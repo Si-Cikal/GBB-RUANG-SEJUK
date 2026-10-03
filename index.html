@@ -22,6 +22,10 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
+  <!-- FIREBASE SDK V8 COMPAT (Untuk Single File App) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
   <style>
     body { font-family: 'Inter', sans-serif; color: #1e293b; -webkit-tap-highlight-color: transparent; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f5f3ff 100%); background-size: 200% 200%; animation: gradientShift 15s ease infinite; -webkit-overflow-scrolling: touch; }
     @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
@@ -38,7 +42,7 @@
     .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
     .glowing-icon { animation: glowPulse 2s infinite; }
     @keyframes glowPulse { 0% { filter: drop-shadow(0 0 2px rgba(2,132,199,0.4)); } 50% { filter: drop-shadow(0 0 10px rgba(2,132,199,0.8)); } 100% { filter: drop-shadow(0 0 2px rgba(2,132,199,0.4)); } }
-    /* PROTEKSI GAMBAR KUSTOM (LOGO, QRIS, TTD) */
+    /* PROTEKSI GAMBAR KUSTOM */
     .protected-image { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; pointer-events: none; }
   </style>
 </head>
@@ -56,7 +60,6 @@
 
   <!-- ==================== LOGIN SCREEN ==================== -->
   <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 overflow-y-auto bg-slate-50">
-    <!-- ... (Bagian Login Tetap Sama) ... -->
     <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-cyan-200/40 rounded-full blur-[80px] pointer-events-none"></div>
     <div class="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-blue-200/40 rounded-full blur-[100px] pointer-events-none"></div>
 
@@ -89,6 +92,10 @@
             </div>
             <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900">Selamat Datang</h1>
             <p class="text-xs text-sky-600 font-bold mt-1">Sistem Manajemen Servis AC Terpadu</p>
+          </div>
+
+          <div id="cloudSyncIndicator" class="mb-4 text-center py-2 bg-emerald-50 text-emerald-700 rounded-xl text-[10px] font-black border border-emerald-200 shadow-sm animate-pulse">
+             <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Menyambungkan ke Cloud Database...
           </div>
           
           <div id="installAppContainer" class="hidden mb-4 p-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white text-xs flex items-center justify-between shadow-lg">
@@ -161,7 +168,7 @@
         <div id="sidebarMainLogo" class="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-600 to-blue-600 text-white p-1 flex items-center justify-center border border-sky-100 shadow-md font-bold text-xl overflow-hidden"><i class="fa-solid fa-snowflake glowing-icon"></i></div>
         <div>
            <h2 class="text-[13px] font-black tracking-tight text-slate-900 leading-tight">GBB RUANG SEJUK</h2>
-           <div class="flex items-center gap-1.5 mt-0.5"><p id="sidebarRoleBadge" class="text-[10px] text-cyan-700 font-bold bg-cyan-100/60 px-1.5 py-0.5 rounded-md">Role</p><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-[0_0_5px_#34d399] animate-pulse"></span></div>
+           <div class="flex items-center gap-1.5 mt-0.5"><p id="sidebarRoleBadge" class="text-[10px] text-cyan-700 font-bold bg-cyan-100/60 px-1.5 py-0.5 rounded-md">Role</p><span id="cloudStatusDot" class="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-[0_0_5px_#34d399] animate-pulse" title="Cloud Sync Aktif"></span></div>
         </div>
       </div>
       <nav id="sidebarNavItems" class="flex-1 p-4 space-y-2 overflow-y-auto no-scrollbar"></nav>
@@ -177,7 +184,7 @@
       <header class="glass-panel border-b border-white/50 p-3.5 flex items-center justify-between md:hidden sticky top-0 z-30 shadow-sm">
         <div class="flex items-center gap-2.5">
           <div id="mobileHeaderLogo" class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 text-white p-1 flex items-center justify-center shadow-sm font-bold overflow-hidden"><i class="fa-solid fa-snowflake glowing-icon"></i></div>
-          <div><h2 class="text-[13px] font-black text-slate-900 leading-tight">GBB RUANG SEJUK</h2><div class="flex items-center gap-1.5 mt-0.5"><p id="mobileHeaderRole" class="text-[9px] text-cyan-700 font-bold bg-cyan-100/60 px-1.5 rounded">Dashboard</p></div></div>
+          <div><h2 class="text-[13px] font-black text-slate-900 leading-tight">GBB RUANG SEJUK</h2><div class="flex items-center gap-1.5 mt-0.5"><p id="mobileHeaderRole" class="text-[9px] text-cyan-700 font-bold bg-cyan-100/60 px-1.5 rounded">Dashboard</p><i class="fa-solid fa-cloud text-[10px] text-emerald-500" title="Cloud Active"></i></div></div>
         </div>
         <button type="button" onclick="window.logout()" class="p-2 rounded-xl bg-white/80 text-slate-500 hover:text-rose-600 border border-white/60 shadow-sm"><i class="fa-solid fa-arrow-right-from-bracket text-sm"></i></button>
       </header>
@@ -502,7 +509,7 @@
               </div>
 
               <button type="submit" class="w-full py-4 bg-slate-800 hover:bg-slate-900 text-white font-black text-sm rounded-xl shadow-lg transition active:scale-[0.98]">
-                <i class="fa-solid fa-save mr-1"></i> SIMPAN PENGATURAN GLOBAL
+                <i class="fa-solid fa-cloud-arrow-up mr-1"></i> SIMPAN & SINKRONISASI KE CLOUD
               </button>
             </form>
           </div>
@@ -638,7 +645,7 @@
     </div>
   </div>
 
-  <!-- CATALOG MODAL (Diperbarui dengan Satuan) -->
+  <!-- CATALOG MODAL -->
   <div id="catalogModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm hidden">
     <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-white relative">
       <div class="flex justify-between items-center mb-5 border-b border-slate-100 pb-3"><h3 id="catalogModalTitle" class="text-base font-black text-slate-900"><i class="fa-solid fa-box text-indigo-600 mr-2"></i> Tambah Item</h3><button type="button" onclick="window.closeCatalogModal()" class="text-slate-400 hover:text-slate-700 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button></div>
@@ -767,7 +774,6 @@
 
   <!-- BERITA ACARA MODAL (DENGAN LAPORAN & FOTO) -->
   <div id="beritaAcaraModal" class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-900/60 backdrop-blur-sm hidden overflow-y-auto">
-    <!-- ... (Bagian Berita Acara Tetap Sama) ... -->
     <div class="bg-white rounded-3xl max-w-3xl w-full shadow-2xl border border-white flex flex-col my-auto max-h-[95vh] overflow-hidden">
       <!-- NON-PRINTED CONTROL PANEL -->
       <div class="p-4 sm:p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -912,19 +918,14 @@
   </div>
 
   <script>
-    // PERLINDUNGAN GLOBAL UNTUK GAMBAR (Mencegah Klik Kanan & Drag di seluruh aplikasi)
+    // PERLINDUNGAN GLOBAL UNTUK GAMBAR
     document.addEventListener('contextmenu', function(e) {
-        if (e.target.tagName === 'IMG' || e.target.classList.contains('protected-image')) {
-            e.preventDefault();
-        }
+        if (e.target.tagName === 'IMG' || e.target.classList.contains('protected-image')) e.preventDefault();
     });
     document.addEventListener('dragstart', function(e) {
-        if (e.target.tagName === 'IMG' || e.target.classList.contains('protected-image')) {
-            e.preventDefault();
-        }
+        if (e.target.tagName === 'IMG' || e.target.classList.contains('protected-image')) e.preventDefault();
     });
 
-    // State Aplikasi (DIPERBARUI DENGAN FIELD SATUAN DAN QTY)
     const GBB_STATE = {
       currentUser: null,
       role: 'admin',
@@ -942,38 +943,93 @@
           ttdName: 'Dede Janudin',
           ttdUrl: "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 250 100'%3E%3Ctext x='10' y='65' font-family='Georgia, serif' font-size='46' font-style='italic' font-weight='bold' fill='%230f172a'%3EDede Janudin%3C/text%3E%3Cpath d='M5,80 Q125,95 240,70' stroke='%230284c7' fill='none' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E"
       },
-      customers: [
-        { name: 'Bapak Budi Santoso', phone: '081122334455', password: '123', address: 'Jl. Melati No. 12, Cirebon', units: [{name: 'AC Split 1 PK', brand: 'Daikin'}], lat: -6.8320, lng: 108.6523 }
-      ],
+      customers: [],
       technicians: [
         { id: 'tech1', name: 'Teknisi Andi', phone: '081298765432', password: '123', status: 'Tersedia' }
       ],
       catalog: [
         { id: 'c1', name: 'Cuci AC Standar (0.5 - 1 PK)', type: 'service', price: 75000, stock: 999, unit: 'Unit' },
-        { id: 'c3', name: 'Isi Freon R32 / R410A', type: 'service', price: 250000, stock: 25, unit: 'Unit' },
-        { id: 'c4', name: 'Kabel Listrik NYM 2x1.5', type: 'part', price: 15000, stock: 100, unit: 'Meter' },
         { id: 'c5', name: 'Pipa AC 1/4 x 3/8 tebal', type: 'part', price: 80000, stock: 50, unit: 'Meter' }
       ],
-      orders: [
-        {
-          id: 'GBB-2026-001',
-          custName: 'Bapak Budi Santoso',
-          custPhone: '081122334455',
-          custAddress: 'Jl. Melati No. 12, Cirebon',
-          units: [{name: 'AC Split 1 PK', brand: 'Daikin'}],
-          techId: 'tech1',
-          techName: 'Teknisi Andi',
-          date: '2026-01-02',
-          services: [{name: 'Cuci AC Standar (0.5 - 1 PK)', price: 75000, qty: 1, unit: 'Unit'}],
-          manualItems: [],
-          total: 75000,
-          status: 'completed',
-          warranty: '90 Hari (3 Bulan)',
-          lat: -6.8320,
-          lng: 108.6523
-        }
-      ]
+      orders: []
     };
+
+    // =========================================================================
+    // KONFIGURASI FIREBASE CLOUD (REAL-TIME DATABASE)
+    // =========================================================================
+    
+    // GANTI BAGIAN INI DENGAN FIREBASE CONFIG DARI PROJECT ANDA
+    const firebaseConfig = {
+    apiKey: "AIzaSyCv4Fu-YJw8sqREapYn2xMpxQyttZrNldg",
+  authDomain: "gbbcooling.firebaseapp.com",
+  projectId: "gbbcooling",
+  storageBucket: "gbbcooling.firebasestorage.app",
+  messagingSenderId: "817517370571",
+  appId: "1:817517370571:web:2dd6053ef6f99a4d59cf4e"
+    };
+
+    let isCloudReady = false;
+    let cloudDbRef = null;
+
+    try {
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+        cloudDbRef = database.ref('gbb_cloud_v6_2'); // Node Database
+        
+        let isInitialLoad = true;
+
+        // MENDENGARKAN PERUBAHAN DATA SECARA REAL-TIME DARI CLOUD
+        cloudDbRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                // Terapkan data dari cloud ke State lokal
+                if (data.settings) GBB_STATE.settings = data.settings;
+                if (data.users) GBB_STATE.users = data.users;
+                if (data.customers) GBB_STATE.customers = data.customers || [];
+                if (data.orders) GBB_STATE.orders = data.orders || [];
+                if (data.catalog) GBB_STATE.catalog = data.catalog || [];
+                if (data.technicians) GBB_STATE.technicians = data.technicians || [];
+
+                isCloudReady = true;
+                const cloudInd = document.getElementById('cloudSyncIndicator');
+                if(cloudInd) {
+                    cloudInd.classList.replace('bg-emerald-50', 'bg-blue-50');
+                    cloudInd.classList.replace('text-emerald-700', 'text-blue-700');
+                    cloudInd.classList.remove('animate-pulse');
+                    cloudInd.innerHTML = '<i class="fa-solid fa-cloud-check mr-1"></i> Terhubung ke Cloud Database';
+                }
+
+                // Jika user sudah masuk dashboard, render ulang layar dengan data baru dari cloud
+                if (!isInitialLoad && GBB_STATE.currentUser) {
+                    window.applySettingsToApp();
+                    window.switchTab(GBB_STATE.activeTab);
+                }
+                isInitialLoad = false;
+            } else {
+                // Jika database kosong, push data default awal ini ke cloud
+                if(isInitialLoad) window.saveToCloud(); 
+                isInitialLoad = false;
+            }
+        });
+
+        // FUNGSI UNTUK MENGIRIM DATA KE CLOUD SETIAP ADA PERUBAHAN
+        window.saveToCloud = function() {
+            if(!cloudDbRef) return;
+            cloudDbRef.set({
+                settings: GBB_STATE.settings,
+                users: GBB_STATE.users,
+                customers: GBB_STATE.customers,
+                orders: GBB_STATE.orders,
+                catalog: GBB_STATE.catalog,
+                technicians: GBB_STATE.technicians
+            }).catch(err => console.error("Firebase Gagal Menyimpan:", err));
+        };
+    } catch (e) {
+        console.warn("Firebase belum dikonfigurasi dengan benar. Menggunakan mode Offline/Local.");
+    }
+    // =========================================================================
 
     let deferredPrompt = null;
     let newOrderUnits = [{name: 'AC Split 1 PK', brand: 'Daikin'}];
@@ -994,7 +1050,6 @@
        document.getElementById('customAlertModal').classList.add('hidden');
     }
 
-    // PWA INSTALL HANDLER
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
@@ -1006,9 +1061,6 @@
       if(deferredPrompt) {
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
-        if(outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-        }
         deferredPrompt = null;
         document.getElementById('installAppContainer').classList.add('hidden');
       } else {
@@ -1018,31 +1070,24 @@
 
     window.onload = function() {
       loadSettingsFromStorage();
-      console.log('GBB Ruang Sejuk Enterprise SaaS v6.2 PWA Started.');
+      console.log('GBB Ruang Sejuk Enterprise SaaS v6.2 Cloud Started.');
     };
 
     function loadSettingsFromStorage() {
+        // LocalStorage tetap digunakan sebagai Cache/Fallback cepat sebelum data dari cloud turun
         const saved = localStorage.getItem('gbb_settings_v62');
-        if(saved) {
-            GBB_STATE.settings = { ...GBB_STATE.settings, ...JSON.parse(saved) };
-            if(!GBB_STATE.settings.ttdName) GBB_STATE.settings.ttdName = 'Dede Janudin';
-        }
+        if(saved) GBB_STATE.settings = { ...GBB_STATE.settings, ...JSON.parse(saved) };
         const savedUsers = localStorage.getItem('gbb_users_v62');
-        if(savedUsers) {
-            GBB_STATE.users = { ...GBB_STATE.users, ...JSON.parse(savedUsers) };
-        }
+        if(savedUsers) GBB_STATE.users = { ...GBB_STATE.users, ...JSON.parse(savedUsers) };
         const savedCustomers = localStorage.getItem('gbb_customers_v62');
-        if(savedCustomers) {
-            GBB_STATE.customers = JSON.parse(savedCustomers);
-        }
+        if(savedCustomers) GBB_STATE.customers = JSON.parse(savedCustomers);
         const savedOrders = localStorage.getItem('gbb_orders_v62');
-        if(savedOrders) {
-            GBB_STATE.orders = JSON.parse(savedOrders);
-        }
+        if(savedOrders) GBB_STATE.orders = JSON.parse(savedOrders);
         const savedCatalog = localStorage.getItem('gbb_catalog_v62');
-        if(savedCatalog) {
-            GBB_STATE.catalog = JSON.parse(savedCatalog);
-        }
+        if(savedCatalog) GBB_STATE.catalog = JSON.parse(savedCatalog);
+        const savedTech = localStorage.getItem('gbb_tech_v62');
+        if(savedTech) GBB_STATE.technicians = JSON.parse(savedTech);
+        
         applySettingsToApp();
     }
 
@@ -1050,9 +1095,13 @@
         localStorage.setItem('gbb_customers_v62', JSON.stringify(GBB_STATE.customers));
         localStorage.setItem('gbb_orders_v62', JSON.stringify(GBB_STATE.orders));
         localStorage.setItem('gbb_catalog_v62', JSON.stringify(GBB_STATE.catalog));
+        localStorage.setItem('gbb_tech_v62', JSON.stringify(GBB_STATE.technicians));
+        
+        // Panggil fungsi sinkronisasi Cloud setiap kali ada perubahan data (Order, Catalog, Pelanggan, dll)
+        if(window.saveToCloud) window.saveToCloud(); 
     }
 
-    function applySettingsToApp() {
+    window.applySettingsToApp = function() {
         let logoHTML = '';
         const logoContainers = ['loginSmallLogo', 'sidebarMainLogo', 'mobileHeaderLogo', 'invCompanyLogo', 'baCompanyLogo'];
         
@@ -1077,12 +1126,7 @@
             });
         }
         
-        logoContainers.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.innerHTML = logoHTML;
-            }
-        });
+        logoContainers.forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = logoHTML; });
         
         const loginBig = document.getElementById('loginLogoContainer');
         if(loginBig && GBB_STATE.settings.logoUrl) {
@@ -1145,8 +1189,12 @@
         if(ttdSrc && !ttdSrc.endsWith('index.html')) GBB_STATE.settings.ttdUrl = ttdSrc;
         
         localStorage.setItem('gbb_settings_v62', JSON.stringify(GBB_STATE.settings));
+        
+        // Panggil fungsi Cloud
+        if(window.saveToCloud) window.saveToCloud();
+
         applySettingsToApp();
-        showCustomAlert('Berhasil', 'Pengaturan Global, Akun Login, Logo, dan TTD Barcode berhasil disimpan permanen!');
+        showCustomAlert('Berhasil', 'Pengaturan Global, Akun Login, Logo, dan TTD Barcode berhasil disimpan permanen di Cloud!');
     };
 
     function renderSettings() {
@@ -1163,19 +1211,9 @@
     }
 
     function checkThreeMonthsReminders() {
-      const now = new Date();
-      const threeMonthsInMs = 90 * 24 * 60 * 60 * 1000;
+      const now = new Date(); const threeMonthsInMs = 90 * 24 * 60 * 60 * 1000;
       let overdueList = [];
-
-      GBB_STATE.orders.forEach(o => {
-        if(o.status === 'completed') {
-           const orderDate = new Date(o.date);
-           const diff = now - orderDate;
-           if(diff >= threeMonthsInMs) {
-              overdueList.push(o);
-           }
-        }
-      });
+      GBB_STATE.orders.forEach(o => { if(o.status === 'completed') { if((now - new Date(o.date)) >= threeMonthsInMs) overdueList.push(o); } });
       return overdueList;
     }
 
@@ -1202,73 +1240,29 @@
       document.getElementById('notificationsModal').classList.remove('hidden');
     };
 
-    window.togglePublicBooking = function(show) {
-      document.getElementById('formLoginView').classList.toggle('hidden', show);
-      document.getElementById('formPublicView').classList.toggle('hidden', !show);
-    };
-
-    window.toggleCustomerRegister = function(show) {
-      document.getElementById('formLoginView').classList.toggle('hidden', show);
-      document.getElementById('formCustomerRegisterView').classList.toggle('hidden', !show);
-    };
+    window.togglePublicBooking = function(show) { document.getElementById('formLoginView').classList.toggle('hidden', show); document.getElementById('formPublicView').classList.toggle('hidden', !show); };
+    window.toggleCustomerRegister = function(show) { document.getElementById('formLoginView').classList.toggle('hidden', show); document.getElementById('formCustomerRegisterView').classList.toggle('hidden', !show); };
 
     window.handleCustomerRegisterSubmit = function(e) {
       e.preventDefault();
-      const name = document.getElementById('regName').value.trim();
       const phone = document.getElementById('regPhone').value.trim();
-      const password = document.getElementById('regPassword').value.trim();
-      const address = document.getElementById('regAddress').value.trim();
+      if (GBB_STATE.customers.some(c => c.phone === phone)) { showCustomAlert('Perhatian', 'Nomor WhatsApp / Username ini sudah terdaftar!', 'fa-solid fa-triangle-exclamation text-amber-500'); return; }
 
-      if (GBB_STATE.customers.some(c => c.phone === phone)) {
-        showCustomAlert('Perhatian', 'Nomor WhatsApp / Username ini sudah terdaftar sebagai pelanggan!', 'fa-solid fa-triangle-exclamation text-amber-500');
-        return;
-      }
-
-      GBB_STATE.customers.push({
-        name,
-        phone,
-        password,
-        address,
-        units: [{ name: 'AC Split Standard', brand: 'Umum' }],
-        lat: -6.2000,
-        lng: 106.8166
-      });
+      GBB_STATE.customers.push({ name: document.getElementById('regName').value.trim(), phone, password: document.getElementById('regPassword').value.trim(), address: document.getElementById('regAddress').value.trim(), units: [{ name: 'AC Split Standard', brand: 'Umum' }], lat: -6.2000, lng: 106.8166 });
       saveAppData();
-      showCustomAlert('Berhasil', 'Pendaftaran Akun Pelanggan Berhasil! Silakan login menggunakan nomor WhatsApp dan kata sandi Anda.');
+      showCustomAlert('Berhasil', 'Pendaftaran Akun Pelanggan Berhasil! Silakan login.');
       window.toggleCustomerRegister(false);
     };
 
     window.handlePublicBookingSubmit = function(e) {
       e.preventDefault();
-      const name = document.getElementById('pubName').value.trim();
-      const phone = document.getElementById('pubPhone').value.trim();
-      const address = document.getElementById('pubAddress').value.trim();
-      const notes = document.getElementById('pubNotes').value.trim();
+      const name = document.getElementById('pubName').value.trim(); const phone = document.getElementById('pubPhone').value.trim(); const address = document.getElementById('pubAddress').value.trim(); const notes = document.getElementById('pubNotes').value.trim();
 
       let cust = GBB_STATE.customers.find(c => c.phone === phone);
-      if (!cust) {
-        cust = { name, phone, password: '123', address, units: [{ name: 'AC Split Standard', brand: 'Umum' }], lat: -6.2000, lng: 106.8166 };
-        GBB_STATE.customers.push(cust);
-      }
+      if (!cust) { cust = { name, phone, password: '123', address, units: [{ name: 'AC Split Standard', brand: 'Umum' }], lat: -6.2000, lng: 106.8166 }; GBB_STATE.customers.push(cust); }
 
       const newId = 'GBB-2026-' + String(GBB_STATE.orders.length + 1).padStart(3, '0');
-      GBB_STATE.orders.unshift({
-        id: newId,
-        custName: name,
-        custPhone: phone,
-        custAddress: address,
-        units: [{ name: 'AC Split Standard', brand: 'Umum' }],
-        techId: GBB_STATE.technicians[0]?.id || 'tech1',
-        techName: GBB_STATE.technicians[0]?.name || 'Teknisi Andi',
-        date: new Date().toISOString().split('T')[0],
-        services: [{ name: 'Panggilan Servis: ' + notes, price: 75000, qty: 1, unit: 'Unit' }],
-        manualItems: [],
-        total: 75000,
-        status: 'pending',
-        warranty: '90 Hari (3 Bulan)',
-        lat: -6.2000,
-        lng: 106.8166
-      });
+      GBB_STATE.orders.unshift({ id: newId, custName: name, custPhone: phone, custAddress: address, units: [{ name: 'AC Split Standard', brand: 'Umum' }], techId: GBB_STATE.technicians[0]?.id || 'tech1', techName: GBB_STATE.technicians[0]?.name || 'Teknisi Andi', date: new Date().toISOString().split('T')[0], services: [{ name: 'Panggilan Servis: ' + notes, price: 75000, qty: 1, unit: 'Unit' }], manualItems: [], total: 75000, status: 'pending', warranty: '90 Hari (3 Bulan)', lat: -6.2000, lng: 106.8166 });
       saveAppData();
       showCustomAlert('Berhasil', 'Booking AC berhasil dikirim! Tim GBB Ruang Sejuk akan segera menghubungi Anda.');
       window.togglePublicBooking(false);
@@ -1301,23 +1295,14 @@
 
     window.handleManualLogin = function(e) {
       e.preventDefault();
-      const u = document.getElementById('loginUsername').value.trim();
-      const p = document.getElementById('loginPassword').value.trim();
+      const u = document.getElementById('loginUsername').value.trim(); const p = document.getElementById('loginPassword').value.trim();
 
-      if (u === GBB_STATE.users.admin.user && p === GBB_STATE.users.admin.pass) {
-        GBB_STATE.currentUser = { name: 'Administrator GBB', role: 'admin' }; GBB_STATE.role = 'admin'; initAppShell(); return;
-      }
-      if (u === GBB_STATE.users.cs.user && p === GBB_STATE.users.cs.pass) {
-        GBB_STATE.currentUser = { name: 'CS / Kasir', role: 'cs' }; GBB_STATE.role = 'cs'; initAppShell(); return;
-      }
+      if (u === GBB_STATE.users.admin.user && p === GBB_STATE.users.admin.pass) { GBB_STATE.currentUser = { name: 'Administrator GBB', role: 'admin' }; GBB_STATE.role = 'admin'; initAppShell(); return; }
+      if (u === GBB_STATE.users.cs.user && p === GBB_STATE.users.cs.pass) { GBB_STATE.currentUser = { name: 'CS / Kasir', role: 'cs' }; GBB_STATE.role = 'cs'; initAppShell(); return; }
       const tech = GBB_STATE.technicians.find(t => (t.name.toLowerCase() === u.toLowerCase() || t.phone === u) && t.password === p);
-      if (tech) {
-        GBB_STATE.currentUser = { name: tech.name, role: 'technician', id: tech.id }; GBB_STATE.role = 'technician'; initAppShell(); return;
-      }
+      if (tech) { GBB_STATE.currentUser = { name: tech.name, role: 'technician', id: tech.id }; GBB_STATE.role = 'technician'; initAppShell(); return; }
       const cust = GBB_STATE.customers.find(c => c.phone === u && c.password === p);
-      if (cust) {
-        GBB_STATE.currentUser = { name: cust.name, role: 'customer', phone: cust.phone }; GBB_STATE.role = 'customer'; initAppShell(); return;
-      }
+      if (cust) { GBB_STATE.currentUser = { name: cust.name, role: 'customer', phone: cust.phone }; GBB_STATE.role = 'customer'; initAppShell(); return; }
       showCustomAlert('Login Gagal', 'Pastikan Username/No. WhatsApp dan Kata Sandi sudah benar.', 'fa-solid fa-triangle-exclamation text-rose-500');
     };
 
@@ -1362,23 +1347,13 @@
 
       if(GBB_STATE.role === 'admin' || GBB_STATE.role === 'cs') {
          const overdue = checkThreeMonthsReminders();
-         if(notifBar) {
-            notifBar.classList.remove('hidden');
-            document.getElementById('notifBadgeCount').innerText = overdue.length;
-            document.getElementById('notifBannerText').innerText = `Ada ${overdue.length} pelanggan yang AC-nya sudah jatuh tempo servis rutin 3 bulan.`;
-         }
-      } else {
-         if(notifBar) notifBar.classList.add('hidden');
-      }
+         if(notifBar) { notifBar.classList.remove('hidden'); document.getElementById('notifBadgeCount').innerText = overdue.length; document.getElementById('notifBannerText').innerText = `Ada ${overdue.length} pelanggan yang AC-nya sudah jatuh tempo servis rutin 3 bulan.`; }
+      } else { if(notifBar) notifBar.classList.add('hidden'); }
 
       if(GBB_STATE.role === 'customer') {
          const myOverdue = GBB_STATE.orders.filter(o => o.custPhone === GBB_STATE.currentUser.phone && o.status === 'completed' && (new Date() - new Date(o.date) >= 90 * 24 * 60 * 60 * 1000));
-         if(reminderBanner) {
-            reminderBanner.classList.toggle('hidden', myOverdue.length === 0);
-         }
-      } else {
-         if(reminderBanner) reminderBanner.classList.add('hidden');
-      }
+         if(reminderBanner) reminderBanner.classList.toggle('hidden', myOverdue.length === 0);
+      } else { if(reminderBanner) reminderBanner.classList.add('hidden'); }
     }
 
     function startClock() { setInterval(() => { const now = new Date(); document.getElementById('liveClockText').innerText = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ' - ' + now.toLocaleTimeString('id-ID'); }, 1000); }
@@ -1388,10 +1363,8 @@
       const lowStock = GBB_STATE.catalog.filter(i => i.stock < 5);
       document.getElementById('lowStockBanner').classList.toggle('hidden', lowStock.length === 0 || GBB_STATE.role === 'customer');
 
-      const totalOrders = GBB_STATE.orders.length;
-      const completedOrders = GBB_STATE.orders.filter(o => o.status === 'completed').length;
-      const totalRevenue = GBB_STATE.orders.filter(o => o.status === 'completed').reduce((acc, curr) => acc + curr.total, 0);
-      const activeTechs = GBB_STATE.technicians.length;
+      const totalOrders = GBB_STATE.orders.length; const completedOrders = GBB_STATE.orders.filter(o => o.status === 'completed').length;
+      const totalRevenue = GBB_STATE.orders.filter(o => o.status === 'completed').reduce((acc, curr) => acc + curr.total, 0); const activeTechs = GBB_STATE.technicians.length;
 
       document.getElementById('metricsCardsContainer').innerHTML = `
         <div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex items-center justify-between"><span class="text-[10px] font-black uppercase text-slate-400">Total Tiket</span><div class="w-9 h-9 rounded-xl bg-cyan-100 text-cyan-600 flex items-center justify-center"><i class="fa-solid fa-ticket"></i></div></div><p class="text-2xl font-black text-slate-900 mt-2">${totalOrders}</p></div>
@@ -1399,62 +1372,32 @@
         <div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex items-center justify-between"><span class="text-[10px] font-black uppercase text-slate-400">Omset Lunas</span><div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-rupiah-sign"></i></div></div><p class="text-lg sm:text-xl font-black text-slate-900 mt-2">Rp ${totalRevenue.toLocaleString('id-ID')}</p></div>
         <div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex items-center justify-between"><span class="text-[10px] font-black uppercase text-slate-400">Teknisi Aktif</span><div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center"><i class="fa-solid fa-user-gear"></i></div></div><p class="text-2xl font-black text-slate-900 mt-2">${activeTechs}</p></div>
       `;
-      setTimeout(() => { window.updateChartData(); }, 100);
-      renderOrdersTable();
+      setTimeout(() => { window.updateChartData(); }, 100); renderOrdersTable();
     }
 
     window.setOrderFilter = function(filter) { GBB_STATE.orderFilter = filter; renderOrdersTable(); };
     window.setDashDate = function(dateStr) { GBB_STATE.dashDateFilter = dateStr; document.getElementById('dashDatePicker').value = dateStr; renderOrdersTable(); };
 
-    // PENAMBAHAN FUNGSI HAPUS DAN EDIT PESANAN / TIKET KERJA
     window.deleteOrder = function(id) {
-        if(confirm('Yakin ingin menghapus tiket pesanan ini secara permanen? Aksi ini tidak dapat dibatalkan.')) {
-            GBB_STATE.orders = GBB_STATE.orders.filter(o => o.id !== id);
-            saveAppData();
-            renderDashboard();
-        }
+        if(confirm('Yakin ingin menghapus tiket pesanan ini secara permanen?')) { GBB_STATE.orders = GBB_STATE.orders.filter(o => o.id !== id); saveAppData(); renderDashboard(); }
     };
 
     window.openEditOrderModal = function(id) {
-        const o = GBB_STATE.orders.find(x => x.id === id);
-        if (!o) return;
-        
-        // Populate tech select
-        const techSelect = document.getElementById('editOrderTech');
-        techSelect.innerHTML = '';
+        const o = GBB_STATE.orders.find(x => x.id === id); if (!o) return;
+        const techSelect = document.getElementById('editOrderTech'); techSelect.innerHTML = '';
         GBB_STATE.technicians.forEach(t => techSelect.innerHTML += `<option value="${t.id}">${t.name}</option>`);
         
-        document.getElementById('editOrderId').value = o.id;
-        document.getElementById('editOrderName').value = o.custName;
-        document.getElementById('editOrderPhone').value = o.custPhone;
-        document.getElementById('editOrderAddress').value = o.custAddress;
-        document.getElementById('editOrderTech').value = o.techId;
-        document.getElementById('editOrderDate').value = o.date;
-        document.getElementById('editOrderTotal').value = o.total;
-        
+        document.getElementById('editOrderId').value = o.id; document.getElementById('editOrderName').value = o.custName; document.getElementById('editOrderPhone').value = o.custPhone; document.getElementById('editOrderAddress').value = o.custAddress; document.getElementById('editOrderTech').value = o.techId; document.getElementById('editOrderDate').value = o.date; document.getElementById('editOrderTotal').value = o.total;
         document.getElementById('editOrderModal').classList.remove('hidden');
     };
 
     window.handleEditOrderSave = function(e) {
-        e.preventDefault();
-        const id = document.getElementById('editOrderId').value;
-        const o = GBB_STATE.orders.find(x => x.id === id);
+        e.preventDefault(); const id = document.getElementById('editOrderId').value; const o = GBB_STATE.orders.find(x => x.id === id);
         if(o) {
-            o.custName = document.getElementById('editOrderName').value;
-            o.custPhone = document.getElementById('editOrderPhone').value;
-            o.custAddress = document.getElementById('editOrderAddress').value;
-            o.techId = document.getElementById('editOrderTech').value;
-            
-            const tech = GBB_STATE.technicians.find(x => x.id === o.techId);
-            if(tech) o.techName = tech.name;
-            
-            o.date = document.getElementById('editOrderDate').value;
-            o.total = parseFloat(document.getElementById('editOrderTotal').value);
-            
-            saveAppData();
-            renderDashboard(); 
-            document.getElementById('editOrderModal').classList.add('hidden');
-            showCustomAlert('Berhasil', 'Data pesanan berhasil diperbarui!');
+            o.custName = document.getElementById('editOrderName').value; o.custPhone = document.getElementById('editOrderPhone').value; o.custAddress = document.getElementById('editOrderAddress').value; o.techId = document.getElementById('editOrderTech').value;
+            const tech = GBB_STATE.technicians.find(x => x.id === o.techId); if(tech) o.techName = tech.name;
+            o.date = document.getElementById('editOrderDate').value; o.total = parseFloat(document.getElementById('editOrderTotal').value);
+            saveAppData(); renderDashboard(); document.getElementById('editOrderModal').classList.add('hidden'); showCustomAlert('Berhasil', 'Data pesanan berhasil diperbarui!');
         }
     };
 
@@ -1465,9 +1408,7 @@
       if (GBB_STATE.orderFilter !== 'all') filtered = filtered.filter(o => o.status === GBB_STATE.orderFilter);
       if (GBB_STATE.dashDateFilter) filtered = filtered.filter(o => o.date === GBB_STATE.dashDateFilter);
 
-      const desktopBody = document.getElementById('desktopOrdersTableBody');
-      const mobileList = document.getElementById('mobileOrdersList');
-      const emptyState = document.getElementById('ordersEmptyState');
+      const desktopBody = document.getElementById('desktopOrdersTableBody'); const mobileList = document.getElementById('mobileOrdersList'); const emptyState = document.getElementById('ordersEmptyState');
       desktopBody.innerHTML = ''; mobileList.innerHTML = '';
 
       if (filtered.length === 0) { emptyState.classList.remove('hidden'); return; }
@@ -1477,217 +1418,76 @@
         let statusBadge = '<span class="px-2 py-1 rounded bg-amber-100 text-amber-700 font-bold text-[9px] uppercase shadow-sm"><i class="fa-solid fa-car"></i> Tunggu</span>';
         if (o.status === 'in_progress') statusBadge = '<span class="px-2 py-1 rounded bg-blue-100 text-blue-700 font-bold text-[9px] uppercase shadow-sm"><i class="fa-solid fa-screwdriver-wrench"></i> Proses</span>';
         if (o.status === 'completed') statusBadge = '<span class="px-2 py-1 rounded bg-emerald-100 text-emerald-700 font-bold text-[9px] uppercase shadow-sm"><i class="fa-solid fa-check"></i> Selesai</span>';
-
         const mapLink = `https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lng}`;
 
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
-        tr.innerHTML = `
-          <td class="py-3 px-4 font-mono font-bold text-cyan-600">${o.id}<br><span class="text-[9px] text-slate-400 font-sans tracking-wide">${o.date}</span></td>
-          <td class="py-3 px-4"><p class="font-bold text-slate-900">${o.custName}</p><p class="text-[10px] text-slate-500">${o.custPhone}</p></td>
-          <td class="py-3 px-4 text-[11px] font-medium">${o.units.map(u => `${u.brand} (${u.name})`).join(', ')}</td>
-          <td class="py-3 px-4 font-bold text-slate-700 text-[11px]">${o.techName}</td>
-          <td class="py-3 px-4 text-right font-black text-slate-900">Rp ${o.total.toLocaleString('id-ID')}</td>
-          <td class="py-3 px-4 text-center">${statusBadge}</td>
-          <td class="py-3 px-4 text-center space-x-1 whitespace-nowrap">
-            <button onclick="window.openInvoiceModalForOrder('${o.id}')" title="Invoice PDF" class="w-7 h-7 bg-cyan-50 text-cyan-600 rounded-lg hover:bg-cyan-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-file-invoice"></i></button>
-            <button onclick="window.openBAModalForOrder('${o.id}')" title="Isi Laporan & Cetak BAST" class="w-7 h-7 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-clipboard-check"></i></button>
-            ${GBB_STATE.role !== 'customer' ? `
-              <button onclick="window.openStatusModal('${o.id}')" title="Ubah Status (Tunggu/Proses/Selesai)" class="w-7 h-7 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-truck-fast"></i></button>
-              <button onclick="window.openEditOrderModal('${o.id}')" title="Edit Data Pesanan" class="w-7 h-7 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-pen"></i></button>
-              <button onclick="window.deleteOrder('${o.id}')" title="Hapus Pesanan" class="w-7 h-7 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-trash"></i></button>
-            ` : ''}
-            <button onclick="window.open('${mapLink}', '_blank')" title="Buka Rute Maps GPS" class="w-7 h-7 bg-indigo-50 text-indigo-500 rounded-lg hover:bg-indigo-500 hover:text-white transition shadow-sm animate-pulse"><i class="fa-solid fa-location-arrow"></i></button>
-          </td>
-        `;
+        const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+        tr.innerHTML = `<td class="py-3 px-4 font-mono font-bold text-cyan-600">${o.id}<br><span class="text-[9px] text-slate-400 font-sans tracking-wide">${o.date}</span></td><td class="py-3 px-4"><p class="font-bold text-slate-900">${o.custName}</p><p class="text-[10px] text-slate-500">${o.custPhone}</p></td><td class="py-3 px-4 text-[11px] font-medium">${o.units.map(u => `${u.brand} (${u.name})`).join(', ')}</td><td class="py-3 px-4 font-bold text-slate-700 text-[11px]">${o.techName}</td><td class="py-3 px-4 text-right font-black text-slate-900">Rp ${o.total.toLocaleString('id-ID')}</td><td class="py-3 px-4 text-center">${statusBadge}</td><td class="py-3 px-4 text-center space-x-1 whitespace-nowrap"><button onclick="window.openInvoiceModalForOrder('${o.id}')" title="Invoice PDF" class="w-7 h-7 bg-cyan-50 text-cyan-600 rounded-lg hover:bg-cyan-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-file-invoice"></i></button><button onclick="window.openBAModalForOrder('${o.id}')" title="Isi Laporan & Cetak BAST" class="w-7 h-7 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-clipboard-check"></i></button>${GBB_STATE.role !== 'customer' ? `<button onclick="window.openStatusModal('${o.id}')" title="Ubah Status" class="w-7 h-7 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-truck-fast"></i></button><button onclick="window.openEditOrderModal('${o.id}')" title="Edit Data" class="w-7 h-7 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-pen"></i></button><button onclick="window.deleteOrder('${o.id}')" title="Hapus Pesanan" class="w-7 h-7 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-trash"></i></button>` : ''}<button onclick="window.open('${mapLink}', '_blank')" title="Buka Rute Maps GPS" class="w-7 h-7 bg-indigo-50 text-indigo-500 rounded-lg hover:bg-indigo-500 hover:text-white transition shadow-sm animate-pulse"><i class="fa-solid fa-location-arrow"></i></button></td>`;
         desktopBody.appendChild(tr);
 
-        const card = document.createElement('div');
-        card.className = 'glass-card p-4 rounded-xl shadow-sm space-y-2 border border-slate-100';
-        card.innerHTML = `
-          <div class="flex justify-between items-start"><div><span class="font-mono font-bold text-cyan-600 text-[10px] bg-cyan-50 px-2 rounded">${o.id}</span><p class="font-black text-slate-900 text-sm mt-1">${o.custName}</p></div><div>${statusBadge}</div></div>
-          <p class="text-[10px] text-slate-500 leading-tight"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> ${o.custAddress}</p>
-          <div class="flex justify-between items-center pt-3 border-t border-slate-100 mt-2">
-             <span class="font-black text-slate-800 text-xs">Rp ${o.total.toLocaleString('id-ID')}</span>
-             <div class="space-x-1 flex flex-wrap justify-end">
-                <button onclick="window.openInvoiceModalForOrder('${o.id}')" class="px-2.5 py-1.5 bg-cyan-500 text-white rounded-lg text-[9px] font-bold shadow-sm">INV</button>
-                <button onclick="window.openBAModalForOrder('${o.id}')" class="px-2.5 py-1.5 bg-emerald-500 text-white rounded-lg text-[9px] font-bold shadow-sm">BAST</button>
-                ${GBB_STATE.role !== 'customer' ? `
-                   <button onclick="window.openStatusModal('${o.id}')" class="px-2.5 py-1.5 bg-blue-500 text-white rounded-lg text-[9px] font-bold shadow-sm"><i class="fa-solid fa-truck-fast"></i></button>
-                   <button onclick="window.openEditOrderModal('${o.id}')" class="px-2.5 py-1.5 bg-amber-500 text-white rounded-lg text-[9px] font-bold shadow-sm"><i class="fa-solid fa-pen"></i></button>
-                   <button onclick="window.deleteOrder('${o.id}')" class="px-2.5 py-1.5 bg-rose-500 text-white rounded-lg text-[9px] font-bold shadow-sm"><i class="fa-solid fa-trash"></i></button>
-                ` : ''}
-                <button onclick="window.open('${mapLink}', '_blank')" class="px-2.5 py-1.5 bg-indigo-500 text-white rounded-lg text-[9px] font-bold shadow-sm"><i class="fa-solid fa-map"></i></button>
-             </div>
-          </div>
-        `;
+        const card = document.createElement('div'); card.className = 'glass-card p-4 rounded-xl shadow-sm space-y-2 border border-slate-100';
+        card.innerHTML = `<div class="flex justify-between items-start"><div><span class="font-mono font-bold text-cyan-600 text-[10px] bg-cyan-50 px-2 rounded">${o.id}</span><p class="font-black text-slate-900 text-sm mt-1">${o.custName}</p></div><div>${statusBadge}</div></div><p class="text-[10px] text-slate-500 leading-tight"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> ${o.custAddress}</p><div class="flex justify-between items-center pt-3 border-t border-slate-100 mt-2"><span class="font-black text-slate-800 text-xs">Rp ${o.total.toLocaleString('id-ID')}</span><div class="space-x-1 flex flex-wrap justify-end"><button onclick="window.openInvoiceModalForOrder('${o.id}')" class="px-2.5 py-1.5 bg-cyan-500 text-white rounded-lg text-[9px] font-bold shadow-sm">INV</button><button onclick="window.openBAModalForOrder('${o.id}')" class="px-2.5 py-1.5 bg-emerald-500 text-white rounded-lg text-[9px] font-bold shadow-sm">BAST</button>${GBB_STATE.role !== 'customer' ? `<button onclick="window.openStatusModal('${o.id}')" class="px-2.5 py-1.5 bg-blue-500 text-white rounded-lg text-[9px] font-bold shadow-sm"><i class="fa-solid fa-truck-fast"></i></button><button onclick="window.openEditOrderModal('${o.id}')" class="px-2.5 py-1.5 bg-amber-500 text-white rounded-lg text-[9px] font-bold shadow-sm"><i class="fa-solid fa-pen"></i></button><button onclick="window.deleteOrder('${o.id}')" class="px-2.5 py-1.5 bg-rose-500 text-white rounded-lg text-[9px] font-bold shadow-sm"><i class="fa-solid fa-trash"></i></button>` : ''}<button onclick="window.open('${mapLink}', '_blank')" class="px-2.5 py-1.5 bg-indigo-500 text-white rounded-lg text-[9px] font-bold shadow-sm"><i class="fa-solid fa-map"></i></button></div></div>`;
         mobileList.appendChild(card);
       });
     }
 
-    window.openStatusModal = function(id) {
-        currentStatusOrderId = id;
-        document.getElementById('statusModal').classList.remove('hidden');
-    }
-    window.saveOrderStatus = function(status) {
-        if(!currentStatusOrderId) return;
-        const o = GBB_STATE.orders.find(x => x.id === currentStatusOrderId);
-        if(o) {
-            o.status = status;
-            saveAppData();
-            renderDashboard();
-            document.getElementById('statusModal').classList.add('hidden');
-        }
-    }
+    window.openStatusModal = function(id) { currentStatusOrderId = id; document.getElementById('statusModal').classList.remove('hidden'); }
+    window.saveOrderStatus = function(status) { if(!currentStatusOrderId) return; const o = GBB_STATE.orders.find(x => x.id === currentStatusOrderId); if(o) { o.status = status; saveAppData(); renderDashboard(); document.getElementById('statusModal').classList.add('hidden'); } }
 
-    // MAP PICKER WITH HIGH ACCURACY GPS
     window.openLocationPicker = function(target) {
-        activePickerTarget = target;
-        document.getElementById('mapPickerModal').classList.remove('hidden');
+        activePickerTarget = target; document.getElementById('mapPickerModal').classList.remove('hidden');
         setTimeout(() => {
-            if(!pickerMapInstance) {
-                pickerMapInstance = L.map('pickerMapContainer').setView([-6.2000, 106.8166], 13);
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(pickerMapInstance);
-                pickerMarker = L.marker([-6.2000, 106.8166], {draggable: true}).addTo(pickerMapInstance);
-                window.locateMe();
-            } else {
-                pickerMapInstance.invalidateSize();
-            }
+            if(!pickerMapInstance) { pickerMapInstance = L.map('pickerMapContainer').setView([-6.2000, 106.8166], 13); L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(pickerMapInstance); pickerMarker = L.marker([-6.2000, 106.8166], {draggable: true}).addTo(pickerMapInstance); window.locateMe(); } 
+            else { pickerMapInstance.invalidateSize(); }
         }, 300);
     }
-    window.locateMe = function() {
-        if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(pos => {
-                const lat = pos.coords.latitude; const lng = pos.coords.longitude;
-                pickerMapInstance.setView([lat, lng], 18);
-                pickerMarker.setLatLng([lat, lng]);
-            }, err => showCustomAlert('GPS Info', 'Akses GPS atau izin lokasi dibatasi oleh browser. Anda bisa geser pin secara manual pada peta.', 'fa-solid fa-triangle-exclamation text-amber-500'), {enableHighAccuracy: true});
-        }
-    }
-    window.confirmMapLocation = function() {
-        const pos = pickerMarker.getLatLng();
-        if(activePickerTarget === 'order') { document.getElementById('orderLat').value = pos.lat; document.getElementById('orderLng').value = pos.lng; } 
-        else if(activePickerTarget === 'customer') { document.getElementById('modalCustLat').value = pos.lat; document.getElementById('modalCustLng').value = pos.lng; }
-        showCustomAlert('Berhasil', 'Koordinat GPS akurat berhasil dikunci!');
-        document.getElementById('mapPickerModal').classList.add('hidden');
-    }
+    window.locateMe = function() { if(navigator.geolocation) { navigator.geolocation.getCurrentPosition(pos => { const lat = pos.coords.latitude; const lng = pos.coords.longitude; pickerMapInstance.setView([lat, lng], 18); pickerMarker.setLatLng([lat, lng]); }, err => showCustomAlert('GPS Info', 'Akses GPS ditolak browser.', 'fa-solid fa-triangle-exclamation text-amber-500'), {enableHighAccuracy: true}); } }
+    window.confirmMapLocation = function() { const pos = pickerMarker.getLatLng(); if(activePickerTarget === 'order') { document.getElementById('orderLat').value = pos.lat; document.getElementById('orderLng').value = pos.lng; } else if(activePickerTarget === 'customer') { document.getElementById('modalCustLat').value = pos.lat; document.getElementById('modalCustLng').value = pos.lng; } showCustomAlert('Berhasil', 'Koordinat GPS akurat berhasil dikunci!'); document.getElementById('mapPickerModal').classList.add('hidden'); }
     window.closeMapPicker = function() { document.getElementById('mapPickerModal').classList.add('hidden'); }
 
-    // PERHITUNGAN BARU: MENAMPILKAN QTY DAN MENGHITUNG TOTAL
+    // FUNGSI BUAT PESANAN BERSAMA QTY
     function renderNewOrderForm() {
-      const custSelect = document.getElementById('savedCustomerSelect');
-      custSelect.innerHTML = '<option value="">-- Pilih Pelanggan (Otomatis Isi) --</option>';
-      GBB_STATE.customers.forEach(c => custSelect.innerHTML += `<option value="${c.phone}">${c.name} (${c.phone})</option>`);
-
-      const techSelect = document.getElementById('orderTechSelect'); techSelect.innerHTML = '';
-      GBB_STATE.technicians.forEach(t => techSelect.innerHTML += `<option value="${t.id}">${t.name}</option>`);
+      const custSelect = document.getElementById('savedCustomerSelect'); custSelect.innerHTML = '<option value="">-- Pilih Pelanggan (Otomatis Isi) --</option>'; GBB_STATE.customers.forEach(c => custSelect.innerHTML += `<option value="${c.phone}">${c.name} (${c.phone})</option>`);
+      const techSelect = document.getElementById('orderTechSelect'); techSelect.innerHTML = ''; GBB_STATE.technicians.forEach(t => techSelect.innerHTML += `<option value="${t.id}">${t.name}</option>`);
 
       const serviceContainer = document.getElementById('serviceChecklist'); serviceContainer.innerHTML = '';
       GBB_STATE.catalog.forEach(item => {
         const isSelected = newOrderSelectedServices[item.id] !== undefined;
         const currentPrice = isSelected ? newOrderSelectedServices[item.id].price : item.price;
         const currentQty = isSelected ? newOrderSelectedServices[item.id].qty : 1;
-        
-        const div = document.createElement('div');
-        div.className = `flex flex-col p-3 rounded-xl border transition shadow-sm ${isSelected ? 'bg-cyan-50 border-cyan-300' : 'bg-white border-slate-200'}`;
-        
+        const div = document.createElement('div'); div.className = `flex flex-col p-3 rounded-xl border transition shadow-sm ${isSelected ? 'bg-cyan-50 border-cyan-300' : 'bg-white border-slate-200'}`;
         const unitDisplay = item.unit ? ` / ${item.unit}` : '';
         
         div.innerHTML = `
           <div class="flex items-center gap-2 mb-1.5"><input type="checkbox" ${isSelected ? 'checked' : ''} onchange="window.toggleServiceSelection('${item.id}', this.checked, ${item.price})" class="w-4 h-4 text-cyan-600 rounded cursor-pointer"><span class="text-[10px] font-bold text-slate-800 leading-tight">${item.name}</span></div>
-          ${isSelected ? `
-          <div class="ml-6 flex flex-col gap-1.5 mt-1">
-             <div class="flex items-center gap-2">
-                <div class="flex items-center border border-cyan-200 bg-white rounded px-2 py-0.5 w-1/3" title="Kuantitas (Qty)">
-                   <span class="text-[9px] text-slate-400 font-bold mr-1">Qty</span>
-                   <input type="number" min="0.1" step="0.1" value="${currentQty}" onchange="window.updateSelectedServiceQty('${item.id}', this.value)" class="w-full text-[10px] font-black text-slate-700 bg-transparent py-0.5 outline-none text-center">
-                </div>
-                <div class="flex items-center border border-cyan-200 bg-white rounded px-2 py-0.5 w-2/3" title="Harga Satuan">
-                   <span class="text-[9px] text-slate-400 font-bold mr-1">Rp</span>
-                   <input type="number" value="${currentPrice}" onchange="window.updateSelectedServicePrice('${item.id}', this.value)" class="w-full text-[10px] font-black text-cyan-700 bg-transparent py-0.5 outline-none">
-                </div>
-             </div>
-             <div class="text-right text-[9px] font-black text-emerald-600">Subtotal: Rp ${(currentPrice * currentQty).toLocaleString('id-ID')}</div>
-          </div>
-          ` : `<span class="text-[9px] text-slate-400 font-bold ml-6">Rp ${item.price.toLocaleString('id-ID')} ${unitDisplay}</span>`}
+          ${isSelected ? `<div class="ml-6 flex flex-col gap-1.5 mt-1"><div class="flex items-center gap-2"><div class="flex items-center border border-cyan-200 bg-white rounded px-2 py-0.5 w-1/3" title="Kuantitas (Qty)"><span class="text-[9px] text-slate-400 font-bold mr-1">Qty</span><input type="number" min="0.1" step="0.1" value="${currentQty}" onchange="window.updateSelectedServiceQty('${item.id}', this.value)" class="w-full text-[10px] font-black text-slate-700 bg-transparent py-0.5 outline-none text-center"></div><div class="flex items-center border border-cyan-200 bg-white rounded px-2 py-0.5 w-2/3" title="Harga Satuan"><span class="text-[9px] text-slate-400 font-bold mr-1">Rp</span><input type="number" value="${currentPrice}" onchange="window.updateSelectedServicePrice('${item.id}', this.value)" class="w-full text-[10px] font-black text-cyan-700 bg-transparent py-0.5 outline-none"></div></div><div class="text-right text-[9px] font-black text-emerald-600">Subtotal: Rp ${(currentPrice * currentQty).toLocaleString('id-ID')}</div></div>` : `<span class="text-[9px] text-slate-400 font-bold ml-6">Rp ${item.price.toLocaleString('id-ID')} ${unitDisplay}</span>`}
         `;
         serviceContainer.appendChild(div);
       });
-      document.getElementById('orderDate').value = new Date().toISOString().split('T')[0];
-      renderOrderUnitsRows(); renderNewOrderManualItems(); calculateNewOrderTotal();
+      document.getElementById('orderDate').value = new Date().toISOString().split('T')[0]; renderOrderUnitsRows(); renderNewOrderManualItems(); calculateNewOrderTotal();
     }
 
-    window.toggleServiceSelection = function(id, checked, defaultPrice) { 
-        if (checked) newOrderSelectedServices[id] = { price: defaultPrice, qty: 1 }; 
-        else delete newOrderSelectedServices[id]; 
-        renderNewOrderForm(); 
-    };
-    
-    window.updateSelectedServicePrice = function(id, newPrice) { 
-        if(newOrderSelectedServices[id]) {
-            newOrderSelectedServices[id].price = parseFloat(newPrice) || 0; 
-            calculateNewOrderTotal();
-            renderNewOrderForm();
-        }
-    }
-
-    window.updateSelectedServiceQty = function(id, newQty) {
-        if(newOrderSelectedServices[id]) {
-            newOrderSelectedServices[id].qty = parseFloat(newQty) || 1;
-            calculateNewOrderTotal();
-            renderNewOrderForm();
-        }
-    }
+    window.toggleServiceSelection = function(id, checked, defaultPrice) { if (checked) newOrderSelectedServices[id] = { price: defaultPrice, qty: 1 }; else delete newOrderSelectedServices[id]; renderNewOrderForm(); };
+    window.updateSelectedServicePrice = function(id, newPrice) { if(newOrderSelectedServices[id]) { newOrderSelectedServices[id].price = parseFloat(newPrice) || 0; calculateNewOrderTotal(); renderNewOrderForm(); } }
+    window.updateSelectedServiceQty = function(id, newQty) { if(newOrderSelectedServices[id]) { newOrderSelectedServices[id].qty = parseFloat(newQty) || 1; calculateNewOrderTotal(); renderNewOrderForm(); } }
 
     window.applySavedCustomer = function(phone) {
-      if (!phone) return;
-      const c = GBB_STATE.customers.find(x => x.phone === phone);
-      if (c) {
-        document.getElementById('orderCustName').value = c.name; document.getElementById('orderCustPhone').value = c.phone; document.getElementById('orderCustAddress').value = c.address;
-        document.getElementById('orderLat').value = c.lat || -6.20; document.getElementById('orderLng').value = c.lng || 106.81;
-        if (c.units) { newOrderUnits = JSON.parse(JSON.stringify(c.units)); renderOrderUnitsRows(); }
-      }
+      if (!phone) return; const c = GBB_STATE.customers.find(x => x.phone === phone);
+      if (c) { document.getElementById('orderCustName').value = c.name; document.getElementById('orderCustPhone').value = c.phone; document.getElementById('orderCustAddress').value = c.address; document.getElementById('orderLat').value = c.lat || -6.20; document.getElementById('orderLng').value = c.lng || 106.81; if (c.units) { newOrderUnits = JSON.parse(JSON.stringify(c.units)); renderOrderUnitsRows(); } }
     };
 
-    function renderOrderUnitsRows() {
-      const container = document.getElementById('orderUnitsList'); container.innerHTML = '';
-      newOrderUnits.forEach((u, idx) => { container.innerHTML += `<div class="flex gap-2 items-center"><input type="text" value="${u.brand}" onchange="newOrderUnits[${idx}].brand=this.value" class="w-1/2 bg-white border border-slate-200 rounded p-2 text-[10px] outline-none font-bold"><input type="text" value="${u.name}" onchange="newOrderUnits[${idx}].name=this.value" class="w-1/2 bg-white border border-slate-200 rounded p-2 text-[10px] outline-none font-bold"><button type="button" onclick="window.removeOrderUnitRow(${idx})" class="text-rose-500 w-6 h-6 flex items-center justify-center bg-rose-50 rounded"><i class="fa-solid fa-trash"></i></button></div>`; });
-    }
+    function renderOrderUnitsRows() { const container = document.getElementById('orderUnitsList'); container.innerHTML = ''; newOrderUnits.forEach((u, idx) => { container.innerHTML += `<div class="flex gap-2 items-center"><input type="text" value="${u.brand}" onchange="newOrderUnits[${idx}].brand=this.value" class="w-1/2 bg-white border border-slate-200 rounded p-2 text-[10px] outline-none font-bold"><input type="text" value="${u.name}" onchange="newOrderUnits[${idx}].name=this.value" class="w-1/2 bg-white border border-slate-200 rounded p-2 text-[10px] outline-none font-bold"><button type="button" onclick="window.removeOrderUnitRow(${idx})" class="text-rose-500 w-6 h-6 flex items-center justify-center bg-rose-50 rounded"><i class="fa-solid fa-trash"></i></button></div>`; }); }
     window.addOrderUnitRow = function() { newOrderUnits.push({ name: 'AC Split 1 PK', brand: 'Umum' }); renderOrderUnitsRows(); };
     window.removeOrderUnitRow = function(idx) { if (newOrderUnits.length > 1) { newOrderUnits.splice(idx, 1); renderOrderUnitsRows(); } };
 
     window.addManualItemToNewOrder = function() {
-      const name = document.getElementById('manualItemName').value.trim(); 
-      const price = parseFloat(document.getElementById('manualItemPrice').value);
-      const qty = parseFloat(document.getElementById('manualItemQty').value) || 1;
-      const unit = document.getElementById('manualItemUnit').value.trim() || 'Unit';
-      
-      if (name && !isNaN(price)) { 
-          newOrderManualItems.push({ name, price, qty, unit }); 
-          document.getElementById('manualItemName').value = ''; 
-          document.getElementById('manualItemPrice').value = ''; 
-          document.getElementById('manualItemQty').value = '1';
-          renderNewOrderManualItems(); 
-          calculateNewOrderTotal(); 
-      }
+      const name = document.getElementById('manualItemName').value.trim(); const price = parseFloat(document.getElementById('manualItemPrice').value); const qty = parseFloat(document.getElementById('manualItemQty').value) || 1; const unit = document.getElementById('manualItemUnit').value.trim() || 'Unit';
+      if (name && !isNaN(price)) { newOrderManualItems.push({ name, price, qty, unit }); document.getElementById('manualItemName').value = ''; document.getElementById('manualItemPrice').value = ''; document.getElementById('manualItemQty').value = '1'; renderNewOrderManualItems(); calculateNewOrderTotal(); }
     };
     
-    function renderNewOrderManualItems() {
-      const container = document.getElementById('newOrderManualItemsList'); container.innerHTML = '';
-      newOrderManualItems.forEach((m, idx) => container.innerHTML += `<div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-slate-200 text-[10px] shadow-sm"><span class="font-bold">${m.name} (${m.qty} ${m.unit})</span><div class="flex items-center gap-2"><span class="font-black">Rp ${(m.price * m.qty).toLocaleString('id-ID')}</span><button type="button" onclick="window.removeManualItem(${idx})" class="w-5 h-5 bg-rose-50 text-rose-500 rounded"><i class="fa-solid fa-xmark"></i></button></div></div>`);
-    }
+    function renderNewOrderManualItems() { const container = document.getElementById('newOrderManualItemsList'); container.innerHTML = ''; newOrderManualItems.forEach((m, idx) => container.innerHTML += `<div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-slate-200 text-[10px] shadow-sm"><span class="font-bold">${m.name} (${m.qty} ${m.unit})</span><div class="flex items-center gap-2"><span class="font-black">Rp ${(m.price * m.qty).toLocaleString('id-ID')}</span><button type="button" onclick="window.removeManualItem(${idx})" class="w-5 h-5 bg-rose-50 text-rose-500 rounded"><i class="fa-solid fa-xmark"></i></button></div></div>`); }
     window.removeManualItem = function(idx) { newOrderManualItems.splice(idx, 1); renderNewOrderManualItems(); calculateNewOrderTotal(); };
 
-    function calculateNewOrderTotal() { 
-        let t = 0; 
-        Object.keys(newOrderSelectedServices).forEach(id => {
-            t += newOrderSelectedServices[id].price * newOrderSelectedServices[id].qty;
-        }); 
-        newOrderManualItems.forEach(m => {
-            t += m.price * m.qty;
-        }); 
-        document.getElementById('newOrderCalculatedTotal').innerText = `Rp ${t.toLocaleString('id-ID')}`; 
-    }
+    function calculateNewOrderTotal() { let t = 0; Object.keys(newOrderSelectedServices).forEach(id => { t += newOrderSelectedServices[id].price * newOrderSelectedServices[id].qty; }); newOrderManualItems.forEach(m => { t += m.price * m.qty; }); document.getElementById('newOrderCalculatedTotal').innerText = `Rp ${t.toLocaleString('id-ID')}`; }
 
     window.handleCreateOrder = function(e) {
       e.preventDefault();
@@ -1695,50 +1495,23 @@
       const tId = document.getElementById('orderTechSelect').value; const tech = GBB_STATE.technicians.find(x => x.id === tId);
 
       const services = []; let total = 0;
-      Object.keys(newOrderSelectedServices).forEach(id => { 
-          const item = GBB_STATE.catalog.find(c => c.id === id); 
-          if (item) { 
-              const sel = newOrderSelectedServices[id];
-              services.push({ name: item.name, price: sel.price, qty: sel.qty, unit: item.unit || 'Unit' }); 
-              total += (sel.price * sel.qty); 
-          } 
-      });
+      Object.keys(newOrderSelectedServices).forEach(id => { const item = GBB_STATE.catalog.find(c => c.id === id); if (item) { const sel = newOrderSelectedServices[id]; services.push({ name: item.name, price: sel.price, qty: sel.qty, unit: item.unit || 'Unit' }); total += (sel.price * sel.qty); } });
       newOrderManualItems.forEach(m => { services.push({name: m.name, price: m.price, qty: m.qty, unit: m.unit}); total += (m.price * m.qty); });
 
-      if (!GBB_STATE.customers.some(c => c.phone === phone)) {
-        GBB_STATE.customers.push({ name, phone, password: '123', address: addr, units: [...newOrderUnits], lat: document.getElementById('orderLat').value, lng: document.getElementById('orderLng').value });
-      }
+      if (!GBB_STATE.customers.some(c => c.phone === phone)) GBB_STATE.customers.push({ name, phone, password: '123', address: addr, units: [...newOrderUnits], lat: document.getElementById('orderLat').value, lng: document.getElementById('orderLng').value });
 
       GBB_STATE.orders.unshift({ id: 'GBB-2026-' + String(GBB_STATE.orders.length + 1).padStart(3, '0'), custName: name, custPhone: phone, custAddress: addr, units: [...newOrderUnits], techId: tId, techName: tech ? tech.name : 'Teknisi', date: document.getElementById('orderDate').value, services, manualItems: [], total, status: 'pending', notes: document.getElementById('orderNotes').value, warranty: document.getElementById('orderWarrantyPeriod').value, lat: document.getElementById('orderLat').value, lng: document.getElementById('orderLng').value });
 
-      saveAppData();
-      showCustomAlert('Berhasil', 'Tiket Pesanan berhasil disimpan dan terintegrasi ke akun pelanggan!');
+      saveAppData(); showCustomAlert('Berhasil', 'Tiket Pesanan berhasil disimpan ke Cloud!');
       newOrderSelectedServices = {}; newOrderManualItems = []; switchTab('dashboard');
     };
 
     function initCanvas(canvasId) {
-        const canvas = document.getElementById(canvasId);
-        if(!canvas) return;
-        const ctx = canvas.getContext('2d');
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-        let isDrawing = false;
-        
-        function getPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            return { x: clientX - rect.left, y: clientY - rect.top };
-        }
-        function startPos(e) { e.preventDefault(); isDrawing = true; draw(e); }
-        function endPos() { isDrawing = false; ctx.beginPath(); }
-        function draw(e) {
-            if(!isDrawing) return;
-            e.preventDefault();
-            const pos = getPos(e);
-            ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#0f172a';
-            ctx.lineTo(pos.x, pos.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
-        }
+        const canvas = document.getElementById(canvasId); if(!canvas) return; const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; let isDrawing = false;
+        function getPos(e) { const rect = canvas.getBoundingClientRect(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; return { x: clientX - rect.left, y: clientY - rect.top }; }
+        function startPos(e) { e.preventDefault(); isDrawing = true; draw(e); } function endPos() { isDrawing = false; ctx.beginPath(); }
+        function draw(e) { if(!isDrawing) return; e.preventDefault(); const pos = getPos(e); ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#0f172a'; ctx.lineTo(pos.x, pos.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
         canvas.addEventListener('mousedown', startPos); canvas.addEventListener('mouseup', endPos); canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('touchstart', startPos, {passive: false}); canvas.addEventListener('touchend', endPos); canvas.addEventListener('touchmove', draw, {passive: false});
     }
@@ -1750,55 +1523,27 @@
     };
 
     window.saveSignature = function(type) {
-        if(type === 'cust') {
-            const data = document.getElementById('custSignCanvas').toDataURL(); const img = document.getElementById('invCustSignImg');
-            img.src = data; img.classList.remove('hidden'); document.getElementById('invCustSignPlaceholder').classList.add('hidden');
-        } else if(type === 'tech') {
-            const data = document.getElementById('techSignCanvas').toDataURL(); const img = document.getElementById('baTechSignImg');
-            img.src = data; img.classList.remove('hidden'); document.getElementById('baTechSignPlaceholder').classList.add('hidden');
-        }
+        if(type === 'cust') { const data = document.getElementById('custSignCanvas').toDataURL(); const img = document.getElementById('invCustSignImg'); img.src = data; img.classList.remove('hidden'); document.getElementById('invCustSignPlaceholder').classList.add('hidden'); } 
+        else if(type === 'tech') { const data = document.getElementById('techSignCanvas').toDataURL(); const img = document.getElementById('baTechSignImg'); img.src = data; img.classList.remove('hidden'); document.getElementById('baTechSignPlaceholder').classList.add('hidden'); }
     };
 
     window.openInvoiceModalForOrder = function(id) {
       const o = GBB_STATE.orders.find(x => x.id === id); currentSelectedOrderForModal = o; if (!o) return;
       document.getElementById('invCustName').innerText = o.custName; document.getElementById('invCustPhone').innerText = o.custPhone; document.getElementById('invCustAddress').innerText = o.custAddress;
-      document.getElementById('invNumber').innerText = 'INV/' + o.id; document.getElementById('invDate').innerText = o.date; document.getElementById('invCustSignName').innerText = o.custName;
-      document.getElementById('invTechName').innerText = o.techName;
-      document.getElementById('invWarrantyBadgeText').innerText = o.warranty || '90 Hari (3 Bulan)';
+      document.getElementById('invNumber').innerText = 'INV/' + o.id; document.getElementById('invDate').innerText = o.date; document.getElementById('invCustSignName').innerText = o.custName; document.getElementById('invTechName').innerText = o.techName; document.getElementById('invWarrantyBadgeText').innerText = o.warranty || '90 Hari (3 Bulan)';
 
-      document.getElementById('invStatusBadge').className = o.status === 'completed' ? 'px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-700' : 'px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-rose-100 text-rose-700';
-      document.getElementById('invStatusBadge').innerText = o.status === 'completed' ? 'LUNAS' : 'BELUM LUNAS';
+      document.getElementById('invStatusBadge').className = o.status === 'completed' ? 'px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-700' : 'px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-rose-100 text-rose-700'; document.getElementById('invStatusBadge').innerText = o.status === 'completed' ? 'LUNAS' : 'BELUM LUNAS';
       
       const paymentSelector = document.getElementById('invPaymentSelector'); if (paymentSelector) paymentSelector.value = 'qris'; window.toggleInvoicePayment('qris');
 
       const tb = document.getElementById('invItemsTableBody'); tb.innerHTML = ''; let sub = 0;
-      
       o.units.forEach(u => tb.innerHTML += `<tr class="border-b border-slate-100"><td class="py-2.5 px-3 font-bold">AC: ${u.brand} (${u.name})</td><td class="py-2.5 px-3 text-center">1 Unit</td><td class="py-2.5 px-3 text-right">-</td><td class="py-2.5 px-3 text-right">Rp 0</td></tr>`);
       
-      // Mengambil data item dengan nilai Qty
-      o.services.forEach(s => { 
-          const qty = s.qty || 1;
-          const unitName = s.unit || 'Unit';
-          const lineTotal = s.price * qty;
-          sub += lineTotal; 
-          tb.innerHTML += `<tr class="border-b border-slate-100"><td class="py-2.5 px-3">${s.name}</td><td class="py-2.5 px-3 text-center whitespace-nowrap">${qty} ${unitName}</td><td class="py-2.5 px-3 text-right">Rp ${s.price.toLocaleString('id-ID')}</td><td class="py-2.5 px-3 text-right">Rp ${lineTotal.toLocaleString('id-ID')}</td></tr>`; 
-      });
-      
-      // Kompatibilitas untuk manualItems jika ada yang lama
-      if(o.manualItems && o.manualItems.length > 0) {
-          o.manualItems.forEach(m => { 
-              const qty = m.qty || 1;
-              const unitName = m.unit || 'Unit';
-              const lineTotal = m.price * qty;
-              sub += lineTotal; 
-              tb.innerHTML += `<tr class="border-b border-slate-100"><td class="py-2.5 px-3">${m.name}</td><td class="py-2.5 px-3 text-center whitespace-nowrap">${qty} ${unitName}</td><td class="py-2.5 px-3 text-right">Rp ${m.price.toLocaleString('id-ID')}</td><td class="py-2.5 px-3 text-right">Rp ${lineTotal.toLocaleString('id-ID')}</td></tr>`; 
-          });
-      }
+      o.services.forEach(s => { const qty = s.qty || 1; const unitName = s.unit || 'Unit'; const lineTotal = s.price * qty; sub += lineTotal; tb.innerHTML += `<tr class="border-b border-slate-100"><td class="py-2.5 px-3">${s.name}</td><td class="py-2.5 px-3 text-center whitespace-nowrap">${qty} ${unitName}</td><td class="py-2.5 px-3 text-right">Rp ${s.price.toLocaleString('id-ID')}</td><td class="py-2.5 px-3 text-right">Rp ${lineTotal.toLocaleString('id-ID')}</td></tr>`; });
+      if(o.manualItems && o.manualItems.length > 0) { o.manualItems.forEach(m => { const qty = m.qty || 1; const unitName = m.unit || 'Unit'; const lineTotal = m.price * qty; sub += lineTotal; tb.innerHTML += `<tr class="border-b border-slate-100"><td class="py-2.5 px-3">${m.name}</td><td class="py-2.5 px-3 text-center whitespace-nowrap">${qty} ${unitName}</td><td class="py-2.5 px-3 text-right">Rp ${m.price.toLocaleString('id-ID')}</td><td class="py-2.5 px-3 text-right">Rp ${lineTotal.toLocaleString('id-ID')}</td></tr>`; }); }
 
       document.getElementById('invSubtotal').innerText = `Rp ${sub.toLocaleString('id-ID')}`; document.getElementById('invGrandTotal').innerText = `Rp ${o.total.toLocaleString('id-ID')}`;
-      
-      document.getElementById('invoiceModal').classList.remove('hidden');
-      setTimeout(() => initCanvas('custSignCanvas'), 200);
+      document.getElementById('invoiceModal').classList.remove('hidden'); setTimeout(() => initCanvas('custSignCanvas'), 200);
     };
     
     window.closeInvoiceModal = function() { document.getElementById('invoiceModal').classList.add('hidden'); };
@@ -1807,37 +1552,28 @@
 
     window.openBAModalForOrder = function(id) {
       const o = GBB_STATE.orders.find(x => x.id === id); currentSelectedOrderForModal = o; if (!o) return;
-      document.getElementById('baDate').innerText = o.date; document.getElementById('baCustName').innerText = o.custName; document.getElementById('baCustAddress').innerText = o.custAddress;
-      document.getElementById('baTechName').innerText = o.techName; document.getElementById('baSignTechName').innerText = o.techName; document.getElementById('baTicketId').innerText = o.id;
+      document.getElementById('baDate').innerText = o.date; document.getElementById('baCustName').innerText = o.custName; document.getElementById('baCustAddress').innerText = o.custAddress; document.getElementById('baTechName').innerText = o.techName; document.getElementById('baSignTechName').innerText = o.techName; document.getElementById('baTicketId').innerText = o.id;
 
       const container = document.getElementById('baUnitsListContainer'); container.innerHTML = '';
       o.units.forEach((u, idx) => container.innerHTML += `<div class="p-2 bg-slate-50 rounded-lg border border-slate-200 text-xs flex justify-between items-center"><span class="font-bold">${idx + 1}. Unit: ${u.brand} - ${u.name}</span><span class="text-emerald-600 font-bold"><i class="fa-solid fa-check"></i> Selesai Diservis (Garansi: ${o.warranty || '90 Hari'})</span></div>`);
       
-      document.getElementById('beritaAcaraModal').classList.remove('hidden');
-      setTimeout(() => initCanvas('techSignCanvas'), 200);
+      document.getElementById('beritaAcaraModal').classList.remove('hidden'); setTimeout(() => initCanvas('techSignCanvas'), 200);
     };
     window.closeBAModal = function() { document.getElementById('beritaAcaraModal').classList.add('hidden'); };
     window.printBAPDF = function() { const el = document.getElementById('baPrintableArea'); html2pdf().from(el).set({ margin: 10, filename: 'BAST_'+(currentSelectedOrderForModal.id)+'.pdf', image: { type: 'jpeg', quality: 1.0 }, html2canvas: {scale: 4, useCORS: true, letterRendering: true}, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).save(); };
 
     window.updateChartData = function() {
         if(!document.getElementById('dashboardChart')) return;
-        const ctx = document.getElementById('dashboardChart').getContext('2d');
-        const year = document.getElementById('chartYearSelect')?.value || new Date().getFullYear().toString();
+        const ctx = document.getElementById('dashboardChart').getContext('2d'); const year = document.getElementById('chartYearSelect')?.value || new Date().getFullYear().toString();
         const monthlyRevenue = new Array(12).fill(0); const monthlyOrders = new Array(12).fill(0);
-        
         GBB_STATE.orders.forEach(o => { if(o.status === 'completed' && o.date.startsWith(year)) { const month = parseInt(o.date.split('-')[1]) - 1; monthlyRevenue[month] += o.total; monthlyOrders[month] += 1; } });
         if(chartInstance) chartInstance.destroy();
-        
-        chartInstance = new Chart(ctx, {
-            type: 'bar', data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'], datasets: [{ label: 'Omset (Rp)', data: monthlyRevenue, backgroundColor: 'rgba(2, 132, 199, 0.7)', borderColor: 'rgb(2, 132, 199)', borderWidth: 1, yAxisID: 'y' }, { label: 'Jml Tiket Selesai', data: monthlyOrders, type: 'line', backgroundColor: 'rgba(16, 185, 129, 1)', borderColor: 'rgb(16, 185, 129)', borderWidth: 2, yAxisID: 'y1' }] },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { type: 'linear', display: true, position: 'left', ticks: { font: {size: 9} } }, y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { font: {size: 9} } }, x: { ticks: { font: {size: 9} } } }, plugins: { legend: { labels: { font: {size: 10} } } } }
-        });
+        chartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'], datasets: [{ label: 'Omset (Rp)', data: monthlyRevenue, backgroundColor: 'rgba(2, 132, 199, 0.7)', borderColor: 'rgb(2, 132, 199)', borderWidth: 1, yAxisID: 'y' }, { label: 'Jml Tiket Selesai', data: monthlyOrders, type: 'line', backgroundColor: 'rgba(16, 185, 129, 1)', borderColor: 'rgb(16, 185, 129)', borderWidth: 2, yAxisID: 'y1' }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { type: 'linear', display: true, position: 'left', ticks: { font: {size: 9} } }, y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { font: {size: 9} } }, x: { ticks: { font: {size: 9} } } }, plugins: { legend: { labels: { font: {size: 10} } } } } });
     };
 
     window.downloadRekapExcel = function() {
         if (typeof XLSX === 'undefined') { showCustomAlert('Info', 'Library Excel belum siap.'); return; }
-        const monthVal = document.getElementById('reportMonth').value;
-        let filteredOrders = GBB_STATE.orders.filter(o => o.status === 'completed'); let fileName = 'Laporan_Rekap_Pesanan_Semua.xlsx';
+        const monthVal = document.getElementById('reportMonth').value; let filteredOrders = GBB_STATE.orders.filter(o => o.status === 'completed'); let fileName = 'Laporan_Rekap_Pesanan_Semua.xlsx';
         if(monthVal) { filteredOrders = filteredOrders.filter(o => o.date.startsWith(monthVal)); fileName = `Laporan_Rekap_Pesanan_${monthVal}.xlsx`; }
         const dataToExport = filteredOrders.map((o, index) => ({ 'No': index + 1, 'ID Tiket': o.id, 'Tanggal': o.date, 'Nama Pelanggan': o.custName, 'No WhatsApp': o.custPhone, 'Alamat Servis': o.custAddress, 'Nama Teknisi': o.techName, 'Garansi': o.warranty, 'Total Tagihan (Rp)': o.total, 'Status': 'Selesai / Lunas' }));
         if(dataToExport.length === 0) { showCustomAlert('Info', 'Data kosong pada periode tersebut.'); return; }
@@ -1845,8 +1581,7 @@
     };
 
     window.downloadRekapPDF = function() {
-        const monthVal = document.getElementById('reportMonth').value;
-        let filteredOrders = GBB_STATE.orders.filter(o => o.status === 'completed'); let periodText = 'Keseluruhan Waktu';
+        const monthVal = document.getElementById('reportMonth').value; let filteredOrders = GBB_STATE.orders.filter(o => o.status === 'completed'); let periodText = 'Keseluruhan Waktu';
         if(monthVal) { filteredOrders = filteredOrders.filter(o => o.date.startsWith(monthVal)); periodText = `Periode: ${monthVal}`; }
         if(filteredOrders.length === 0) { showCustomAlert('Info', 'Data kosong pada periode tersebut.'); return; }
         let totalOmset = filteredOrders.reduce((acc, curr) => acc + curr.total, 0);
@@ -1860,101 +1595,25 @@
       GBB_STATE.customers.forEach((c, idx) => grid.innerHTML += `<div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex justify-between items-start"><div><h4 class="font-black text-slate-900 text-sm">${c.name}</h4><p class="text-[10px] text-cyan-600 font-bold"><i class="fa-brands fa-whatsapp mr-1"></i> ${c.phone}</p></div></div><p class="text-[10px] text-slate-500 mt-2 h-8 overflow-hidden"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> ${c.address}</p><div class="pt-3 border-t border-slate-100 flex justify-between items-center mt-3"><span class="text-[9px] text-slate-400 font-bold bg-slate-50 px-2 py-1 rounded border border-slate-200">Pass: ${c.password}</span><div class="flex gap-1.5"><button onclick="window.openEditCustomerModal(${idx})" class="w-6 h-6 bg-blue-50 text-blue-600 rounded flex justify-center items-center"><i class="fa-solid fa-pen"></i></button><button onclick="window.deleteCustomer(${idx})" class="w-6 h-6 bg-rose-50 text-rose-500 rounded flex justify-center items-center"><i class="fa-solid fa-trash"></i></button></div></div></div>`);
     }
     window.filterCustomerList = function(q) { const lowerQ = q.toLowerCase(); const cards = document.getElementById('customersGrid').children; GBB_STATE.customers.forEach((c, i) => cards[i].style.display = (c.name.toLowerCase().includes(lowerQ) || c.phone.includes(lowerQ)) ? 'block' : 'none'); };
-    window.deleteCustomer = function(idx) { 
-       GBB_STATE.customers.splice(idx, 1); saveAppData(); renderCustomers(); 
-    };
+    window.deleteCustomer = function(idx) { GBB_STATE.customers.splice(idx, 1); saveAppData(); renderCustomers(); };
     window.openCustomerModal = function() { document.getElementById('customerModalTitle').innerHTML = '<i class="fa-solid fa-user-plus text-cyan-600 mr-2"></i> Tambah Pelanggan'; document.getElementById('editCustomerOriginalPhone').value = ''; document.getElementById('modalCustName').value = ''; document.getElementById('modalCustPhone').value = ''; document.getElementById('modalCustPassword').value = '123'; document.getElementById('modalCustAddress').value = ''; document.getElementById('customerModal').classList.remove('hidden'); };
     window.openEditCustomerModal = function(idx) { document.getElementById('customerModalTitle').innerHTML = '<i class="fa-solid fa-user-pen text-cyan-600 mr-2"></i> Edit Pelanggan'; const c = GBB_STATE.customers[idx]; document.getElementById('editCustomerOriginalPhone').value = c.phone; document.getElementById('modalCustName').value = c.name; document.getElementById('modalCustPhone').value = c.phone; document.getElementById('modalCustPassword').value = c.password; document.getElementById('modalCustAddress').value = c.address; document.getElementById('modalCustLat').value = c.lat; document.getElementById('modalCustLng').value = c.lng; document.getElementById('customerModal').classList.remove('hidden'); };
     window.closeCustomerModal = function() { document.getElementById('customerModal').classList.add('hidden'); };
     window.handleCustomerSave = function(e) { e.preventDefault(); const orig = document.getElementById('editCustomerOriginalPhone').value; const c = { name: document.getElementById('modalCustName').value, phone: document.getElementById('modalCustPhone').value, password: document.getElementById('modalCustPassword').value, address: document.getElementById('modalCustAddress').value, lat: document.getElementById('modalCustLat').value, lng: document.getElementById('modalCustLng').value, units: [{name:'AC Standar',brand:'Umum'}] }; if (orig) { const i = GBB_STATE.customers.findIndex(x => x.phone === orig); if (i>-1) GBB_STATE.customers[i] = {...GBB_STATE.customers[i], ...c}; } else { if (GBB_STATE.customers.some(x => x.phone === c.phone)) { showCustomAlert('Perhatian', 'No WA sudah terdaftar!', 'fa-solid fa-triangle-exclamation text-amber-500'); return; } GBB_STATE.customers.push(c); } saveAppData(); closeCustomerModal(); renderCustomers(); };
 
     function renderTechnicians() { const g = document.getElementById('techniciansGrid'); g.innerHTML = ''; GBB_STATE.technicians.forEach((t, i) => g.innerHTML += `<div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex justify-between items-start"><div><h4 class="font-black text-slate-900 text-sm">${t.name}</h4><p class="text-[10px] text-blue-600 font-bold"><i class="fa-brands fa-whatsapp mr-1"></i> ${t.phone}</p></div></div><div class="pt-3 border-t border-slate-100 flex justify-between items-center mt-3"><span class="text-[9px] text-slate-400 font-bold bg-slate-50 px-2 py-1 rounded">PIN: ${t.password}</span><div class="flex gap-1.5"><button onclick="window.openEditTechnicianModal(${i})" class="w-6 h-6 bg-blue-50 text-blue-600 rounded flex justify-center items-center"><i class="fa-solid fa-pen"></i></button><button onclick="window.deleteTechnician(${i})" class="w-6 h-6 bg-rose-50 text-rose-500 rounded flex justify-center items-center"><i class="fa-solid fa-trash"></i></button></div></div></div>`); }
-    window.deleteTechnician = function(i) { GBB_STATE.technicians.splice(i, 1); renderTechnicians(); };
+    window.deleteTechnician = function(i) { GBB_STATE.technicians.splice(i, 1); saveAppData(); renderTechnicians(); };
     window.openTechnicianModal = function() { document.getElementById('technicianModalTitle').innerHTML = '<i class="fa-solid fa-user-gear text-blue-600 mr-2"></i> Tambah Teknisi'; document.getElementById('editTechnicianOriginalId').value = ''; document.getElementById('modalTechName').value = ''; document.getElementById('modalTechPhone').value = ''; document.getElementById('modalTechPassword').value = '123'; document.getElementById('technicianModal').classList.remove('hidden'); };
     window.openEditTechnicianModal = function(i) { document.getElementById('technicianModalTitle').innerHTML = '<i class="fa-solid fa-user-pen text-blue-600 mr-2"></i> Edit Teknisi'; const t = GBB_STATE.technicians[i]; document.getElementById('editTechnicianOriginalId').value = t.id; document.getElementById('modalTechName').value = t.name; document.getElementById('modalTechPhone').value = t.phone; document.getElementById('modalTechPassword').value = t.password; document.getElementById('technicianModal').classList.remove('hidden'); };
     window.closeTechnicianModal = function() { document.getElementById('technicianModal').classList.add('hidden'); };
-    window.handleTechnicianSave = function(e) { e.preventDefault(); const orig = document.getElementById('editTechnicianOriginalId').value; const t = { name: document.getElementById('modalTechName').value, phone: document.getElementById('modalTechPhone').value, password: document.getElementById('modalTechPassword').value }; if (orig) { const i = GBB_STATE.technicians.findIndex(x => x.id === orig); if (i>-1) GBB_STATE.technicians[i] = {...GBB_STATE.technicians[i], ...t}; } else { t.id = 'tech_'+Date.now(); t.status = 'Tersedia'; GBB_STATE.technicians.push(t); } closeTechnicianModal(); renderTechnicians(); };
+    window.handleTechnicianSave = function(e) { e.preventDefault(); const orig = document.getElementById('editTechnicianOriginalId').value; const t = { name: document.getElementById('modalTechName').value, phone: document.getElementById('modalTechPhone').value, password: document.getElementById('modalTechPassword').value }; if (orig) { const i = GBB_STATE.technicians.findIndex(x => x.id === orig); if (i>-1) GBB_STATE.technicians[i] = {...GBB_STATE.technicians[i], ...t}; } else { t.id = 'tech_'+Date.now(); t.status = 'Tersedia'; GBB_STATE.technicians.push(t); } saveAppData(); closeTechnicianModal(); renderTechnicians(); };
 
-    // FUNGSI GUDANG DENGAN EDIT DAN HAPUS
-    function renderCatalog() { 
-        const g = document.getElementById('catalogGrid'); g.innerHTML = ''; 
-        GBB_STATE.catalog.forEach(c => g.innerHTML += `
-        <div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100">
-            <div class="flex justify-between items-start">
-                <div>
-                    <h4 class="font-black text-slate-900 text-xs">${c.name}</h4>
-                    <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase ${c.type==='service'?'bg-cyan-50 text-cyan-700':'bg-indigo-50 text-indigo-700'}">${c.type==='service'?'Jasa':'Barang'}</span>
-                </div>
-                <div class="flex gap-1.5 ml-2 shrink-0">
-                    <button onclick="window.openEditCatalogModal('${c.id}')" class="w-6 h-6 bg-blue-50 text-blue-600 rounded flex justify-center items-center"><i class="fa-solid fa-pen text-[10px]"></i></button>
-                    <button onclick="window.deleteCatalogItem('${c.id}')" class="w-6 h-6 bg-rose-50 text-rose-500 rounded flex justify-center items-center"><i class="fa-solid fa-trash text-[10px]"></i></button>
-                </div>
-            </div>
-            <div class="flex justify-between items-center pt-3 border-t border-slate-100 mt-3 text-[10px]">
-                <span class="font-black text-emerald-600">Rp ${c.price.toLocaleString('id-ID')} / ${c.unit || 'Unit'}</span>
-                <span class="font-bold text-slate-500 bg-slate-50 px-2 py-1 rounded">Stok: ${c.stock}</span>
-            </div>
-        </div>`); 
-    }
-
-    window.openCatalogModal = function() { 
-        document.getElementById('catalogModalTitle').innerHTML = '<i class="fa-solid fa-box text-indigo-600 mr-2"></i> Tambah Item';
-        document.getElementById('editCatalogOriginalId').value = ''; 
-        document.getElementById('modalCatName').value = ''; 
-        document.getElementById('modalCatPrice').value = ''; 
-        document.getElementById('modalCatStock').value = '10'; 
-        document.getElementById('modalCatUnit').value = 'Unit'; 
-        document.getElementById('catalogModal').classList.remove('hidden'); 
-    }; 
-    
-    window.openEditCatalogModal = function(id) { 
-        document.getElementById('catalogModalTitle').innerHTML = '<i class="fa-solid fa-box text-indigo-600 mr-2"></i> Edit Item';
-        const c = GBB_STATE.catalog.find(x => x.id === id);
-        if(!c) return;
-        document.getElementById('editCatalogOriginalId').value = c.id; 
-        document.getElementById('modalCatName').value = c.name; 
-        document.getElementById('modalCatType').value = c.type; 
-        document.getElementById('modalCatPrice').value = c.price; 
-        document.getElementById('modalCatStock').value = c.stock; 
-        document.getElementById('modalCatUnit').value = c.unit || 'Unit'; 
-        document.getElementById('catalogModal').classList.remove('hidden'); 
-    }; 
-    
-    window.deleteCatalogItem = function(id) {
-        if(confirm('Yakin ingin menghapus item ini dari katalog gudang?')) {
-            GBB_STATE.catalog = GBB_STATE.catalog.filter(c => c.id !== id);
-            saveAppData();
-            renderCatalog();
-        }
-    };
-
+    function renderCatalog() { const g = document.getElementById('catalogGrid'); g.innerHTML = ''; GBB_STATE.catalog.forEach(c => g.innerHTML += `<div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex justify-between items-start"><div><h4 class="font-black text-slate-900 text-xs">${c.name}</h4><span class="px-2 py-0.5 rounded text-[8px] font-black uppercase ${c.type==='service'?'bg-cyan-50 text-cyan-700':'bg-indigo-50 text-indigo-700'}">${c.type==='service'?'Jasa':'Barang'}</span></div><div class="flex gap-1.5 ml-2 shrink-0"><button onclick="window.openEditCatalogModal('${c.id}')" class="w-6 h-6 bg-blue-50 text-blue-600 rounded flex justify-center items-center"><i class="fa-solid fa-pen text-[10px]"></i></button><button onclick="window.deleteCatalogItem('${c.id}')" class="w-6 h-6 bg-rose-50 text-rose-500 rounded flex justify-center items-center"><i class="fa-solid fa-trash text-[10px]"></i></button></div></div><div class="flex justify-between items-center pt-3 border-t border-slate-100 mt-3 text-[10px]"><span class="font-black text-emerald-600">Rp ${c.price.toLocaleString('id-ID')} / ${c.unit || 'Unit'}</span><span class="font-bold text-slate-500 bg-slate-50 px-2 py-1 rounded">Stok: ${c.stock}</span></div></div>`); }
+    window.openCatalogModal = function() { document.getElementById('catalogModalTitle').innerHTML = '<i class="fa-solid fa-box text-indigo-600 mr-2"></i> Tambah Item'; document.getElementById('editCatalogOriginalId').value = ''; document.getElementById('modalCatName').value = ''; document.getElementById('modalCatPrice').value = ''; document.getElementById('modalCatStock').value = '10'; document.getElementById('modalCatUnit').value = 'Unit'; document.getElementById('catalogModal').classList.remove('hidden'); }; 
+    window.openEditCatalogModal = function(id) { document.getElementById('catalogModalTitle').innerHTML = '<i class="fa-solid fa-box text-indigo-600 mr-2"></i> Edit Item'; const c = GBB_STATE.catalog.find(x => x.id === id); if(!c) return; document.getElementById('editCatalogOriginalId').value = c.id; document.getElementById('modalCatName').value = c.name; document.getElementById('modalCatType').value = c.type; document.getElementById('modalCatPrice').value = c.price; document.getElementById('modalCatStock').value = c.stock; document.getElementById('modalCatUnit').value = c.unit || 'Unit'; document.getElementById('catalogModal').classList.remove('hidden'); }; 
+    window.deleteCatalogItem = function(id) { if(confirm('Yakin ingin menghapus item ini dari katalog gudang?')) { GBB_STATE.catalog = GBB_STATE.catalog.filter(c => c.id !== id); saveAppData(); renderCatalog(); } };
     window.closeCatalogModal = function() { document.getElementById('catalogModal').classList.add('hidden'); }; 
-
-    window.handleCatalogSave = function(e) { 
-        e.preventDefault(); 
-        const origId = document.getElementById('editCatalogOriginalId').value;
-        const catData = { 
-            name: document.getElementById('modalCatName').value, 
-            type: document.getElementById('modalCatType').value, 
-            price: parseFloat(document.getElementById('modalCatPrice').value), 
-            stock: parseInt(document.getElementById('modalCatStock').value),
-            unit: document.getElementById('modalCatUnit').value 
-        }; 
-        
-        if (origId) {
-            const idx = GBB_STATE.catalog.findIndex(x => x.id === origId);
-            if (idx > -1) {
-                GBB_STATE.catalog[idx] = { ...GBB_STATE.catalog[idx], ...catData };
-            }
-        } else {
-            catData.id = 'c_' + Date.now();
-            GBB_STATE.catalog.push(catData);
-        }
-        
-        saveAppData();
-        closeCatalogModal(); 
-        renderCatalog(); 
-    };
+    window.handleCatalogSave = function(e) { e.preventDefault(); const origId = document.getElementById('editCatalogOriginalId').value; const catData = { name: document.getElementById('modalCatName').value, type: document.getElementById('modalCatType').value, price: parseFloat(document.getElementById('modalCatPrice').value), stock: parseInt(document.getElementById('modalCatStock').value), unit: document.getElementById('modalCatUnit').value }; if (origId) { const idx = GBB_STATE.catalog.findIndex(x => x.id === origId); if (idx > -1) { GBB_STATE.catalog[idx] = { ...GBB_STATE.catalog[idx], ...catData }; } } else { catData.id = 'c_' + Date.now(); GBB_STATE.catalog.push(catData); } saveAppData(); closeCatalogModal(); renderCatalog(); };
 
     function renderPayroll() {
       const c = GBB_STATE.orders.filter(o => o.status === 'completed'); document.getElementById('payrollTotalTickets').innerText = c.length; const rev = c.reduce((a, b) => a + b.total, 0); document.getElementById('payrollTotalRevenue').innerText = `Rp ${rev.toLocaleString('id-ID')}`; document.getElementById('payrollTotalCommission').innerText = `Rp ${(rev * 0.20).toLocaleString('id-ID')}`;
@@ -1962,58 +1621,18 @@
       GBB_STATE.technicians.forEach(t => { const o = c.filter(x => x.techId === t.id); const r = o.reduce((a, b) => a + b.total, 0); const comm = r * 0.20; tbody.innerHTML += `<tr class="border-b border-slate-50"><td class="py-3 px-4 font-bold text-slate-900">${t.name}</td><td class="py-3 px-4 text-center">${o.length}</td><td class="py-3 px-4 text-right">Rp ${r.toLocaleString('id-ID')}</td><td class="py-3 px-4 text-right text-emerald-600 font-bold">Rp ${comm.toLocaleString('id-ID')}</td><td class="py-3 px-4 text-right font-black text-emerald-700 bg-emerald-50">Rp ${comm.toLocaleString('id-ID')}</td></tr>`; });
     }
 
-    // WARRANTY CLAIM MODAL LOGIC
     window.openWarrantyClaimModal = function() {
-       const container = document.getElementById('warrantyClaimListContainer');
-       container.innerHTML = '';
-       const completedOrders = GBB_STATE.orders.filter(o => o.status === 'completed');
-       
-       if (completedOrders.length === 0) {
-          container.innerHTML = '<p class="text-xs text-slate-500 text-center py-4 font-bold">Belum ada riwayat pesanan selesai untuk garansi.</p>';
-       } else {
-          completedOrders.forEach(o => {
-             const div = document.createElement('div');
-             div.className = 'p-3.5 bg-sky-50 rounded-2xl border border-sky-200 text-xs space-y-1 shadow-sm';
-             div.innerHTML = `
-                <div class="flex justify-between items-center"><span class="font-bold text-slate-900">${o.custName} (${o.custPhone})</span><span class="text-[9px] bg-emerald-100 text-emerald-800 font-black px-2 py-0.5 rounded">Garansi: ${o.warranty || '90 Hari'}</span></div>
-                <p class="text-[10px] text-slate-600"><i class="fa-solid fa-ticket text-cyan-600 mr-1"></i> No. Tiket: ${o.id} • Tgl Servis: ${o.date}</p>
-                <p class="text-[10px] text-slate-600"><i class="fa-solid fa-snowflake text-blue-500 mr-1"></i> Unit: ${o.units.map(u => u.name).join(', ')}</p>
-                <div class="pt-2 flex justify-end gap-2">
-                   <button onclick="window.processClaimWarranty('${o.id}')" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-700 text-white font-black text-[10px] rounded-xl shadow transition"><i class="fa-solid fa-file-shield mr-1"></i> Buat Tiket Klaim Garansi</button>
-                </div>
-             `;
-             container.appendChild(div);
-          });
-       }
-       document.getElementById('warrantyClaimModal').classList.remove('hidden');
+       const container = document.getElementById('warrantyClaimListContainer'); container.innerHTML = ''; const completedOrders = GBB_STATE.orders.filter(o => o.status === 'completed');
+       if (completedOrders.length === 0) { container.innerHTML = '<p class="text-xs text-slate-500 text-center py-4 font-bold">Belum ada riwayat pesanan selesai untuk garansi.</p>'; } else {
+          completedOrders.forEach(o => { const div = document.createElement('div'); div.className = 'p-3.5 bg-sky-50 rounded-2xl border border-sky-200 text-xs space-y-1 shadow-sm';
+             div.innerHTML = `<div class="flex justify-between items-center"><span class="font-bold text-slate-900">${o.custName} (${o.custPhone})</span><span class="text-[9px] bg-emerald-100 text-emerald-800 font-black px-2 py-0.5 rounded">Garansi: ${o.warranty || '90 Hari'}</span></div><p class="text-[10px] text-slate-600"><i class="fa-solid fa-ticket text-cyan-600 mr-1"></i> No. Tiket: ${o.id} • Tgl Servis: ${o.date}</p><p class="text-[10px] text-slate-600"><i class="fa-solid fa-snowflake text-blue-500 mr-1"></i> Unit: ${o.units.map(u => u.name).join(', ')}</p><div class="pt-2 flex justify-end gap-2"><button onclick="window.processClaimWarranty('${o.id}')" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-700 text-white font-black text-[10px] rounded-xl shadow transition"><i class="fa-solid fa-file-shield mr-1"></i> Buat Tiket Klaim Garansi</button></div>`;
+             container.appendChild(div); });
+       } document.getElementById('warrantyClaimModal').classList.remove('hidden');
     };
-
     window.processClaimWarranty = function(orderId) {
-       const o = GBB_STATE.orders.find(x => x.id === orderId);
-       if(!o) return;
-       const claimOrder = {
-          id: 'GBB-GARANSI-' + String(GBB_STATE.orders.length + 1).padStart(3, '0'),
-          custName: o.custName,
-          custPhone: o.custPhone,
-          custAddress: o.custAddress,
-          units: [...o.units],
-          techId: o.techId,
-          techName: o.techName,
-          date: new Date().toISOString().split('T')[0],
-          services: [{name: '[KLAIM GARANSI] Perbaikan Ulang AC (Bebas Biaya Jasa)', price: 0, qty: 1, unit: 'Unit'}],
-          manualItems: [],
-          total: 0,
-          status: 'pending',
-          notes: 'Klaim Garansi dari Tiket ' + o.id,
-          warranty: o.warranty || '90 Hari',
-          lat: o.lat,
-          lng: o.lng
-       };
-       GBB_STATE.orders.unshift(claimOrder);
-       saveAppData();
-       document.getElementById('warrantyClaimModal').classList.add('hidden');
-       showCustomAlert('Berhasil', 'Tiket Klaim Garansi berhasil dibuat! Status tiket masuk ke daftar tunggu penugasan.');
-       switchTab('dashboard');
+       const o = GBB_STATE.orders.find(x => x.id === orderId); if(!o) return;
+       const claimOrder = { id: 'GBB-GARANSI-' + String(GBB_STATE.orders.length + 1).padStart(3, '0'), custName: o.custName, custPhone: o.custPhone, custAddress: o.custAddress, units: [...o.units], techId: o.techId, techName: o.techName, date: new Date().toISOString().split('T')[0], services: [{name: '[KLAIM GARANSI] Perbaikan Ulang AC (Bebas Biaya Jasa)', price: 0, qty: 1, unit: 'Unit'}], manualItems: [], total: 0, status: 'pending', notes: 'Klaim Garansi dari Tiket ' + o.id, warranty: o.warranty || '90 Hari', lat: o.lat, lng: o.lng };
+       GBB_STATE.orders.unshift(claimOrder); saveAppData(); document.getElementById('warrantyClaimModal').classList.add('hidden'); showCustomAlert('Berhasil', 'Tiket Klaim Garansi berhasil dibuat! Status tiket masuk ke daftar tunggu penugasan.'); switchTab('dashboard');
     };
   </script>
 </body>
