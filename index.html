@@ -236,7 +236,12 @@
             <div class="lg:col-span-2 glass-card rounded-3xl p-5 sm:p-7 shadow-xl border border-white/60">
               <div class="flex justify-between items-center mb-4">
                 <h3 class="text-sm font-black text-slate-800"><i class="fa-solid fa-chart-line text-cyan-600 mr-2"></i> Grafik Tren Omset & Pesanan</h3>
-                <select id="chartYearSelect" onchange="window.updateChartData()" class="bg-slate-50 border border-slate-200 rounded-lg p-1 text-xs font-bold outline-none text-cyan-700"><option value="2026">2026</option><option value="2025">2025</option></select>
+                <select id="chartYearSelect" onchange="window.updateChartData()" class="bg-slate-50 border border-slate-200 rounded-lg p-1 text-xs font-bold outline-none text-cyan-700">
+                   <option value="2027">2027</option>
+                   <option value="2026" selected>2026</option>
+                   <option value="2025">2025</option>
+                   <option value="2024">2024</option>
+                </select>
               </div>
               <div class="relative w-full h-48 sm:h-64"><canvas id="dashboardChart"></canvas></div>
             </div>
@@ -960,16 +965,24 @@
     
     // GANTI BAGIAN INI DENGAN FIREBASE CONFIG DARI PROJECT ANDA
     const firebaseConfig = {
-    apiKey: "AIzaSyCv4Fu-YJw8sqREapYn2xMpxQyttZrNldg",
-  authDomain: "gbbcooling.firebaseapp.com",
-  projectId: "gbbcooling",
-  storageBucket: "gbbcooling.firebasestorage.app",
-  messagingSenderId: "817517370571",
-  appId: "1:817517370571:web:2dd6053ef6f99a4d59cf4e"
+      apiKey: "AIzaSyCv4Fu-YJw8sqREapYn2xMpxQyttZrNldg",
+      authDomain: "gbbcooling.firebaseapp.com",
+      databaseURL: "https://gbbcooling-default-rtdb.firebaseio.com",
+      projectId: "gbbcooling",
+      storageBucket: "gbbcooling.firebasestorage.app",
+      messagingSenderId: "817517370571",
+      appId: "1:817517370571:web:2dd6053ef6f99a4d59cf4e"
     };
 
     let isCloudReady = false;
     let cloudDbRef = null;
+
+    // Helper untuk mendapatkan tanggal lokal (WIB/Indonesia) akurat
+    function getLocalDateString() {
+        const d = new Date();
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+        return d.toISOString().split('T')[0];
+    }
 
     try {
         if (!firebase.apps.length) {
@@ -997,13 +1010,17 @@
                 if(cloudInd) {
                     cloudInd.classList.replace('bg-emerald-50', 'bg-blue-50');
                     cloudInd.classList.replace('text-emerald-700', 'text-blue-700');
+                    cloudInd.classList.replace('bg-rose-50', 'bg-blue-50');
+                    cloudInd.classList.replace('text-rose-700', 'text-blue-700');
                     cloudInd.classList.remove('animate-pulse');
                     cloudInd.innerHTML = '<i class="fa-solid fa-cloud-check mr-1"></i> Terhubung ke Cloud Database';
                 }
 
-                // Jika user sudah masuk dashboard, render ulang layar dengan data baru dari cloud
+                // Render ulang logo & pengaturan dari cloud secara langsung
+                window.applySettingsToApp();
+
+                // Jika user sudah masuk dashboard, render ulang layar dengan data baru
                 if (!isInitialLoad && GBB_STATE.currentUser) {
-                    window.applySettingsToApp();
                     window.switchTab(GBB_STATE.activeTab);
                 }
                 isInitialLoad = false;
@@ -1027,7 +1044,14 @@
             }).catch(err => console.error("Firebase Gagal Menyimpan:", err));
         };
     } catch (e) {
-        console.warn("Firebase belum dikonfigurasi dengan benar. Menggunakan mode Offline/Local.");
+        console.warn("Firebase Error/Offline. Berpindah ke mode lokal:", e);
+        const cloudInd = document.getElementById('cloudSyncIndicator');
+        if(cloudInd) {
+            cloudInd.classList.replace('bg-emerald-50', 'bg-rose-50');
+            cloudInd.classList.replace('text-emerald-700', 'text-rose-700');
+            cloudInd.classList.remove('animate-pulse');
+            cloudInd.innerHTML = '<i class="fa-solid fa-cloud-xmark mr-1"></i> Gagal Tersambung (Mode Offline Aktif)';
+        }
     }
     // =========================================================================
 
@@ -1262,7 +1286,7 @@
       if (!cust) { cust = { name, phone, password: '123', address, units: [{ name: 'AC Split Standard', brand: 'Umum' }], lat: -6.2000, lng: 106.8166 }; GBB_STATE.customers.push(cust); }
 
       const newId = 'GBB-2026-' + String(GBB_STATE.orders.length + 1).padStart(3, '0');
-      GBB_STATE.orders.unshift({ id: newId, custName: name, custPhone: phone, custAddress: address, units: [{ name: 'AC Split Standard', brand: 'Umum' }], techId: GBB_STATE.technicians[0]?.id || 'tech1', techName: GBB_STATE.technicians[0]?.name || 'Teknisi Andi', date: new Date().toISOString().split('T')[0], services: [{ name: 'Panggilan Servis: ' + notes, price: 75000, qty: 1, unit: 'Unit' }], manualItems: [], total: 75000, status: 'pending', warranty: '90 Hari (3 Bulan)', lat: -6.2000, lng: 106.8166 });
+      GBB_STATE.orders.unshift({ id: newId, custName: name, custPhone: phone, custAddress: address, units: [{ name: 'AC Split Standard', brand: 'Umum' }], techId: GBB_STATE.technicians[0]?.id || 'tech1', techName: GBB_STATE.technicians[0]?.name || 'Teknisi Andi', date: getLocalDateString(), services: [{ name: 'Panggilan Servis: ' + notes, price: 75000, qty: 1, unit: 'Unit' }], manualItems: [], total: 75000, status: 'pending', warranty: '90 Hari (3 Bulan)', lat: -6.2000, lng: 106.8166 });
       saveAppData();
       showCustomAlert('Berhasil', 'Booking AC berhasil dikirim! Tim GBB Ruang Sejuk akan segera menghubungi Anda.');
       window.togglePublicBooking(false);
@@ -1463,7 +1487,7 @@
         `;
         serviceContainer.appendChild(div);
       });
-      document.getElementById('orderDate').value = new Date().toISOString().split('T')[0]; renderOrderUnitsRows(); renderNewOrderManualItems(); calculateNewOrderTotal();
+      document.getElementById('orderDate').value = getLocalDateString(); renderOrderUnitsRows(); renderNewOrderManualItems(); calculateNewOrderTotal();
     }
 
     window.toggleServiceSelection = function(id, checked, defaultPrice) { if (checked) newOrderSelectedServices[id] = { price: defaultPrice, qty: 1 }; else delete newOrderSelectedServices[id]; renderNewOrderForm(); };
@@ -1505,21 +1529,33 @@
       saveAppData(); showCustomAlert('Berhasil', 'Tiket Pesanan berhasil disimpan ke Cloud!');
       newOrderSelectedServices = {}; newOrderManualItems = []; switchTab('dashboard');
     };
+    window.saveSettings = function(e) {
+        e.preventDefault();
+        GBB_STATE.settings.qrisNmid = document.getElementById('settingNmid').value;
+        GBB_STATE.settings.ttdName = document.getElementById('settingTtdName').value;
+        
+        GBB_STATE.users.admin.user = document.getElementById('settingAdminUser').value.trim();
+        GBB_STATE.users.admin.pass = document.getElementById('settingAdminPass').value.trim();
+        GBB_STATE.users.cs.user = document.getElementById('settingCsUser').value.trim();
+        GBB_STATE.users.cs.pass = document.getElementById('settingCsPass').value.trim();
+        localStorage.setItem('gbb_users_v62', JSON.stringify(GBB_STATE.users));
 
-    function initCanvas(canvasId) {
-        const canvas = document.getElementById(canvasId); if(!canvas) return; const ctx = canvas.getContext('2d');
-        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; let isDrawing = false;
-        function getPos(e) { const rect = canvas.getBoundingClientRect(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; return { x: clientX - rect.left, y: clientY - rect.top }; }
-        function startPos(e) { e.preventDefault(); isDrawing = true; draw(e); } function endPos() { isDrawing = false; ctx.beginPath(); }
-        function draw(e) { if(!isDrawing) return; e.preventDefault(); const pos = getPos(e); ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#0f172a'; ctx.lineTo(pos.x, pos.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
-        canvas.addEventListener('mousedown', startPos); canvas.addEventListener('mouseup', endPos); canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('touchstart', startPos, {passive: false}); canvas.addEventListener('touchend', endPos); canvas.addEventListener('touchmove', draw, {passive: false});
-    }
+        const logoImg = document.getElementById('logoPreview');
+        if(logoImg && !logoImg.classList.contains('hidden') && logoImg.src.startsWith('data:')) GBB_STATE.settings.logoUrl = logoImg.src;
+        
+        const qrisImg = document.getElementById('qrisPreview');
+        if(qrisImg && !qrisImg.classList.contains('hidden') && qrisImg.src.startsWith('data:')) GBB_STATE.settings.qrisUrl = qrisImg.src;
+        
+        const ttdImg = document.getElementById('ttdPreview');
+        if(ttdImg && !ttdImg.classList.contains('hidden') && ttdImg.src.startsWith('data:')) GBB_STATE.settings.ttdUrl = ttdImg.src;
+        
+        localStorage.setItem('gbb_settings_v62', JSON.stringify(GBB_STATE.settings));
+        
+        // Panggil fungsi Cloud
+        if(window.saveToCloud) window.saveToCloud();
 
-    window.clearCanvas = function(id) {
-        const c = document.getElementById(id); const ctx = c.getContext('2d'); ctx.clearRect(0, 0, c.width, c.height);
-        if(id === 'custSignCanvas') { document.getElementById('invCustSignImg').classList.add('hidden'); document.getElementById('invCustSignPlaceholder').classList.remove('hidden'); }
-        else if(id === 'techSignCanvas') { document.getElementById('baTechSignImg').classList.add('hidden'); document.getElementById('baTechSignPlaceholder').classList.remove('hidden'); }
+        applySettingsToApp();
+        showCustomAlert('Berhasil', 'Pengaturan Global, Akun Login, Logo, dan TTD Barcode berhasil disimpan permanen di Cloud!');
     };
 
     window.saveSignature = function(type) {
@@ -1631,7 +1667,7 @@
     };
     window.processClaimWarranty = function(orderId) {
        const o = GBB_STATE.orders.find(x => x.id === orderId); if(!o) return;
-       const claimOrder = { id: 'GBB-GARANSI-' + String(GBB_STATE.orders.length + 1).padStart(3, '0'), custName: o.custName, custPhone: o.custPhone, custAddress: o.custAddress, units: [...o.units], techId: o.techId, techName: o.techName, date: new Date().toISOString().split('T')[0], services: [{name: '[KLAIM GARANSI] Perbaikan Ulang AC (Bebas Biaya Jasa)', price: 0, qty: 1, unit: 'Unit'}], manualItems: [], total: 0, status: 'pending', notes: 'Klaim Garansi dari Tiket ' + o.id, warranty: o.warranty || '90 Hari', lat: o.lat, lng: o.lng };
+       const claimOrder = { id: 'GBB-GARANSI-' + String(GBB_STATE.orders.length + 1).padStart(3, '0'), custName: o.custName, custPhone: o.custPhone, custAddress: o.custAddress, units: [...o.units], techId: o.techId, techName: o.techName, date: getLocalDateString(), services: [{name: '[KLAIM GARANSI] Perbaikan Ulang AC (Bebas Biaya Jasa)', price: 0, qty: 1, unit: 'Unit'}], manualItems: [], total: 0, status: 'pending', notes: 'Klaim Garansi dari Tiket ' + o.id, warranty: o.warranty || '90 Hari', lat: o.lat, lng: o.lng };
        GBB_STATE.orders.unshift(claimOrder); saveAppData(); document.getElementById('warrantyClaimModal').classList.add('hidden'); showCustomAlert('Berhasil', 'Tiket Klaim Garansi berhasil dibuat! Status tiket masuk ke daftar tunggu penugasan.'); switchTab('dashboard');
     };
   </script>
