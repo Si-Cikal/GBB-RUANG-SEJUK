@@ -61,6 +61,7 @@
       <div class="hidden md:flex md:w-1/2 bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700 p-8 flex-col items-center justify-center relative overflow-hidden">
         <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGRlZnM+PHBhdHRlcm4gaWQ9InAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PGNpcmNsZSBjeD0iMjAi cy0yMCByPSIxIiBmaWxsPSJyZmdiKDI1NSwgMjU1LCAyNTUsIDAuMSkiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjcCkiLz48L3N2Zz4=')] opacity-50"></div>
         <div class="relative w-64 h-64 flex items-center justify-center float-slow z-10" id="loginLogoContainer">
+           <!-- Default logo rendering if logoUrl not set -->
            <div class="absolute top-4 w-40 h-32 bg-white rounded-3xl shadow-2xl border-b-8 border-sky-200 flex flex-col items-center justify-center overflow-hidden z-25">
                <div class="absolute -top-4 w-2 h-6 bg-slate-300"></div>
                <div class="absolute -top-6 w-4 h-4 bg-amber-400 rounded-full animate-pulse shadow-[0_0_10px_#fbbf24]"></div>
@@ -761,7 +762,7 @@
            <label class="text-[9px] font-bold text-slate-600 block mb-1 uppercase">Tanda Tangan Teknisi Pelapor</label>
            <canvas id="techSignCanvas" class="w-full h-20 bg-white border border-slate-300 rounded-lg sig-canvas shadow-inner"></canvas>
            <div class="flex justify-end gap-2 mt-2">
-              <button type="button" onclick="window.clearCanvas('techSignCanvas')" class="text-[10px] bg-slate-200 hover:bg-slate-300 px-3 py-1.5 rounded-lg font-bold text-slate-700 transition">Hapus TTD</button>
+               <button type="button" onclick="window.clearCanvas('techSignCanvas')" class="text-[10px] bg-slate-200 hover:bg-slate-300 px-3 py-1.5 rounded-lg font-bold text-slate-700 transition">Hapus TTD</button>
               <button type="button" onclick="window.saveSignature('tech')" class="text-[10px] bg-emerald-600 hover:bg-emerald-700 px-3 py-1.5 rounded-lg font-bold text-white shadow-md transition">Terapkan ke PDF</button>
            </div>
         </div>
@@ -872,7 +873,7 @@
   </div>
 
   <script>
-    // State Aplikasi
+    // State Aplikasi (SUDAH DIPERBAIKI SINTAKS ERROR DAN LOGO/TTD PERMANEN)
     const GBB_STATE = {
       currentUser: null,
       role: 'admin',
@@ -884,11 +885,12 @@
           cs: { user: 'cs', pass: 'cs123' } 
       },
       settings: {
-          logoUrl: 'logo.png.png',
-          qrisNmid: 'ID1029384756483',\
-          qrisUrl: '', 
+          // Menggunakan SVG Data URI sebagai Default Logo dan Tanda Tangan Permanen.
+          logoUrl: "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%230891b2;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%232563eb;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23grad)'/%3E%3Ctext x='50' y='62' font-family='Arial, sans-serif' font-size='32' font-weight='900' fill='white' text-anchor='middle'%3EGBB%3C/text%3E%3C/svg%3E",
+          qrisNmid: 'ID1029384756483',
+          qrisUrl: '',
           ttdName: 'Dede Janudin',
-          ttdUrl: 'Ttd.png.png'
+          ttdUrl: "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 250 100'%3E%3Ctext x='10' y='65' font-family='Georgia, serif' font-size='46' font-style='italic' font-weight='bold' fill='%230f172a'%3EDede Janudin%3C/text%3E%3Cpath d='M5,80 Q125,95 240,70' stroke='%230284c7' fill='none' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E"
       },
       customers: [
         { name: 'Bapak Budi Santoso', phone: '081122334455', password: '123', address: 'Jl. Melati No. 12, Cirebon', units: [{name: 'AC Split 1 PK', brand: 'Daikin'}], lat: -6.8320, lng: 108.6523 }
