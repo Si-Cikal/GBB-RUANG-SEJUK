@@ -977,13 +977,6 @@
     let isCloudReady = false;
     let cloudDbRef = null;
 
-    // Helper untuk mendapatkan tanggal lokal (WIB/Indonesia) akurat
-    function getLocalDateString() {
-        const d = new Date();
-        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-        return d.toISOString().split('T')[0];
-    }
-
     try {
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
@@ -992,6 +985,32 @@
         cloudDbRef = database.ref('gbb_cloud_v6_2'); // Node Database
         
         let isInitialLoad = true;
+
+        const connectedRef = database.ref(".info/connected");
+        connectedRef.on("value", (snap) => {
+            const cloudInd = document.getElementById('cloudSyncIndicator');
+            if (snap.val() === true) {
+                isCloudReady = true;
+                if(cloudInd) {
+                    cloudInd.classList.replace('bg-emerald-50', 'bg-blue-50');
+                    cloudInd.classList.replace('text-emerald-700', 'text-blue-700');
+                    cloudInd.classList.replace('bg-rose-50', 'bg-blue-50');
+                    cloudInd.classList.replace('text-rose-700', 'text-blue-700');
+                    cloudInd.classList.remove('animate-pulse');
+                    cloudInd.innerHTML = '<i class="fa-solid fa-cloud-check mr-1"></i> Terhubung ke Cloud Database';
+                }
+                window.applySettingsToApp(); // Render logo secepatnya saat terkoneksi
+            } else {
+                if(cloudInd) {
+                    cloudInd.classList.replace('bg-emerald-50', 'bg-rose-50');
+                    cloudInd.classList.replace('bg-blue-50', 'bg-rose-50');
+                    cloudInd.classList.replace('text-emerald-700', 'text-rose-700');
+                    cloudInd.classList.replace('text-blue-700', 'text-rose-700');
+                    cloudInd.classList.remove('animate-pulse');
+                    cloudInd.innerHTML = '<i class="fa-solid fa-cloud-xmark mr-1"></i> Mode Offline Aktif';
+                }
+            }
+        });
 
         // MENDENGARKAN PERUBAHAN DATA SECARA REAL-TIME DARI CLOUD
         cloudDbRef.on('value', (snapshot) => {
@@ -1005,21 +1024,9 @@
                 if (data.catalog) GBB_STATE.catalog = data.catalog || [];
                 if (data.technicians) GBB_STATE.technicians = data.technicians || [];
 
-                isCloudReady = true;
-                const cloudInd = document.getElementById('cloudSyncIndicator');
-                if(cloudInd) {
-                    cloudInd.classList.replace('bg-emerald-50', 'bg-blue-50');
-                    cloudInd.classList.replace('text-emerald-700', 'text-blue-700');
-                    cloudInd.classList.replace('bg-rose-50', 'bg-blue-50');
-                    cloudInd.classList.replace('text-rose-700', 'text-blue-700');
-                    cloudInd.classList.remove('animate-pulse');
-                    cloudInd.innerHTML = '<i class="fa-solid fa-cloud-check mr-1"></i> Terhubung ke Cloud Database';
-                }
-
-                // Render ulang logo & pengaturan dari cloud secara langsung
                 window.applySettingsToApp();
 
-                // Jika user sudah masuk dashboard, render ulang layar dengan data baru
+                // Jika user sudah masuk dashboard, render ulang layar dengan data baru dari cloud
                 if (!isInitialLoad && GBB_STATE.currentUser) {
                     window.switchTab(GBB_STATE.activeTab);
                 }
@@ -1044,16 +1051,15 @@
             }).catch(err => console.error("Firebase Gagal Menyimpan:", err));
         };
     } catch (e) {
-        console.warn("Firebase Error/Offline. Berpindah ke mode lokal:", e);
-        const cloudInd = document.getElementById('cloudSyncIndicator');
-        if(cloudInd) {
-            cloudInd.classList.replace('bg-emerald-50', 'bg-rose-50');
-            cloudInd.classList.replace('text-emerald-700', 'text-rose-700');
-            cloudInd.classList.remove('animate-pulse');
-            cloudInd.innerHTML = '<i class="fa-solid fa-cloud-xmark mr-1"></i> Gagal Tersambung (Mode Offline Aktif)';
-        }
+        console.warn("Firebase belum dikonfigurasi dengan benar. Menggunakan mode Offline/Local.");
     }
     // =========================================================================
+
+    if ('serviceWorker' in navigator) {
+        const swCode = `self.addEventListener('install', (e) => self.skipWaiting()); self.addEventListener('fetch', (e) => {});`;
+        const blob = new Blob([swCode], {type: 'application/javascript'});
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+    }
 
     let deferredPrompt = null;
     let newOrderUnits = [{name: 'AC Split 1 PK', brand: 'Daikin'}];
@@ -1095,6 +1101,15 @@
     window.onload = function() {
       loadSettingsFromStorage();
       console.log('GBB Ruang Sejuk Enterprise SaaS v6.2 Cloud Started.');
+
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      if (isMobile && !isStandalone) {
+          setTimeout(() => {
+              const el = document.getElementById('installAppContainer');
+              if(el) el.classList.remove('hidden');
+          }, 1500);
+      }
     };
 
     function loadSettingsFromStorage() {
