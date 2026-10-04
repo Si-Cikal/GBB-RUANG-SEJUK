@@ -986,33 +986,30 @@
         
         let isInitialLoad = true;
 
+        // 1. MENDETEKSI KONEKSI INTERNET/SERVER SECARA REALTIME
         const connectedRef = database.ref(".info/connected");
         connectedRef.on("value", (snap) => {
             const cloudInd = document.getElementById('cloudSyncIndicator');
             if (snap.val() === true) {
                 isCloudReady = true;
                 if(cloudInd) {
-                    cloudInd.classList.replace('bg-emerald-50', 'bg-blue-50');
-                    cloudInd.classList.replace('text-emerald-700', 'text-blue-700');
-                    cloudInd.classList.replace('bg-rose-50', 'bg-blue-50');
-                    cloudInd.classList.replace('text-rose-700', 'text-blue-700');
-                    cloudInd.classList.remove('animate-pulse');
+                    cloudInd.className = 'mb-4 text-center py-2 bg-blue-50 text-blue-700 rounded-xl text-[10px] font-black border border-blue-200 shadow-sm transition-all duration-300';
                     cloudInd.innerHTML = '<i class="fa-solid fa-cloud-check mr-1"></i> Terhubung ke Cloud Database';
                 }
-                window.applySettingsToApp(); // Render logo secepatnya saat terkoneksi
+                window.applySettingsToApp();
             } else {
-                if(cloudInd) {
-                    cloudInd.classList.replace('bg-emerald-50', 'bg-rose-50');
-                    cloudInd.classList.replace('bg-blue-50', 'bg-rose-50');
-                    cloudInd.classList.replace('text-emerald-700', 'text-rose-700');
-                    cloudInd.classList.replace('text-blue-700', 'text-rose-700');
-                    cloudInd.classList.remove('animate-pulse');
-                    cloudInd.innerHTML = '<i class="fa-solid fa-cloud-xmark mr-1"></i> Mode Offline Aktif';
-                }
+                isCloudReady = false;
+                // Delay 3 detik agar tidak kedap-kedip merah saat pertama kali buka
+                setTimeout(() => {
+                    if (!isCloudReady && cloudInd) {
+                        cloudInd.className = 'mb-4 text-center py-2 bg-rose-50 text-rose-700 rounded-xl text-[10px] font-black border border-rose-200 shadow-sm transition-all duration-300';
+                        cloudInd.innerHTML = '<i class="fa-solid fa-wifi mr-1"></i> Mode Offline (Koneksi Terputus)';
+                    }
+                }, 3000);
             }
         });
 
-        // MENDENGARKAN PERUBAHAN DATA SECARA REAL-TIME DARI CLOUD
+        // 2. MENDENGARKAN PERUBAHAN DATA SECARA REAL-TIME DARI CLOUD
         cloudDbRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -1024,10 +1021,9 @@
                 if (data.catalog) GBB_STATE.catalog = data.catalog || [];
                 if (data.technicians) GBB_STATE.technicians = data.technicians || [];
 
-                window.applySettingsToApp();
-
                 // Jika user sudah masuk dashboard, render ulang layar dengan data baru dari cloud
                 if (!isInitialLoad && GBB_STATE.currentUser) {
+                    window.applySettingsToApp();
                     window.switchTab(GBB_STATE.activeTab);
                 }
                 isInitialLoad = false;
