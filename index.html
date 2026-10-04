@@ -963,7 +963,6 @@
     // KONFIGURASI FIREBASE CLOUD (REAL-TIME DATABASE)
     // =========================================================================
     
-    // GANTI BAGIAN INI DENGAN FIREBASE CONFIG DARI PROJECT ANDA
     const firebaseConfig = {
       apiKey: "AIzaSyCv4Fu-YJw8sqREapYn2xMpxQyttZrNldg",
       authDomain: "gbbcooling.firebaseapp.com",
@@ -976,16 +975,15 @@
 
     let isCloudReady = false;
     let cloudDbRef = null;
+    let isInitialLoad = true;
 
     try {
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const database = firebase.database();
-        cloudDbRef = database.ref('gbb_cloud_v6_2'); // Node Database
+        cloudDbRef = database.ref('gbb_cloud_v6_2'); 
         
-        let isInitialLoad = true;
-
         // 1. MENDETEKSI KONEKSI INTERNET/SERVER SECARA REALTIME
         const connectedRef = database.ref(".info/connected");
         connectedRef.on("value", (snap) => {
@@ -999,7 +997,6 @@
                 window.applySettingsToApp();
             } else {
                 isCloudReady = false;
-                // Delay 3 detik agar tidak kedap-kedip merah saat pertama kali buka
                 setTimeout(() => {
                     if (!isCloudReady && cloudInd) {
                         cloudInd.className = 'mb-4 text-center py-2 bg-rose-50 text-rose-700 rounded-xl text-[10px] font-black border border-rose-200 shadow-sm transition-all duration-300';
@@ -1013,7 +1010,6 @@
         cloudDbRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                // Terapkan data dari cloud ke State lokal
                 if (data.settings) GBB_STATE.settings = data.settings;
                 if (data.users) GBB_STATE.users = data.users;
                 if (data.customers) GBB_STATE.customers = data.customers || [];
@@ -1021,20 +1017,17 @@
                 if (data.catalog) GBB_STATE.catalog = data.catalog || [];
                 if (data.technicians) GBB_STATE.technicians = data.technicians || [];
 
-                // Jika user sudah masuk dashboard, render ulang layar dengan data baru dari cloud
                 if (!isInitialLoad && GBB_STATE.currentUser) {
                     window.applySettingsToApp();
                     window.switchTab(GBB_STATE.activeTab);
                 }
                 isInitialLoad = false;
             } else {
-                // Jika database kosong, push data default awal ini ke cloud
                 if(isInitialLoad) window.saveToCloud(); 
                 isInitialLoad = false;
             }
         });
 
-        // FUNGSI UNTUK MENGIRIM DATA KE CLOUD SETIAP ADA PERUBAHAN
         window.saveToCloud = function() {
             if(!cloudDbRef) return;
             cloudDbRef.set({
@@ -1047,14 +1040,22 @@
             }).catch(err => console.error("Firebase Gagal Menyimpan:", err));
         };
     } catch (e) {
-        console.warn("Firebase belum dikonfigurasi dengan benar. Menggunakan mode Offline/Local.");
+        console.warn("Firebase Error:", e);
     }
     // =========================================================================
 
+    // Mendaftarkan Virtual Service Worker untuk PWA
     if ('serviceWorker' in navigator) {
-        const swCode = `self.addEventListener('install', (e) => self.skipWaiting()); self.addEventListener('fetch', (e) => {});`;
+        const swCode = `
+          self.addEventListener('install', (e) => { self.skipWaiting(); });
+          self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); });
+          self.addEventListener('fetch', (e) => {
+             // Cache fallback sederhana agar dianggap PWA valid
+             e.respondWith(fetch(e.request).catch(() => new Response('Offline Mode Aktif')));
+          });
+        `;
         const blob = new Blob([swCode], {type: 'application/javascript'});
-        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch((err) => console.log("SW Reg Error", err));
     }
 
     let deferredPrompt = null;
@@ -1076,6 +1077,7 @@
        document.getElementById('customAlertModal').classList.add('hidden');
     }
 
+    // Menangani Event PWA Install Prompt
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
@@ -1090,7 +1092,7 @@
         deferredPrompt = null;
         document.getElementById('installAppContainer').classList.add('hidden');
       } else {
-        showCustomAlert('Informasi Install', 'Untuk menginstal aplikasi ini ke HP, buka menu browser Anda (titik tiga di kanan atas) lalu pilih "Tambahkan ke Layar Utama" (Add to Home Screen).');
+        showCustomAlert('Informasi Install', 'Buka menu browser Anda (titik tiga di kanan atas) lalu pilih "Tambahkan ke Layar Utama" atau "Install App" untuk memasang di HP Anda.');
       }
     };
 
@@ -1100,6 +1102,8 @@
 
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      
+      // Jika di HP dan belum diinstal, paksa tampilkan tombol install
       if (isMobile && !isStandalone) {
           setTimeout(() => {
               const el = document.getElementById('installAppContainer');
@@ -1109,7 +1113,6 @@
     };
 
     function loadSettingsFromStorage() {
-        // LocalStorage tetap digunakan sebagai Cache/Fallback cepat sebelum data dari cloud turun
         const saved = localStorage.getItem('gbb_settings_v62');
         if(saved) GBB_STATE.settings = { ...GBB_STATE.settings, ...JSON.parse(saved) };
         const savedUsers = localStorage.getItem('gbb_users_v62');
@@ -1132,7 +1135,6 @@
         localStorage.setItem('gbb_catalog_v62', JSON.stringify(GBB_STATE.catalog));
         localStorage.setItem('gbb_tech_v62', JSON.stringify(GBB_STATE.technicians));
         
-        // Panggil fungsi sinkronisasi Cloud setiap kali ada perubahan data (Order, Catalog, Pelanggan, dll)
         if(window.saveToCloud) window.saveToCloud(); 
     }
 
@@ -1214,18 +1216,17 @@
         GBB_STATE.users.cs.pass = document.getElementById('settingCsPass').value.trim();
         localStorage.setItem('gbb_users_v62', JSON.stringify(GBB_STATE.users));
 
-        const logoSrc = document.getElementById('logoPreview').src;
-        if(logoSrc && !logoSrc.endsWith('index.html')) GBB_STATE.settings.logoUrl = logoSrc;
+        const logoImg = document.getElementById('logoPreview');
+        if(logoImg && !logoImg.classList.contains('hidden') && logoImg.src.startsWith('data:')) GBB_STATE.settings.logoUrl = logoImg.src;
         
-        const qrisSrc = document.getElementById('qrisPreview').src;
-        if(qrisSrc && !qrisSrc.endsWith('index.html')) GBB_STATE.settings.qrisUrl = qrisSrc;
+        const qrisImg = document.getElementById('qrisPreview');
+        if(qrisImg && !qrisImg.classList.contains('hidden') && qrisImg.src.startsWith('data:')) GBB_STATE.settings.qrisUrl = qrisImg.src;
         
-        const ttdSrc = document.getElementById('ttdPreview').src;
-        if(ttdSrc && !ttdSrc.endsWith('index.html')) GBB_STATE.settings.ttdUrl = ttdSrc;
+        const ttdImg = document.getElementById('ttdPreview');
+        if(ttdImg && !ttdImg.classList.contains('hidden') && ttdImg.src.startsWith('data:')) GBB_STATE.settings.ttdUrl = ttdImg.src;
         
         localStorage.setItem('gbb_settings_v62', JSON.stringify(GBB_STATE.settings));
         
-        // Panggil fungsi Cloud
         if(window.saveToCloud) window.saveToCloud();
 
         applySettingsToApp();
@@ -1297,7 +1298,7 @@
       if (!cust) { cust = { name, phone, password: '123', address, units: [{ name: 'AC Split Standard', brand: 'Umum' }], lat: -6.2000, lng: 106.8166 }; GBB_STATE.customers.push(cust); }
 
       const newId = 'GBB-2026-' + String(GBB_STATE.orders.length + 1).padStart(3, '0');
-      GBB_STATE.orders.unshift({ id: newId, custName: name, custPhone: phone, custAddress: address, units: [{ name: 'AC Split Standard', brand: 'Umum' }], techId: GBB_STATE.technicians[0]?.id || 'tech1', techName: GBB_STATE.technicians[0]?.name || 'Teknisi Andi', date: getLocalDateString(), services: [{ name: 'Panggilan Servis: ' + notes, price: 75000, qty: 1, unit: 'Unit' }], manualItems: [], total: 75000, status: 'pending', warranty: '90 Hari (3 Bulan)', lat: -6.2000, lng: 106.8166 });
+      GBB_STATE.orders.unshift({ id: newId, custName: name, custPhone: phone, custAddress: address, units: [{ name: 'AC Split Standard', brand: 'Umum' }], techId: GBB_STATE.technicians[0]?.id || 'tech1', techName: GBB_STATE.technicians[0]?.name || 'Teknisi Andi', date: new Date().toISOString().split('T')[0], services: [{ name: 'Panggilan Servis: ' + notes, price: 75000, qty: 1, unit: 'Unit' }], manualItems: [], total: 75000, status: 'pending', warranty: '90 Hari (3 Bulan)', lat: -6.2000, lng: 106.8166 });
       saveAppData();
       showCustomAlert('Berhasil', 'Booking AC berhasil dikirim! Tim GBB Ruang Sejuk akan segera menghubungi Anda.');
       window.togglePublicBooking(false);
@@ -1498,7 +1499,7 @@
         `;
         serviceContainer.appendChild(div);
       });
-      document.getElementById('orderDate').value = getLocalDateString(); renderOrderUnitsRows(); renderNewOrderManualItems(); calculateNewOrderTotal();
+      document.getElementById('orderDate').value = new Date().toISOString().split('T')[0]; renderOrderUnitsRows(); renderNewOrderManualItems(); calculateNewOrderTotal();
     }
 
     window.toggleServiceSelection = function(id, checked, defaultPrice) { if (checked) newOrderSelectedServices[id] = { price: defaultPrice, qty: 1 }; else delete newOrderSelectedServices[id]; renderNewOrderForm(); };
@@ -1540,33 +1541,21 @@
       saveAppData(); showCustomAlert('Berhasil', 'Tiket Pesanan berhasil disimpan ke Cloud!');
       newOrderSelectedServices = {}; newOrderManualItems = []; switchTab('dashboard');
     };
-    window.saveSettings = function(e) {
-        e.preventDefault();
-        GBB_STATE.settings.qrisNmid = document.getElementById('settingNmid').value;
-        GBB_STATE.settings.ttdName = document.getElementById('settingTtdName').value;
-        
-        GBB_STATE.users.admin.user = document.getElementById('settingAdminUser').value.trim();
-        GBB_STATE.users.admin.pass = document.getElementById('settingAdminPass').value.trim();
-        GBB_STATE.users.cs.user = document.getElementById('settingCsUser').value.trim();
-        GBB_STATE.users.cs.pass = document.getElementById('settingCsPass').value.trim();
-        localStorage.setItem('gbb_users_v62', JSON.stringify(GBB_STATE.users));
 
-        const logoImg = document.getElementById('logoPreview');
-        if(logoImg && !logoImg.classList.contains('hidden') && logoImg.src.startsWith('data:')) GBB_STATE.settings.logoUrl = logoImg.src;
-        
-        const qrisImg = document.getElementById('qrisPreview');
-        if(qrisImg && !qrisImg.classList.contains('hidden') && qrisImg.src.startsWith('data:')) GBB_STATE.settings.qrisUrl = qrisImg.src;
-        
-        const ttdImg = document.getElementById('ttdPreview');
-        if(ttdImg && !ttdImg.classList.contains('hidden') && ttdImg.src.startsWith('data:')) GBB_STATE.settings.ttdUrl = ttdImg.src;
-        
-        localStorage.setItem('gbb_settings_v62', JSON.stringify(GBB_STATE.settings));
-        
-        // Panggil fungsi Cloud
-        if(window.saveToCloud) window.saveToCloud();
+    function initCanvas(canvasId) {
+        const canvas = document.getElementById(canvasId); if(!canvas) return; const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; let isDrawing = false;
+        function getPos(e) { const rect = canvas.getBoundingClientRect(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; return { x: clientX - rect.left, y: clientY - rect.top }; }
+        function startPos(e) { e.preventDefault(); isDrawing = true; draw(e); } function endPos() { isDrawing = false; ctx.beginPath(); }
+        function draw(e) { if(!isDrawing) return; e.preventDefault(); const pos = getPos(e); ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#0f172a'; ctx.lineTo(pos.x, pos.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
+        canvas.addEventListener('mousedown', startPos); canvas.addEventListener('mouseup', endPos); canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('touchstart', startPos, {passive: false}); canvas.addEventListener('touchend', endPos); canvas.addEventListener('touchmove', draw, {passive: false});
+    }
 
-        applySettingsToApp();
-        showCustomAlert('Berhasil', 'Pengaturan Global, Akun Login, Logo, dan TTD Barcode berhasil disimpan permanen di Cloud!');
+    window.clearCanvas = function(id) {
+        const c = document.getElementById(id); const ctx = c.getContext('2d'); ctx.clearRect(0, 0, c.width, c.height);
+        if(id === 'custSignCanvas') { document.getElementById('invCustSignImg').classList.add('hidden'); document.getElementById('invCustSignPlaceholder').classList.remove('hidden'); }
+        else if(id === 'techSignCanvas') { document.getElementById('baTechSignImg').classList.add('hidden'); document.getElementById('baTechSignPlaceholder').classList.remove('hidden'); }
     };
 
     window.saveSignature = function(type) {
@@ -1678,7 +1667,7 @@
     };
     window.processClaimWarranty = function(orderId) {
        const o = GBB_STATE.orders.find(x => x.id === orderId); if(!o) return;
-       const claimOrder = { id: 'GBB-GARANSI-' + String(GBB_STATE.orders.length + 1).padStart(3, '0'), custName: o.custName, custPhone: o.custPhone, custAddress: o.custAddress, units: [...o.units], techId: o.techId, techName: o.techName, date: getLocalDateString(), services: [{name: '[KLAIM GARANSI] Perbaikan Ulang AC (Bebas Biaya Jasa)', price: 0, qty: 1, unit: 'Unit'}], manualItems: [], total: 0, status: 'pending', notes: 'Klaim Garansi dari Tiket ' + o.id, warranty: o.warranty || '90 Hari', lat: o.lat, lng: o.lng };
+       const claimOrder = { id: 'GBB-GARANSI-' + String(GBB_STATE.orders.length + 1).padStart(3, '0'), custName: o.custName, custPhone: o.custPhone, custAddress: o.custAddress, units: [...o.units], techId: o.techId, techName: o.techName, date: new Date().toISOString().split('T')[0], services: [{name: '[KLAIM GARANSI] Perbaikan Ulang AC (Bebas Biaya Jasa)', price: 0, qty: 1, unit: 'Unit'}], manualItems: [], total: 0, status: 'pending', notes: 'Klaim Garansi dari Tiket ' + o.id, warranty: o.warranty || '90 Hari', lat: o.lat, lng: o.lng };
        GBB_STATE.orders.unshift(claimOrder); saveAppData(); document.getElementById('warrantyClaimModal').classList.add('hidden'); showCustomAlert('Berhasil', 'Tiket Klaim Garansi berhasil dibuat! Status tiket masuk ke daftar tunggu penugasan.'); switchTab('dashboard');
     };
   </script>
