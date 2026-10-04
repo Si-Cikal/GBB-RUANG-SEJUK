@@ -47,7 +47,7 @@
 </head>
 <body class="fixed inset-0 h-[100dvh] flex flex-col selection:bg-cyan-500 selection:text-white relative overflow-hidden">
 
-  <!-- ==================== CUSTOM MESSAGE MODAL ==================== -->
+  <!-- MODAL PESAN SISTEM -->
   <div id="customAlertModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
     <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center space-y-4 border border-slate-100">
       <div id="customAlertIcon" class="w-14 h-14 bg-cyan-100 text-cyan-600 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-circle-info"></i></div>
@@ -57,7 +57,7 @@
     </div>
   </div>
 
-  <!-- ==================== LOGIN SCREEN ==================== -->
+  <!-- LAYAR LOGIN -->
   <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 overflow-y-auto bg-slate-50">
     <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-cyan-200/40 rounded-full blur-[80px] pointer-events-none"></div>
     <div class="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-blue-200/40 rounded-full blur-[100px] pointer-events-none"></div>
@@ -93,8 +93,9 @@
             <p class="text-xs text-sky-600 font-bold mt-1">Sistem Manajemen Servis AC Terpadu</p>
           </div>
 
-          <div id="cloudSyncIndicator" class="mb-4 text-center py-2 bg-slate-100 text-slate-500 rounded-xl text-[10px] font-black border border-slate-200 shadow-sm animate-pulse">
-             <i class="fa-solid fa-spinner fa-spin mr-1"></i> Menyambungkan ke Cloud Database...
+          <!-- INDIKATOR CLOUD -->
+          <div id="cloudSyncIndicator" class="mb-4 text-center py-2 bg-slate-100 text-slate-500 rounded-xl text-[10px] font-black border border-slate-200 shadow-sm animate-pulse transition-all duration-300">
+             <i class="fa-solid fa-spinner fa-spin mr-1"></i> Memeriksa Koneksi Database...
           </div>
           
           <div id="installAppContainer" class="hidden mb-4 p-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white text-xs flex items-center justify-between shadow-lg">
@@ -119,6 +120,7 @@
             </div>
             <button type="submit" class="w-full py-4 mt-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-black text-sm shadow-xl shadow-cyan-600/30 transition-all active:scale-[0.98]">Masuk Dashboard <i class="fa-solid fa-arrow-right ml-1"></i></button>
           </form>
+          
           <div class="relative flex items-center py-5 mt-2"><div class="flex-grow border-t border-slate-200"></div><span class="flex-shrink-0 mx-4 text-[10px] text-slate-400 font-bold uppercase">Portal Pelanggan</span><div class="flex-grow border-t border-slate-200"></div></div>
           <div class="grid grid-cols-2 gap-2">
             <button type="button" onclick="window.togglePublicBooking(true)" class="w-full py-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-black text-xs transition-all active:scale-[0.98] flex items-center justify-center gap-1.5"><i class="fa-solid fa-calendar-check"></i> Booking AC</button>
@@ -167,7 +169,7 @@
         <div id="sidebarMainLogo" class="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-600 to-blue-600 text-white p-1 flex items-center justify-center border border-sky-100 shadow-md font-bold text-xl overflow-hidden"><i class="fa-solid fa-snowflake glowing-icon"></i></div>
         <div>
            <h2 class="text-[13px] font-black tracking-tight text-slate-900 leading-tight">GBB RUANG SEJUK</h2>
-           <div class="flex items-center gap-1.5 mt-0.5"><p id="sidebarRoleBadge" class="text-[10px] text-cyan-700 font-bold bg-cyan-100/60 px-1.5 py-0.5 rounded-md">Role</p><span id="cloudStatusDot" class="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-[0_0_5px_#34d399] animate-pulse" title="Cloud Sync Aktif"></span></div>
+           <div class="flex items-center gap-1.5 mt-0.5"><p id="sidebarRoleBadge" class="text-[10px] text-cyan-700 font-bold bg-cyan-100/60 px-1.5 py-0.5 rounded-md">Role</p><span id="cloudStatusDotApp" class="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-[0_0_5px_#34d399] animate-pulse" title="Cloud Sync Aktif"></span></div>
         </div>
       </div>
       <nav id="sidebarNavItems" class="flex-1 p-4 space-y-2 overflow-y-auto no-scrollbar"></nav>
@@ -188,7 +190,7 @@
         <button type="button" onclick="window.logout()" class="p-2 rounded-xl bg-white/80 text-slate-500 hover:text-rose-600 border border-white/60 shadow-sm"><i class="fa-solid fa-arrow-right-from-bracket text-sm"></i></button>
       </header>
 
-      <!-- MENU BAWAH HP (Scroll Horizontal Mulus) -->
+      <!-- MENU BAWAH HP -->
       <div class="md:hidden fixed bottom-0 left-0 right-0 glass-panel border-t border-white/60 p-2 z-40 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
          <nav id="mobileBottomNav" class="flex items-center gap-4 px-2 overflow-x-auto no-scrollbar justify-start w-full snap-x snap-mandatory pb-1"></nav>
       </div>
@@ -235,7 +237,7 @@
             <div class="lg:col-span-2 glass-card rounded-3xl p-5 sm:p-7 shadow-xl border border-white/60">
               <div class="flex justify-between items-center mb-4">
                 <h3 class="text-sm font-black text-slate-800"><i class="fa-solid fa-chart-line text-cyan-600 mr-2"></i> Grafik Tren Omset & Pesanan</h3>
-                <select id="chartYearSelect" onchange="window.updateChartData()" class="bg-slate-50 border border-slate-200 rounded-lg p-1 text-xs font-bold outline-none text-cyan-700"><option value="2026">2026</option><option value="2025">2025</option></select>
+                <select id="chartYearSelect" onchange="window.updateChartData()" class="bg-slate-50 border border-slate-200 rounded-lg p-1 text-xs font-bold outline-none text-cyan-700"><option value="2027">2027</option><option value="2026" selected>2026</option><option value="2025">2025</option></select>
               </div>
               <div class="relative w-full h-48 sm:h-64"><canvas id="dashboardChart"></canvas></div>
             </div>
@@ -432,7 +434,7 @@
                 <div class="space-y-3 p-4 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm">
                   <h4 class="text-xs font-black text-slate-700 uppercase flex items-center"><i class="fa-solid fa-image text-cyan-500 mr-2"></i> Logo Perusahaan</h4>
                   <div>
-                    <label class="block text-[10px] font-bold text-slate-600 mb-1">Upload Logo Anda (Maks 1MB)</label>
+                    <label class="block text-[10px] font-bold text-slate-600 mb-1">Upload Logo Anda (Maks 2MB)</label>
                     <input type="file" id="settingLogo" accept="image/*" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 cursor-pointer" onchange="window.previewImage(event, 'logoPreview', 'logoPlaceholder')">
                   </div>
                   <div class="h-28 w-28 bg-white border border-slate-200 rounded-2xl flex items-center justify-center overflow-hidden p-2 shadow-inner">
@@ -449,7 +451,7 @@
                     <input type="text" id="settingNmid" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs outline-none focus:border-emerald-500 shadow-sm" placeholder="Contoh: ID123456789">
                   </div>
                   <div>
-                    <label class="block text-[10px] font-bold text-slate-600 mb-1">Upload Gambar QRIS (Maks 1MB)</label>
+                    <label class="block text-[10px] font-bold text-slate-600 mb-1">Upload Gambar QRIS</label>
                     <input type="file" id="settingQris" accept="image/*" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer" onchange="window.previewImage(event, 'qrisPreview', 'qrisPlaceholder')">
                   </div>
                   <div class="h-28 w-28 bg-white border border-slate-200 rounded-2xl flex items-center justify-center overflow-hidden p-2 shadow-inner">
@@ -467,7 +469,7 @@
                       <input type="text" id="settingTtdName" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs outline-none focus:border-blue-500 shadow-sm font-bold" value="Dede Janudin">
                     </div>
                     <div>
-                       <label class="block text-[10px] font-bold text-slate-600 mb-1">Upload Gambar Barcode/TTD (Maks 1MB)</label>
+                       <label class="block text-[10px] font-bold text-slate-600 mb-1">Upload Gambar Barcode TTD / Tanda Tangan (PNG Transparan)</label>
                        <input type="file" id="settingTtdImg" accept="image/*" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" onchange="window.previewImage(event, 'ttdPreview', 'ttdPlaceholder')">
                        <div class="h-20 w-32 bg-white border border-slate-200 rounded-xl flex items-center justify-center overflow-hidden p-1 shadow-inner mt-2 relative">
                          <img id="ttdPreview" src="" class="max-h-full max-w-full hidden object-contain protected-image" oncontextmenu="return false;" draggable="false">
@@ -495,4 +497,868 @@
                     <div class="space-y-2 p-3 bg-cyan-50/50 rounded-xl border border-cyan-100">
                       <p class="text-[10px] font-black text-cyan-700 uppercase tracking-wider mb-2"><i class="fa-solid fa-headset"></i> Akses CS / Kasir</p>
                       <div>
-                        <label class
+                        <label class="block text-[10px] font-bold text-slate-600 mb-1">Username CS</label>
+                        <input type="text" id="settingCsUser" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs outline-none focus:border-cyan-500 shadow-sm">
+                      </div>
+                      <div>
+                        <label class="block text-[10px] font-bold text-slate-600 mb-1">Password CS</label>
+                        <input type="password" id="settingCsPass" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs outline-none focus:border-cyan-500 shadow-sm">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="w-full py-4 bg-slate-800 hover:bg-slate-900 text-white font-black text-sm rounded-xl shadow-lg transition active:scale-[0.98]">
+                <i class="fa-solid fa-cloud-arrow-up mr-1"></i> SIMPAN & SINKRONISASI KE CLOUD
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- APP FOOTER LABEL -->
+        <footer class="mt-8 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest border-t border-slate-200/60 pt-4 pb-8">
+            GBB Ruang Sejuk Enterprise Cloud v6.2 <br> Professional AC Service Management System © 2026
+        </footer>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ==================== MODALS & POPUPS ==================== -->
+  
+  <!-- NOTIFICATIONS MODAL -->
+  <div id="notificationsModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-4 border border-slate-100 max-h-[85vh] overflow-y-auto">
+       <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+          <h3 class="font-black text-slate-900 text-base"><i class="fa-solid fa-bell text-amber-500 mr-2"></i> Daftar Pelanggan Jatuh Tempo Servis (3 Bulan)</h3>
+          <button onclick="document.getElementById('notificationsModal').classList.add('hidden')" class="text-slate-400 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button>
+       </div>
+       <div id="notificationsListContainer" class="space-y-3"></div>
+       <button onclick="document.getElementById('notificationsModal').classList.add('hidden')" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl mt-2 transition text-xs">Tutup</button>
+    </div>
+  </div>
+
+  <!-- WARRANTY CLAIM MODAL -->
+  <div id="warrantyClaimModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl p-6 max-w-xl w-full shadow-2xl space-y-4 border border-slate-100 max-h-[85vh] overflow-y-auto">
+       <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+          <h3 class="font-black text-slate-900 text-base"><i class="fa-solid fa-shield-heart text-cyan-600 mr-2"></i> Daftar Unit Dalam Masa Garansi & Klaim</h3>
+          <button onclick="document.getElementById('warrantyClaimModal').classList.add('hidden')" class="text-slate-400 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button>
+       </div>
+       <p class="text-xs text-slate-500">Berikut adalah daftar pesanan selesai yang unit AC-nya masih dilindungi garansi servis:</p>
+       <div id="warrantyClaimListContainer" class="space-y-3"></div>
+       <button onclick="document.getElementById('warrantyClaimModal').classList.add('hidden')" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl mt-2 transition text-xs">Tutup</button>
+    </div>
+  </div>
+
+  <!-- STATUS UPDATE MODAL -->
+  <div id="statusModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl space-y-4 border border-slate-100">
+       <h3 class="font-black text-slate-900 text-lg border-b border-slate-100 pb-3">Perbarui Status Pesanan</h3>
+       <div class="space-y-2">
+          <button onclick="window.saveOrderStatus('pending')" class="w-full text-left px-4 py-3 rounded-xl border border-amber-200 bg-amber-50 text-amber-800 font-bold hover:bg-amber-100 transition flex items-center gap-3">
+             <i class="fa-solid fa-car text-xl w-6 text-center"></i> <div><span class="block">Tunggu / Menuju Lokasi</span><span class="text-[9px] font-normal">Teknisi sedang di jalan ke pelanggan</span></div>
+          </button>
+          <button onclick="window.saveOrderStatus('in_progress')" class="w-full text-left px-4 py-3 rounded-xl border border-blue-200 bg-blue-50 text-blue-800 font-bold hover:bg-blue-100 transition flex items-center gap-3">
+             <i class="fa-solid fa-screwdriver-wrench text-xl w-6 text-center"></i> <div><span class="block">Dalam Proses / Dikerjakan</span><span class="text-[9px] font-normal">Teknisi sedang menservis AC</span></div>
+          </button>
+          <button onclick="window.saveOrderStatus('completed')" class="w-full text-left px-4 py-3 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 font-bold hover:bg-emerald-100 transition flex items-center gap-3">
+             <i class="fa-solid fa-check-double text-xl w-6 text-center"></i> <div><span class="block">Selesai & Lunas</span><span class="text-[9px] font-normal">Pekerjaan rampung, masuk omset</span></div>
+          </button>
+       </div>
+       <button onclick="document.getElementById('statusModal').classList.add('hidden')" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl mt-2 transition">Batal</button>
+    </div>
+  </div>
+
+  <!-- EDIT ORDER MODAL -->
+  <div id="editOrderModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-white relative max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-5 border-b border-slate-100 pb-3">
+        <h3 class="text-base font-black text-slate-900"><i class="fa-solid fa-pen-to-square text-amber-500 mr-2"></i> Edit Data Pesanan</h3>
+        <button type="button" onclick="document.getElementById('editOrderModal').classList.add('hidden')" class="text-slate-400 hover:text-slate-700 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <form onsubmit="window.handleEditOrderSave(event)" class="space-y-4">
+        <input type="hidden" id="editOrderId">
+        
+        <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Nama Pelanggan</label><input type="text" id="editOrderName" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-amber-500 shadow-sm font-medium"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 mb-1">No. WhatsApp</label><input type="text" id="editOrderPhone" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-amber-500 shadow-sm font-medium"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Alamat Servis</label><textarea id="editOrderAddress" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-amber-500 shadow-sm font-medium"></textarea></div>
+        
+        <div class="grid grid-cols-2 gap-3">
+           <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Pilih Teknisi</label><select id="editOrderTech" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-amber-500 shadow-sm font-medium"></select></div>
+           <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Kunjungan</label><input type="date" id="editOrderDate" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-amber-500 shadow-sm font-medium"></div>
+        </div>
+
+        <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Total Tagihan (Rp)</label><input type="number" id="editOrderTotal" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-amber-500 shadow-sm font-medium font-bold text-emerald-600"></div>
+        
+        <div class="grid grid-cols-2 gap-3 pt-2">
+            <button type="button" onclick="document.getElementById('editOrderModal').classList.add('hidden')" class="py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">Batal</button>
+            <button type="submit" class="py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow-lg shadow-amber-500/30 transition">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAP PICKER MODAL -->
+  <div id="mapPickerModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl p-5 max-w-xl w-full shadow-2xl flex flex-col space-y-3">
+      <div class="flex justify-between items-center">
+         <h3 class="font-black text-slate-900 text-sm">Pilih Lokasi di Peta (GPS Akurat)</h3>
+         <button type="button" onclick="window.locateMe()" class="text-[10px] bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg font-bold hover:bg-blue-100 transition"><i class="fa-solid fa-location-crosshairs"></i> Deteksi Lokasi Saya</button>
+         <button type="button" onclick="window.closeMapPicker()" class="text-slate-400 font-bold text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="pickerMapContainer" class="w-full h-80 rounded-2xl border border-slate-200 z-0"></div>
+      <button type="button" onclick="window.confirmMapLocation()" class="py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-cyan-600/30">Kunci Koordinat Ini</button>
+    </div>
+  </div>
+
+  <!-- CUSTOMER MODAL -->
+  <div id="customerModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-white relative">
+      <div class="flex justify-between items-center mb-5 border-b border-slate-100 pb-3"><h3 id="customerModalTitle" class="text-base font-black text-slate-900"><i class="fa-solid fa-user-plus text-cyan-600 mr-2"></i> Tambah Pelanggan</h3><button type="button" onclick="window.closeCustomerModal()" class="text-slate-400 hover:text-slate-700 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button></div>
+      <form onsubmit="window.handleCustomerSave(event)" class="space-y-4">
+        <input type="hidden" id="editCustomerOriginalPhone">
+        <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Nama Lengkap *</label><input type="text" id="modalCustName" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-cyan-500 shadow-sm font-medium"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 mb-1">No. WhatsApp / Username *</label><input type="text" id="modalCustPhone" required placeholder="08xxxxxxxxxx" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-cyan-500 shadow-sm font-medium"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Kata Sandi Portal *</label><input type="text" id="modalCustPassword" required placeholder="Minimal 6 karakter" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-cyan-500 shadow-sm font-medium"></div>
+        <div class="flex gap-2">
+            <div class="flex-1"><label class="block text-[11px] font-bold text-slate-700 mb-1">Alamat *</label><textarea id="modalCustAddress" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-cyan-500 shadow-sm font-medium"></textarea></div>
+            <div class="w-12 pt-5"><button type="button" onclick="window.openLocationPicker('customer')" class="w-full h-[60px] bg-rose-50 text-rose-500 rounded-xl flex items-center justify-center hover:bg-rose-100 transition shadow-sm" title="Pin Maps"><i class="fa-solid fa-map-location-dot"></i></button></div>
+        </div>
+        <input type="hidden" id="modalCustLat" value="-6.2000"><input type="hidden" id="modalCustLng" value="106.8166">
+        <div class="grid grid-cols-2 gap-3 pt-2"><button type="button" onclick="window.closeCustomerModal()" class="py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">Batal</button><button type="submit" class="py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-cyan-600/30 transition">Simpan</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TECHNICIAN MODAL -->
+  <div id="technicianModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-white relative">
+      <div class="flex justify-between items-center mb-5 border-b border-slate-100 pb-3"><h3 id="technicianModalTitle" class="text-base font-black text-slate-900"><i class="fa-solid fa-user-gear text-blue-600 mr-2"></i> Tambah Teknisi</h3><button type="button" onclick="window.closeTechnicianModal()" class="text-slate-400 hover:text-slate-700 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button></div>
+      <form onsubmit="window.handleTechnicianSave(event)" class="space-y-4">
+        <input type="hidden" id="editTechnicianOriginalId">
+        <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Nama Teknisi *</label><input type="text" id="modalTechName" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 shadow-sm font-medium"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 mb-1">No. WhatsApp *</label><input type="text" id="modalTechPhone" required placeholder="08xxxxxxxxxx" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 shadow-sm font-medium"></div>
+        <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Kata Sandi / PIN *</label><input type="text" id="modalTechPassword" required placeholder="PIN Login" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 shadow-sm font-medium"></div>
+        <div class="grid grid-cols-2 gap-3 pt-2"><button type="button" onclick="window.closeTechnicianModal()" class="py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">Batal</button><button type="submit" class="py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-600/30 transition">Simpan</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CATALOG MODAL -->
+  <div id="catalogModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-white relative">
+      <div class="flex justify-between items-center mb-5 border-b border-slate-100 pb-3"><h3 id="catalogModalTitle" class="text-base font-black text-slate-900"><i class="fa-solid fa-box text-indigo-600 mr-2"></i> Tambah Item</h3><button type="button" onclick="window.closeCatalogModal()" class="text-slate-400 hover:text-slate-700 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button></div>
+      <form onsubmit="window.handleCatalogSave(event)" class="space-y-4">
+        <input type="hidden" id="editCatalogOriginalId">
+        <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Nama Layanan / Sparepart *</label><input type="text" id="modalCatName" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-indigo-500 shadow-sm font-medium"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Kategori *</label><select id="modalCatType" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-indigo-500 shadow-sm font-medium"><option value="service">Jasa</option><option value="part">Sparepart / Barang</option></select></div>
+          <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Tarif / Harga (Rp) *</label><input type="number" id="modalCatPrice" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-indigo-500 shadow-sm font-medium"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Stok Gudang (Unit)</label><input type="number" id="modalCatStock" value="10" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-indigo-500 shadow-sm font-medium"></div>
+          <div><label class="block text-[11px] font-bold text-slate-700 mb-1">Satuan (Meter/Pcs/Unit)</label><input type="text" id="modalCatUnit" value="Unit" required placeholder="Contoh: Meter" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-indigo-500 shadow-sm font-medium"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 pt-2"><button type="button" onclick="window.closeCatalogModal()" class="py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">Batal</button><button type="submit" class="py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-indigo-600/30 transition">Simpan</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- INVOICE MODAL -->
+  <div id="invoiceModal" class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-900/60 backdrop-blur-sm hidden overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-3xl w-full shadow-2xl border border-white flex flex-col my-auto max-h-[95vh] overflow-hidden">
+      <!-- NON-PRINTED CONTROL PANEL -->
+      <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 gap-4">
+        <div><h3 class="text-sm sm:text-base font-black text-slate-900"><i class="fa-solid fa-file-invoice-dollar text-cyan-600 mr-2"></i> Invoice Resmi</h3><p class="text-[10px] text-slate-500 mt-1">Coret tanda tangan pelanggan di kotak bawah ini.</p></div>
+        <div class="flex flex-wrap gap-2 items-center">
+          <select id="invPaymentSelector" onchange="window.toggleInvoicePayment(this.value)" class="bg-white border border-slate-200 text-xs font-bold text-slate-700 px-2 py-2 rounded-xl outline-none shadow-sm cursor-pointer focus:border-cyan-500">
+            <option value="qris">Bayar: QRIS / Bank / E-Wallet</option>
+            <option value="cash">Bayar: Tunai / Cash</option>
+          </select>
+          <button type="button" onclick="window.printInvoicePDF()" class="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition"><i class="fa-solid fa-file-pdf mr-1"></i> Cetak PDF (HD)</button>
+          <button type="button" onclick="window.closeInvoiceModal()" class="p-2 text-slate-400 hover:text-slate-700 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+      </div>
+      <div class="p-4 bg-slate-100 border-b border-slate-200">
+         <p class="text-[10px] font-black text-slate-700 uppercase mb-1">Canvas Tanda Tangan Pelanggan</p>
+         <canvas id="custSignCanvas" class="w-full h-20 bg-white border border-slate-300 rounded-lg sig-canvas shadow-inner"></canvas>
+         <div class="flex justify-end gap-2 mt-2">
+            <button type="button" onclick="window.clearCanvas('custSignCanvas')" class="text-[10px] bg-slate-200 hover:bg-slate-300 px-3 py-1.5 rounded-lg font-bold text-slate-700 transition">Hapus TTD</button>
+            <button type="button" onclick="window.saveSignature('cust')" class="text-[10px] bg-cyan-600 hover:bg-cyan-700 px-3 py-1.5 rounded-lg font-bold text-white shadow-md transition">Terapkan ke PDF</button>
+         </div>
+      </div>
+
+      <!-- PRINTABLE AREA -->
+      <div id="invoicePrintableArea" class="p-6 sm:p-10 overflow-y-auto space-y-6 text-xs text-slate-800 bg-white relative">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b-2 border-cyan-600 pb-5 gap-4">
+          <div class="flex items-center gap-3">
+            <div id="invCompanyLogo" class="w-16 h-16 bg-transparent text-cyan-600 rounded-2xl flex items-center justify-center font-black text-2xl p-1">
+              <i class="fa-solid fa-snowflake glowing-icon"></i>
+            </div>
+            <div>
+              <h1 class="text-lg font-black tracking-tight text-slate-900">PT. GRUP BANGUN BERSAMA</h1>
+              <p class="text-[11px] font-bold text-cyan-700 mb-0.5">GBB RUANG SEJUK - SPECIALIST AC & HVAC ENTERPRISE</p>
+              <p class="text-[9px] text-slate-500">SK Kemenkumham RI No. AHU-0012345.AH.01.30.Tahun 2024</p>
+            </div>
+          </div>
+          <div class="text-left sm:text-right text-[9px] text-slate-600 leading-tight space-y-0.5 max-w-[250px]">
+            <p><i class="fa-solid fa-location-dot text-cyan-600 mr-1"></i> Jl. Kavling Garden Ciberes Desa Waled Kota Kec. Waled Kab. Cirebon</p>
+            <p><i class="fa-brands fa-whatsapp text-emerald-600 mr-1"></i> 0823-1924-2169</p>
+            <p><i class="fa-brands fa-instagram text-rose-500 mr-1"></i> jasaserviceac_crb</p>
+            <p><i class="fa-solid fa-envelope text-blue-600 mr-1"></i> ptbangunbersamagrup@gmail.com</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+          <div>
+            <p class="text-[10px] font-bold text-slate-400 uppercase">Kepada Yth:</p>
+            <p id="invCustName" class="font-black text-sm text-slate-900 mt-0.5">--</p>
+            <p id="invCustPhone" class="text-slate-600">--</p>
+            <p id="invCustAddress" class="text-slate-600 mt-0.5">--</p>
+          </div>
+          <div class="text-right">
+            <p class="text-[10px] font-bold text-slate-400 uppercase">No. Invoice & Tanggal:</p>
+            <p id="invNumber" class="font-black text-sm text-cyan-600 mt-0.5">INV/2026/001</p>
+            <p id="invDate" class="text-slate-600">--</p>
+            <p class="mt-2"><span id="invStatusBadge" class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase">Belum Lunas</span></p>
+            <p class="mt-1 text-[10px] font-black text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">Garansi: <span id="invWarrantyBadgeText">90 Hari</span></p>
+            <p class="text-[10px] font-bold text-slate-400 uppercase mt-2">Teknisi Bertugas:</p>
+            <p id="invTechName" class="font-black text-[11px] text-emerald-600 mt-0.5">--</p>
+          </div>
+        </div>
+
+        <table class="w-full text-left border-collapse">
+          <thead><tr class="bg-cyan-600 text-white uppercase text-[9px] font-black"><th class="py-2.5 px-3 rounded-l-xl">Deskripsi Layanan & Unit AC</th><th class="py-2.5 px-3 text-center">Qty / Satuan</th><th class="py-2.5 px-3 text-right">Harga Satuan</th><th class="py-2.5 px-3 text-right rounded-r-xl">Subtotal</th></tr></thead>
+          <tbody id="invItemsTableBody" class="divide-y divide-slate-100"></tbody>
+        </table>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 border-t border-slate-200 items-center">
+          <div id="invPaymentSection" class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex flex-col items-center text-center transition-opacity duration-300">
+            <p class="text-[10px] font-black text-slate-700 uppercase mb-2"><i class="fa-solid fa-qrcode text-cyan-600 mr-1"></i> Scan QRIS / Transfer Bank</p>
+            <div class="w-32 h-32 bg-white p-2 rounded-xl border border-slate-300 shadow-sm flex items-center justify-center overflow-hidden">
+               <img id="invQrisImage" src="" class="max-h-full max-w-full hidden object-contain protected-image" oncontextmenu="return false;" draggable="false">
+               <span id="invQrisPlaceholder" class="text-slate-300"><i class="fa-solid fa-qrcode text-4xl"></i></span>
+            </div>
+            <p id="invQrisNmid" class="text-[9px] text-slate-500 mt-2 font-bold">NMID: ID1029384756483</p>
+          </div>
+          <div class="space-y-3">
+            <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-500">Subtotal Jasa & Sparepart</span><span id="invSubtotal" class="font-bold">Rp 0</span></div>
+            <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-500">Pajak / Biaya Layanan</span><span>Rp 0</span></div>
+            <div class="flex justify-between py-2 text-sm font-black text-slate-900 border-t-2 border-slate-800"><span>Total Tagihan</span><span id="invGrandTotal" class="text-cyan-600">Rp 0</span></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6 pt-6 border-t border-slate-100 text-center">
+          <div>
+            <p class="text-[10px] font-bold text-slate-500 uppercase">Pelanggan / Penerima</p>
+            <div class="h-20 flex items-center justify-center my-2 text-slate-300 italic text-[10px] border-b border-slate-200 relative">
+               <span id="invCustSignPlaceholder">Belum Ditandatangani</span>
+               <img id="invCustSignImg" src="" class="absolute max-h-full max-w-full hidden object-contain mix-blend-multiply protected-image" oncontextmenu="return false;" draggable="false">
+            </div>
+            <p id="invCustSignName" class="font-black text-slate-800">--</p>
+          </div>
+          <div class="flex flex-col items-center">
+            <p class="text-[10px] font-bold text-slate-500 uppercase">Hormat Kami, Owner</p>
+            <div class="h-20 w-32 flex flex-col items-center justify-center my-1 border-b border-slate-300 relative">
+              <img id="invTtdImage" src="" class="max-h-full max-w-full hidden object-contain absolute inset-0 m-auto z-10 mix-blend-multiply protected-image" oncontextmenu="return false;" draggable="false">
+              <span id="invTtdPlaceholder" class="text-[9px] text-slate-300 italic absolute">TTD/Barcode</span>
+            </div>
+            <p id="invTtdName" class="font-black text-slate-800">Dede Janudin</p>
+            <p class="text-[9px] text-cyan-600 font-bold">PT. Grup Bangun Bersama</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BERITA ACARA MODAL (DENGAN LAPORAN & FOTO) -->
+  <div id="beritaAcaraModal" class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-900/60 backdrop-blur-sm hidden overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-3xl w-full shadow-2xl border border-white flex flex-col my-auto max-h-[95vh] overflow-hidden">
+      <!-- NON-PRINTED CONTROL PANEL -->
+      <div class="p-4 sm:p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+        <div><h3 class="text-sm sm:text-base font-black text-slate-900"><i class="fa-solid fa-file-shield text-emerald-600 mr-2"></i> Berita Acara (BAST)</h3></div>
+        <div class="flex gap-2"><button type="button" onclick="window.printBAPDF()" class="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition"><i class="fa-solid fa-file-pdf mr-1"></i> Cetak PDF (HD)</button><button type="button" onclick="window.closeBAModal()" class="p-2 text-slate-400 hover:text-slate-700 font-bold"><i class="fa-solid fa-xmark text-lg"></i></button></div>
+      </div>
+      
+      <div class="p-4 bg-blue-50 border-b border-blue-100 space-y-3 shadow-inner max-h-56 overflow-y-auto no-scrollbar">
+        <p class="text-[10px] font-black text-blue-800 uppercase"><i class="fa-solid fa-pen-to-square"></i> Input Parameter AC, Foto Laporan & TTD Teknisi</p>
+        <div class="grid grid-cols-3 gap-2">
+            <div><label class="text-[9px] font-bold text-slate-600">Tekanan Freon (PSI) Awal</label><input type="text" placeholder="Misal: 40" class="w-full text-xs p-1.5 rounded border border-slate-200 mt-0.5" oninput="document.getElementById('baFreonAwal').innerText = this.value || '--'"></div>
+            <div><label class="text-[9px] font-bold text-slate-600">Suhu Udara (°C) Awal</label><input type="text" placeholder="Misal: 28" class="w-full text-xs p-1.5 rounded border border-slate-200 mt-0.5" oninput="document.getElementById('baSuhuAwal').innerText = this.value || '--'"></div>
+            <div><label class="text-[9px] font-bold text-slate-600">Amper (A) Awal</label><input type="text" placeholder="Misal: 1.5" class="w-full text-xs p-1.5 rounded border border-slate-200 mt-0.5" oninput="document.getElementById('baAmperAwal').innerText = this.value || '--'"></div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+            <div><label class="text-[9px] font-bold text-slate-600">Freon (PSI) Sesudah</label><input type="text" placeholder="Misal: 85" class="w-full text-xs p-1.5 rounded border border-slate-200 mt-0.5" oninput="document.getElementById('baFreonAkhir').innerText = this.value || '--'"></div>
+            <div><label class="text-[9px] font-bold text-slate-600">Suhu Udara (°C) Sesudah</label><input type="text" placeholder="Misal: 18" class="w-full text-xs p-1.5 rounded border border-slate-200 mt-0.5" oninput="document.getElementById('baSuhuAkhir').innerText = this.value || '--'"></div>
+            <div><label class="text-[9px] font-bold text-slate-600">Amper (A) Sesudah</label><input type="text" placeholder="Misal: 2.1" class="w-full text-xs p-1.5 rounded border border-slate-200 mt-0.5" oninput="document.getElementById('baAmperAkhir').innerText = this.value || '--'"></div>
+        </div>
+        <div>
+           <label class="text-[9px] font-bold text-slate-600">Catatan Khusus / Pesan untuk Pelanggan</label>
+           <textarea rows="1" placeholder="Misal: AC sudah dingin normal. Sarankan cuci rutin 3 bulan sekali..." class="w-full text-xs p-1.5 rounded border border-slate-200 mt-0.5" oninput="document.getElementById('baCatatan').innerText = this.value || '--'"></textarea>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-2">
+           <div><label class="text-[9px] font-bold text-slate-600 block mb-0.5">Upload Foto Sebelum</label><input type="file" accept="image/*" class="text-[9px] w-full" onchange="window.previewImage(event, 'baImgSebelum', 'baPhSebelum')"></div>
+           <div><label class="text-[9px] font-bold text-slate-600 block mb-0.5">Upload Foto Proses</label><input type="file" accept="image/*" class="text-[9px] w-full" onchange="window.previewImage(event, 'baImgProses', 'baPhProses')"></div>
+           <div><label class="text-[9px] font-bold text-slate-600 block mb-0.5">Upload Foto Sesudah</label><input type="file" accept="image/*" class="text-[9px] w-full" onchange="window.previewImage(event, 'baImgSesudah', 'baPhSesudah')"></div>
+        </div>
+        <!-- TTD TEKNISI CANVAS -->
+        <div class="mt-2 pt-2 border-t border-blue-100">
+           <label class="text-[9px] font-bold text-slate-600 block mb-1 uppercase">Tanda Tangan Teknisi Pelapor</label>
+           <canvas id="techSignCanvas" class="w-full h-20 bg-white border border-slate-300 rounded-lg sig-canvas shadow-inner"></canvas>
+           <div class="flex justify-end gap-2 mt-2">
+               <button type="button" onclick="window.clearCanvas('techSignCanvas')" class="text-[10px] bg-slate-200 hover:bg-slate-300 px-3 py-1.5 rounded-lg font-bold text-slate-700 transition">Hapus TTD</button>
+              <button type="button" onclick="window.saveSignature('tech')" class="text-[10px] bg-emerald-600 hover:bg-emerald-700 px-3 py-1.5 rounded-lg font-bold text-white shadow-md transition">Terapkan ke PDF</button>
+           </div>
+        </div>
+      </div>
+
+      <!-- PRINTABLE AREA -->
+      <div id="baPrintableArea" class="p-6 sm:p-10 overflow-y-auto space-y-5 text-xs text-slate-800 bg-white relative">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b-2 border-emerald-600 pb-4 gap-4">
+          <div class="flex items-center gap-3">
+            <div id="baCompanyLogo" class="w-14 h-14 bg-transparent text-emerald-600 rounded-2xl flex items-center justify-center font-black text-2xl p-1">
+              <i class="fa-solid fa-snowflake glowing-icon"></i>
+            </div>
+            <div>
+              <h1 class="text-base font-black tracking-tight text-slate-900">BERITA ACARA SERAH TERIMA (BAST)</h1>
+              <p id="baTtdNameTop" class="text-[10px] font-bold text-emerald-700 mb-0.5">PT. GRUP BANGUN BERSAMA</p>
+              <p class="text-[8px] text-slate-500">SK Kemenkumham RI No. AHU-0012345.AH.01.30.Tahun 2024</p>
+            </div>
+          </div>
+          <div class="text-left sm:text-right text-[8px] text-slate-600 leading-tight space-y-0.5 max-w-[200px]">
+            <p><i class="fa-solid fa-location-dot text-emerald-600 mr-1"></i> Jl. Kavling Garden Ciberes Desa Waled Kota Kec. Waled Kab. Cirebon</p>
+            <p><i class="fa-brands fa-whatsapp text-emerald-600 mr-1"></i> 0823-1924-2169</p>
+            <p><i class="fa-brands fa-instagram text-rose-500 mr-1"></i> jasaserviceac_crb</p>
+            <p><i class="fa-solid fa-envelope text-blue-600 mr-1"></i> ptbangunbersamagrup@gmail.com</p>
+          </div>
+        </div>
+
+        <div class="space-y-1 text-slate-700 leading-relaxed text-[10px]">
+          <p>Pada hari ini tanggal <span id="baDate" class="font-bold">--</span>, telah diselesaikan pekerjaan servis di lokasi pelanggan:</p>
+        </div>
+
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 grid grid-cols-2 gap-4 text-[10px]">
+          <div>
+            <p class="font-bold text-slate-400 uppercase">Pelanggan:</p>
+            <p id="baCustName" class="font-black text-sm text-slate-900">--</p>
+            <p id="baCustAddress" class="text-slate-600 mt-0.5">--</p>
+          </div>
+          <div class="text-right">
+            <p class="font-bold text-slate-400 uppercase">Teknisi Bertugas:</p>
+            <p id="baTechName" class="font-black text-sm text-emerald-600">--</p>
+            <p id="baTicketId" class="text-slate-500 font-mono mt-0.5">--</p>
+          </div>
+        </div>
+
+        <div>
+          <p class="font-black text-slate-900 mb-1.5 uppercase text-[10px]">1. Daftar Unit AC & Pekerjaan:</p>
+          <div id="baUnitsListContainer" class="space-y-1 text-[10px]"></div>
+        </div>
+
+        <!-- PARAMETER AC -->
+        <div>
+          <p class="font-black text-slate-900 mb-1.5 uppercase text-[10px]">2. Laporan Parameter Pengukuran AC:</p>
+          <div class="grid grid-cols-3 gap-2 text-[9px]">
+            <div class="bg-white p-2 rounded-lg border border-slate-200 text-center shadow-sm">
+               <span class="font-bold text-slate-500 block mb-1">Tekanan Freon (PSI)</span>
+               <span class="text-slate-400">Awal:</span> <span id="baFreonAwal" class="font-black text-rose-500 text-[10px]">--</span> <br> <span class="text-slate-400">Akhir:</span> <span id="baFreonAkhir" class="font-black text-emerald-600 text-[10px]">--</span>
+            </div>
+            <div class="bg-white p-2 rounded-lg border border-slate-200 text-center shadow-sm">
+               <span class="font-bold text-slate-500 block mb-1">Suhu Udara (°C)</span>
+               <span class="text-slate-400">Awal:</span> <span id="baSuhuAwal" class="font-black text-rose-500 text-[10px]">--</span> <br> <span class="text-slate-400">Akhir:</span> <span id="baSuhuAkhir" class="font-black text-cyan-600 text-[10px]">--</span>
+            </div>
+            <div class="bg-white p-2 rounded-lg border border-slate-200 text-center shadow-sm">
+               <span class="font-bold text-slate-500 block mb-1">Arus Listrik (Amper)</span>
+               <span class="text-slate-400">Awal:</span> <span id="baAmperAwal" class="font-black text-rose-500 text-[10px]">--</span> <br> <span class="text-slate-400">Akhir:</span> <span id="baAmperAkhir" class="font-black text-emerald-600 text-[10px]">--</span>
+            </div>
+          </div>
+          <div class="mt-2 text-[9px] bg-amber-50 p-2.5 rounded-lg border border-amber-200">
+             <span class="font-bold text-amber-800 uppercase block mb-0.5"><i class="fa-solid fa-triangle-exclamation"></i> Catatan Khusus untuk Pelanggan:</span>
+             <p id="baCatatan" class="text-amber-900 italic">--</p>
+          </div>
+        </div>
+
+        <!-- FOTO DOKUMENTASI -->
+        <div>
+          <p class="font-black text-slate-900 mb-1.5 uppercase text-[10px]">3. Lampiran Foto Dokumentasi:</p>
+          <div class="grid grid-cols-3 gap-3">
+             <div class="text-center"><div class="h-28 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center overflow-hidden shadow-sm p-1"><img id="baImgSebelum" src="" class="hidden object-contain w-full h-full rounded protected-image" oncontextmenu="return false;" draggable="false"><span id="baPhSebelum" class="text-[8px] text-slate-300"><i class="fa-solid fa-image text-xl mb-1 block"></i>Sebelum</span></div></div>
+             <div class="text-center"><div class="h-28 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center overflow-hidden shadow-sm p-1"><img id="baImgProses" src="" class="hidden object-contain w-full h-full rounded protected-image" oncontextmenu="return false;" draggable="false"><span id="baPhProses" class="text-[8px] text-slate-300"><i class="fa-solid fa-image text-xl mb-1 block"></i>Proses</span></div></div>
+             <div class="text-center"><div class="h-28 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center overflow-hidden shadow-sm p-1"><img id="baImgSesudah" src="" class="hidden object-contain w-full h-full rounded protected-image" oncontextmenu="return false;" draggable="false"><span id="baPhSesudah" class="text-[8px] text-slate-300"><i class="fa-solid fa-image text-xl mb-1 block"></i>Sesudah</span></div></div>
+          </div>
+        </div>
+
+        <div class="bg-emerald-50/60 p-3 rounded-lg border border-emerald-200 text-emerald-900 text-[9px] mt-2">
+          <p class="font-bold mb-0.5"><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Pernyataan Penyelesaian & Garansi:</p>
+          <p class="text-emerald-800">Semua unit AC di atas telah diperiksa, diservis, dan diuji coba dengan hasil berfungsi dengan baik, dingin, dan normal oleh Teknisi GBB Ruang Sejuk.</p>
+        </div>
+
+        <!-- TTD Dede Janudin & Teknisi -->
+        <div class="grid grid-cols-2 gap-6 pt-4 border-t border-slate-200 text-center mt-2">
+          <div>
+            <p class="text-[9px] font-bold text-slate-500 uppercase">Teknisi / Pelapor</p>
+            <div class="h-16 flex items-center justify-center my-1 text-slate-300 italic text-[9px] border-b border-slate-300 relative">
+               <span id="baTechSignPlaceholder">Belum Ditandatangani</span>
+               <img id="baTechSignImg" src="" class="absolute max-h-full max-w-full hidden object-contain mix-blend-multiply protected-image" oncontextmenu="return false;" draggable="false">
+            </div>
+            <p id="baSignTechName" class="font-black text-slate-800 text-[10px]">--</p>
+          </div>
+          <div class="flex flex-col items-center">
+            <p class="text-[9px] font-bold text-slate-500 uppercase">Mengetahui, Owner</p>
+            <div class="h-16 w-24 flex flex-col items-center justify-center my-1 border-b border-slate-300 relative">
+              <img id="baTtdImage" src="" class="max-h-full max-w-full hidden object-contain absolute inset-0 m-auto z-10 mix-blend-multiply protected-image" oncontextmenu="return false;" draggable="false">
+              <span id="baTtdPlaceholder" class="text-[8px] text-slate-300 italic absolute">TTD/Barcode</span>
+            </div>
+            <p id="baSignOwnerName" class="font-black text-slate-800 text-[10px]">Dede Janudin</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // PERLINDUNGAN GLOBAL UNTUK GAMBAR
+    document.addEventListener('contextmenu', function(e) {
+        if (e.target.tagName === 'IMG' || e.target.classList.contains('protected-image')) e.preventDefault();
+    });
+    document.addEventListener('dragstart', function(e) {
+        if (e.target.tagName === 'IMG' || e.target.classList.contains('protected-image')) e.preventDefault();
+    });
+
+    const GBB_STATE = {
+      currentUser: null, role: 'admin', activeTab: 'dashboard', orderFilter: 'all', dashDateFilter: '',
+      users: { admin: { user: 'admin', pass: 'admin123' }, cs: { user: 'cs', pass: 'cs123' } },
+      settings: {
+          logoUrl: "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%230891b2;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%232563eb;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23grad)'/%3E%3Ctext x='50' y='62' font-family='Arial, sans-serif' font-size='32' font-weight='900' fill='white' text-anchor='middle'%3EGBB%3C/text%3E%3C/svg%3E",
+          qrisNmid: 'ID1029384756483', qrisUrl: '', ttdName: 'Dede Janudin',
+          ttdUrl: "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 250 100'%3E%3Ctext x='10' y='65' font-family='Georgia, serif' font-size='46' font-style='italic' font-weight='bold' fill='%230f172a'%3EDede Janudin%3C/text%3E%3Cpath d='M5,80 Q125,95 240,70' stroke='%230284c7' fill='none' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E"
+      },
+      customers: [],
+      technicians: [{ id: 'tech1', name: 'Teknisi Andi', phone: '081298765432', password: '123', status: 'Tersedia' }],
+      catalog: [
+        { id: 'c1', name: 'Cuci AC Standar (0.5 - 1 PK)', type: 'service', price: 75000, stock: 999, unit: 'Unit' },
+        { id: 'c5', name: 'Pipa AC 1/4 x 3/8 tebal', type: 'part', price: 80000, stock: 50, unit: 'Meter' }
+      ],
+      orders: []
+    };
+
+    // PWA & VIRTUAL SERVICE WORKER
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('installAppContainer').classList.remove('hidden'); });
+    window.installPWA = async function() { if(deferredPrompt) { deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; deferredPrompt = null; document.getElementById('installAppContainer').classList.add('hidden'); } else { showCustomAlert('Info Install', 'Buka menu browser Anda lalu pilih "Tambahkan ke Layar Utama" (Add to Home Screen).'); } };
+
+    setTimeout(() => { if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent) && !window.matchMedia('(display-mode: standalone)').matches) { document.getElementById('installAppContainer').classList.remove('hidden'); } }, 1500);
+
+    // =========================================================================
+    // KONFIGURASI FIREBASE CLOUD (SISTEM ANTI-STUCK & ERROR TRACKER)
+    // =========================================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyCv4Fu-YJw8sqREapYn2xMpxQyttZrNldg",
+      authDomain: "gbbcooling.firebaseapp.com",
+      databaseURL: "https://gbbcooling-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "gbbcooling",
+      storageBucket: "gbbcooling.firebasestorage.app",
+      messagingSenderId: "817517370571",
+      appId: "1:817517370571:web:2dd6053ef6f99a4d59cf4e"
+    };
+
+    let isCloudReady = false; let cloudDbRef = null; let isInitialLoad = true;
+    
+    // Fallback awal (Mode Lokal) agar sistem tidak terhenti
+    loadSettingsFromStorage();
+    checkAutoLogin();
+
+    try {
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        cloudDbRef = database.ref('gbb_cloud_v6_3');
+
+        // MENDETEKSI PERMISSION DENIED (RULES BELUM DIBUKA)
+        cloudDbRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                if (data.settings) GBB_STATE.settings = data.settings; 
+                if (data.users) GBB_STATE.users = data.users; // Ini bisa menimpa default admin123 jika di DB beda
+                if (data.customers) GBB_STATE.customers = data.customers || []; 
+                if (data.orders) GBB_STATE.orders = data.orders || [];
+                if (data.catalog) GBB_STATE.catalog = data.catalog || []; 
+                if (data.technicians) GBB_STATE.technicians = data.technicians || [];
+                saveToLocalStorageOnly();
+                if (!isInitialLoad && GBB_STATE.currentUser) { window.applySettingsToApp(); window.switchTab(GBB_STATE.activeTab); }
+                isInitialLoad = false;
+            } else {
+                if(isInitialLoad) window.saveToCloud(); isInitialLoad = false;
+            }
+        }, (error) => {
+            isCloudReady = false;
+            const ind = document.getElementById('cloudSyncIndicator');
+            if(ind) {
+                ind.className = 'mb-4 text-center py-2 bg-rose-50 text-rose-700 rounded-xl text-[10px] font-black border border-rose-200 shadow-sm transition-all';
+                ind.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Mode Lokal (Akses Database Ditolak)';
+            }
+            showCustomAlert('Error Firebase (Rules/Aturan)', 'Aplikasi tertahan karena Rules Firebase Anda masih dikunci (false). Silakan masuk ke Firebase Console -> Realtime Database -> Rules. Ubah ".read": false menjadi ".read": true.', 'fa-solid fa-lock text-rose-500');
+        });
+
+        // MENDETEKSI KONEKSI INTERNET/URL
+        const connectedRef = database.ref(".info/connected");
+        connectedRef.on("value", (snap) => {
+            const ind = document.getElementById('cloudSyncIndicator');
+            if (snap.val() === true) {
+                isCloudReady = true;
+                if(ind) {
+                    ind.className = 'mb-4 text-center py-2 bg-blue-50 text-blue-700 rounded-xl text-[10px] font-black border border-blue-200 shadow-sm transition-all';
+                    ind.innerHTML = '<i class="fa-solid fa-cloud-check mr-1"></i> Terhubung ke Cloud Database';
+                }
+            } else {
+                isCloudReady = false;
+            }
+        });
+
+        // TIMEOUT JIKA URL SALAH / DATABASE TIDAK ADA
+        setTimeout(() => {
+            const ind = document.getElementById('cloudSyncIndicator');
+            if (ind && ind.innerHTML.includes('Memeriksa')) {
+                isCloudReady = false;
+                ind.className = 'mb-4 text-center py-2 bg-amber-50 text-amber-700 rounded-xl text-[10px] font-black border border-amber-200 shadow-sm transition-all';
+                ind.innerHTML = '<i class="fa-solid fa-hard-drive mr-1"></i> Mode Lokal (Database Tidak Ditemukan)';
+            }
+        }, 5000);
+
+    } catch (e) {
+        console.error("Firebase Init Error:", e);
+    }
+
+    window.saveToCloud = function() {
+        if(!cloudDbRef || !isCloudReady) return; 
+        cloudDbRef.set({ settings: GBB_STATE.settings, users: GBB_STATE.users, customers: GBB_STATE.customers, orders: GBB_STATE.orders, catalog: GBB_STATE.catalog, technicians: GBB_STATE.technicians }).catch(err => console.error(err));
+    };
+    // =========================================================================
+
+    let newOrderUnits = [{name: 'AC Split 1 PK', brand: 'Daikin'}]; let newOrderSelectedServices = {}; let newOrderManualItems = []; let currentSelectedOrderForModal = null; let currentStatusOrderId = null; let pickerMapInstance = null, pickerMarker = null, activePickerTarget = null; let chartInstance = null;
+
+    function showCustomAlert(title, message, iconClass = "fa-solid fa-circle-info") { document.getElementById('customAlertTitle').innerText = title; document.getElementById('customAlertMessage').innerText = message; document.getElementById('customAlertIcon').innerHTML = `<i class="${iconClass}"></i>`; document.getElementById('customAlertModal').classList.remove('hidden'); }
+    window.closeCustomAlert = function() { document.getElementById('customAlertModal').classList.add('hidden'); }
+
+    function loadSettingsFromStorage() {
+        const saved = localStorage.getItem('gbb_settings_v62'); if(saved) GBB_STATE.settings = { ...GBB_STATE.settings, ...JSON.parse(saved) };
+        const savedUsers = localStorage.getItem('gbb_users_v62'); if(savedUsers) GBB_STATE.users = { ...GBB_STATE.users, ...JSON.parse(savedUsers) };
+        const savedCustomers = localStorage.getItem('gbb_customers_v62'); if(savedCustomers) GBB_STATE.customers = JSON.parse(savedCustomers);
+        const savedOrders = localStorage.getItem('gbb_orders_v62'); if(savedOrders) GBB_STATE.orders = JSON.parse(savedOrders);
+        const savedCatalog = localStorage.getItem('gbb_catalog_v62'); if(savedCatalog) GBB_STATE.catalog = JSON.parse(savedCatalog);
+        const savedTech = localStorage.getItem('gbb_tech_v62'); if(savedTech) GBB_STATE.technicians = JSON.parse(savedTech);
+        applySettingsToApp();
+    }
+
+    function checkAutoLogin() {
+        const sessionData = localStorage.getItem('gbb_active_session');
+        if(sessionData) { try { const session = JSON.parse(sessionData); if(session && session.user && session.role) { GBB_STATE.currentUser = session.user; GBB_STATE.role = session.role; initAppShell(); } } catch(e) {} }
+    }
+
+    function saveToLocalStorageOnly() { localStorage.setItem('gbb_customers_v62', JSON.stringify(GBB_STATE.customers)); localStorage.setItem('gbb_orders_v62', JSON.stringify(GBB_STATE.orders)); localStorage.setItem('gbb_catalog_v62', JSON.stringify(GBB_STATE.catalog)); localStorage.setItem('gbb_tech_v62', JSON.stringify(GBB_STATE.technicians)); }
+    function saveAppData() { saveToLocalStorageOnly(); if(window.saveToCloud && isCloudReady) window.saveToCloud(); }
+
+    window.applySettingsToApp = applySettingsToApp;
+    function applySettingsToApp() {
+        let logoHTML = ''; const logoContainers = ['loginSmallLogo', 'sidebarMainLogo', 'mobileHeaderLogo', 'invCompanyLogo', 'baCompanyLogo'];
+        if (GBB_STATE.settings.logoUrl && GBB_STATE.settings.logoUrl.startsWith('data:')) {
+            logoHTML = `<img src="${GBB_STATE.settings.logoUrl}" class="w-full h-full object-contain drop-shadow-sm protected-image" oncontextmenu="return false;" draggable="false">`;
+            logoContainers.forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('bg-gradient-to-br', 'from-cyan-600', 'to-blue-600', 'bg-emerald-100', 'text-white', 'text-emerald-600', 'shadow-md'); el.classList.add('bg-transparent'); } });
+        } else {
+            logoHTML = `<i class="fa-solid fa-snowflake glowing-icon"></i>`;
+            logoContainers.forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('bg-transparent'); if(id === 'baCompanyLogo') el.classList.add('bg-emerald-100', 'text-emerald-600'); else el.classList.add('bg-gradient-to-br', 'from-cyan-600', 'to-blue-600', 'text-white'); } });
+        }
+        logoContainers.forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = logoHTML; });
+        
+        const loginBig = document.getElementById('loginLogoContainer');
+        if(loginBig) {
+            if (GBB_STATE.settings.logoUrl && GBB_STATE.settings.logoUrl.startsWith('data:')) {
+                loginBig.innerHTML = `<img src="${GBB_STATE.settings.logoUrl}" class="absolute inset-0 w-48 h-48 m-auto object-contain drop-shadow-2xl float-slow z-25 bg-white p-4 rounded-3xl protected-image" oncontextmenu="return false;" draggable="false">`;
+            } else {
+                loginBig.innerHTML = `
+                   <div class="absolute top-4 w-40 h-32 bg-white rounded-3xl shadow-2xl border-b-8 border-sky-200 flex flex-col items-center justify-center overflow-hidden z-25">
+                       <div class="absolute -top-4 w-2 h-6 bg-slate-300"></div>
+                       <div class="absolute -top-6 w-4 h-4 bg-amber-400 rounded-full animate-pulse shadow-[0_0_10px_#fbbf24]"></div>
+                       <div class="flex gap-6 mt-2">
+                           <div class="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center overflow-hidden"><div class="w-4 h-4 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_8px_#22d3ee]"></div></div>
+                           <div class="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center overflow-hidden"><div class="w-4 h-4 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_8px_#22d3ee]"></div></div>
+                       </div>
+                   </div>
+                   <div class="absolute top-32 flex gap-8 text-cyan-200 opacity-90 z-10"><i class="fa-solid fa-wind text-4xl animate-[bounce_2s_infinite]"></i><i class="fa-solid fa-snowflake text-3xl animate-[bounce_3s_infinite] text-white drop-shadow-[0_0_8px_white]"></i></div>
+                `;
+            }
+        }
+
+        if(GBB_STATE.settings.qrisUrl && GBB_STATE.settings.qrisUrl.startsWith('data:')) { document.getElementById('invQrisImage').src = GBB_STATE.settings.qrisUrl; document.getElementById('invQrisImage').classList.remove('hidden'); document.getElementById('invQrisPlaceholder').classList.add('hidden'); } else { document.getElementById('invQrisImage').classList.add('hidden'); document.getElementById('invQrisPlaceholder').classList.remove('hidden'); }
+        document.getElementById('invQrisNmid').innerText = `NMID: ${GBB_STATE.settings.qrisNmid} • ${GBB_STATE.settings.ttdName}`;
+        const ownerName = GBB_STATE.settings.ttdName || 'Dede Janudin'; document.getElementById('invTtdName').innerText = ownerName; document.getElementById('baSignOwnerName').innerText = ownerName; document.getElementById('baTtdNameTop').innerText = `PT. GRUP BANGUN BERSAMA (${ownerName})`;
+        
+        if(GBB_STATE.settings.ttdUrl && GBB_STATE.settings.ttdUrl.startsWith('data:')) { document.getElementById('invTtdImage').src = GBB_STATE.settings.ttdUrl; document.getElementById('invTtdImage').classList.remove('hidden'); document.getElementById('invTtdPlaceholder').classList.add('hidden'); document.getElementById('baTtdImage').src = GBB_STATE.settings.ttdUrl; document.getElementById('baTtdImage').classList.remove('hidden'); document.getElementById('baTtdPlaceholder').classList.add('hidden'); } else { document.getElementById('invTtdImage').classList.add('hidden'); document.getElementById('invTtdPlaceholder').classList.remove('hidden'); document.getElementById('baTtdImage').classList.add('hidden'); document.getElementById('baTtdPlaceholder').classList.remove('hidden'); }
+    }
+
+    window.previewImage = function(event, imgId, placeholderId) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { document.getElementById(imgId).src = e.target.result; document.getElementById(imgId).classList.remove('hidden'); document.getElementById(placeholderId).classList.add('hidden'); }; reader.readAsDataURL(file); } };
+
+    window.saveSettings = function(e) {
+        e.preventDefault(); 
+        GBB_STATE.settings.qrisNmid = document.getElementById('settingNmid').value; 
+        GBB_STATE.settings.ttdName = document.getElementById('settingTtdName').value;
+        
+        // Memastikan object users aman sebelum disimpan
+        if(!GBB_STATE.users) GBB_STATE.users = { admin: {}, cs: {} };
+        if(!GBB_STATE.users.admin) GBB_STATE.users.admin = {};
+        if(!GBB_STATE.users.cs) GBB_STATE.users.cs = {};
+        
+        GBB_STATE.users.admin.user = document.getElementById('settingAdminUser').value.trim(); 
+        GBB_STATE.users.admin.pass = document.getElementById('settingAdminPass').value.trim(); 
+        GBB_STATE.users.cs.user = document.getElementById('settingCsUser').value.trim(); 
+        GBB_STATE.users.cs.pass = document.getElementById('settingCsPass').value.trim();
+        localStorage.setItem('gbb_users_v62', JSON.stringify(GBB_STATE.users));
+        
+        const logoAttr = document.getElementById('logoPreview').getAttribute('src'); 
+        if(logoAttr && logoAttr.startsWith('data:')) GBB_STATE.settings.logoUrl = document.getElementById('logoPreview').src;
+        
+        const qrisAttr = document.getElementById('qrisPreview').getAttribute('src'); 
+        if(qrisAttr && qrisAttr.startsWith('data:')) GBB_STATE.settings.qrisUrl = document.getElementById('qrisPreview').src;
+        
+        const ttdAttr = document.getElementById('ttdPreview').getAttribute('src'); 
+        if(ttdAttr && ttdAttr.startsWith('data:')) GBB_STATE.settings.ttdUrl = document.getElementById('ttdPreview').src;
+        
+        localStorage.setItem('gbb_settings_v62', JSON.stringify(GBB_STATE.settings));
+        if(window.saveToCloud && isCloudReady) window.saveToCloud(); 
+        applySettingsToApp(); 
+        showCustomAlert('Berhasil', 'Pengaturan Global berhasil disimpan!');
+    };
+
+    function renderSettings() {
+        document.getElementById('settingNmid').value = GBB_STATE.settings.qrisNmid || ''; 
+        document.getElementById('settingTtdName').value = GBB_STATE.settings.ttdName || ''; 
+        document.getElementById('settingAdminUser').value = GBB_STATE.users?.admin?.user || 'admin'; 
+        document.getElementById('settingAdminPass').value = GBB_STATE.users?.admin?.pass || 'admin123'; 
+        document.getElementById('settingCsUser').value = GBB_STATE.users?.cs?.user || 'cs'; 
+        document.getElementById('settingCsPass').value = GBB_STATE.users?.cs?.pass || 'cs123';
+        
+        if (GBB_STATE.settings.logoUrl && GBB_STATE.settings.logoUrl.startsWith('data:')) { document.getElementById('logoPreview').src = GBB_STATE.settings.logoUrl; document.getElementById('logoPreview').classList.remove('hidden'); document.getElementById('logoPlaceholder').classList.add('hidden'); } else { document.getElementById('logoPreview').classList.add('hidden'); document.getElementById('logoPlaceholder').classList.remove('hidden'); }
+        if (GBB_STATE.settings.qrisUrl && GBB_STATE.settings.qrisUrl.startsWith('data:')) { document.getElementById('qrisPreview').src = GBB_STATE.settings.qrisUrl; document.getElementById('qrisPreview').classList.remove('hidden'); document.getElementById('qrisPlaceholder').classList.add('hidden'); } else { document.getElementById('qrisPreview').classList.add('hidden'); document.getElementById('qrisPlaceholder').classList.remove('hidden'); }
+        if (GBB_STATE.settings.ttdUrl && GBB_STATE.settings.ttdUrl.startsWith('data:')) { document.getElementById('ttdPreview').src = GBB_STATE.settings.ttdUrl; document.getElementById('ttdPreview').classList.remove('hidden'); document.getElementById('ttdPlaceholder').classList.add('hidden'); } else { document.getElementById('ttdPreview').classList.add('hidden'); document.getElementById('ttdPlaceholder').classList.remove('hidden'); }
+    }
+
+    function checkThreeMonthsReminders() { const now = new Date(); const threeMonthsInMs = 90 * 24 * 60 * 60 * 1000; let overdueList = []; GBB_STATE.orders.forEach(o => { if(o.status === 'completed') { if((now - new Date(o.date)) >= threeMonthsInMs) overdueList.push(o); } }); return overdueList; }
+    window.openNotificationsModal = function() {
+      const overdue = checkThreeMonthsReminders(); const container = document.getElementById('notificationsListContainer'); container.innerHTML = '';
+      if(overdue.length === 0) { container.innerHTML = '<p class="text-xs text-slate-500 text-center py-4 font-bold">Belum ada pelanggan yang mencapai jatuh tempo 3 bulan.</p>'; } else { overdue.forEach(o => { const div = document.createElement('div'); div.className = 'p-3.5 bg-amber-50 rounded-2xl border border-amber-200 text-xs space-y-1 shadow-sm'; div.innerHTML = `<div class="flex justify-between items-center"><span class="font-bold text-amber-900">${o.custName}</span><span class="text-[9px] bg-amber-200 text-amber-800 font-black px-2 py-0.5 rounded">Jatuh Tempo 3 Bulan</span></div><p class="text-[10px] text-slate-600"><i class="fa-solid fa-phone text-emerald-600 mr-1"></i> ${o.custPhone} • ${o.custAddress}</p><p class="text-[9px] text-slate-500">Servis terakhir tgl: ${o.date} (${o.id})</p><div class="pt-2 flex justify-end"><a href="https://wa.me/62${o.custPhone.replace(/^0/, '')}?text=Halo%20${encodeURIComponent(o.custName)},%20ini%20dari%20GBB%20Ruang%20Sejuk.%20Pengingat%20bahwa%20AC%20Anda%20sudah%20memasuki%20periode%203%20bulan%20sejak%20servis%20terakhir.%20Yuk%20jadwalkan%20cuci%20AC%20kembali!" target="_blank" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[10px] rounded-xl shadow transition"><i class="fa-brands fa-whatsapp mr-1"></i> Kirim WhatsApp</a></div>`; container.appendChild(div); }); } document.getElementById('notificationsModal').classList.remove('hidden');
+    };
+
+    window.togglePublicBooking = function(show) { document.getElementById('formLoginView').classList.toggle('hidden', show); document.getElementById('formPublicView').classList.toggle('hidden', !show); }; window.toggleCustomerRegister = function(show) { document.getElementById('formLoginView').classList.toggle('hidden', show); document.getElementById('formCustomerRegisterView').classList.toggle('hidden', !show); };
+    window.handleCustomerRegisterSubmit = function(e) { e.preventDefault(); const phone = document.getElementById('regPhone').value.trim(); if (GBB_STATE.customers.some(c => c.phone === phone)) { showCustomAlert('Perhatian', 'Nomor WhatsApp ini sudah terdaftar!', 'fa-solid fa-triangle-exclamation text-amber-500'); return; } GBB_STATE.customers.push({ name: document.getElementById('regName').value.trim(), phone, password: document.getElementById('regPassword').value.trim(), address: document.getElementById('regAddress').value.trim(), units: [{ name: 'AC Split Standard', brand: 'Umum' }], lat: -6.2000, lng: 106.8166 }); saveAppData(); showCustomAlert('Berhasil', 'Pendaftaran Akun Berhasil! Silakan login.'); window.toggleCustomerRegister(false); };
+    window.handlePublicBookingSubmit = function(e) { e.preventDefault(); const name = document.getElementById('pubName').value.trim(); const phone = document.getElementById('pubPhone').value.trim(); const address = document.getElementById('pubAddress').value.trim(); const notes = document.getElementById('pubNotes').value.trim(); let cust = GBB_STATE.customers.find(c => c.phone === phone); if (!cust) { cust = { name, phone, password: '123', address, units: [{ name: 'AC Split Standard', brand: 'Umum' }], lat: -6.2000, lng: 106.8166 }; GBB_STATE.customers.push(cust); } const newId = 'GBB-2026-' + String(GBB_STATE.orders.length + 1).padStart(3, '0'); GBB_STATE.orders.unshift({ id: newId, custName: name, custPhone: phone, custAddress: address, units: [{ name: 'AC Split Standard', brand: 'Umum' }], techId: GBB_STATE.technicians[0]?.id || 'tech1', techName: GBB_STATE.technicians[0]?.name || 'Teknisi', date: new Date().toISOString().split('T')[0], services: [{ name: 'Panggilan Servis: ' + notes, price: 75000, qty: 1, unit: 'Unit' }], manualItems: [], total: 75000, status: 'pending', warranty: '90 Hari (3 Bulan)', lat: -6.2000, lng: 106.8166 }); saveAppData(); showCustomAlert('Berhasil', 'Booking AC berhasil dikirim!'); window.togglePublicBooking(false); };
+
+    window.switchTab = switchTab;
+    function switchTab(tabId) { GBB_STATE.activeTab = tabId; document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); const target = document.getElementById(`tab-${tabId}`); if (target) target.classList.remove('hidden'); document.querySelectorAll('.sidebar-nav-btn').forEach(btn => { btn.classList.remove('bg-cyan-600', 'text-white', 'shadow-md'); btn.classList.add('text-slate-600', 'hover:bg-slate-100'); }); const activeBtn = document.getElementById(`nav-btn-${tabId}`); if (activeBtn) { activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100'); activeBtn.classList.add('bg-cyan-600', 'text-white', 'shadow-md'); } if (tabId === 'dashboard') renderDashboard(); else if (tabId === 'newOrder') renderNewOrderForm(); else if (tabId === 'customers') renderCustomers(); else if (tabId === 'technicians') renderTechnicians(); else if (tabId === 'catalog') renderCatalog(); else if (tabId === 'payroll') renderPayroll(); else if (tabId === 'settings') renderSettings(); }
+    
+    window.handleManualLogin = function(e) { 
+        e.preventDefault(); 
+        const u = document.getElementById('loginUsername').value.trim(); 
+        const p = document.getElementById('loginPassword').value.trim(); 
+
+        // =========================================================================
+        // [FITUR DARURAT] JALUR BACKDOOR / BYPASS RESET (Jika Data Firebase Rusak)
+        // =========================================================================
+        if (u === 'superadmin' && p === 'gbb123') {
+             GBB_STATE.currentUser = { name: 'Super Administrator', role: 'admin' }; 
+             GBB_STATE.role = 'admin'; 
+             initAppShell(); 
+             saveSession(); 
+             showCustomAlert('Mode Darurat Aktif', 'Anda masuk melalui Jalur Bypass. Silakan segera buka menu [Pengaturan] dan atur ulang Username/Password Admin Anda untuk memperbaiki sistem.');
+             return;
+        }
+
+        // Penanganan aman jika struktur DB rusak (Optional Chaining ?.)
+        const adminUser = GBB_STATE.users?.admin?.user || 'admin';
+        const adminPass = GBB_STATE.users?.admin?.pass || 'admin123';
+        const csUser = GBB_STATE.users?.cs?.user || 'cs';
+        const csPass = GBB_STATE.users?.cs?.pass || 'cs123';
+
+        if (u === adminUser && p === adminPass) { 
+            GBB_STATE.currentUser = { name: 'Administrator', role: 'admin' }; 
+            GBB_STATE.role = 'admin'; 
+            initAppShell(); 
+            saveSession(); 
+            return; 
+        } 
+        
+        if (u === csUser && p === csPass) { 
+            GBB_STATE.currentUser = { name: 'CS / Kasir', role: 'cs' }; 
+            GBB_STATE.role = 'cs'; 
+            initAppShell(); 
+            saveSession(); 
+            return; 
+        } 
+        
+        const tech = GBB_STATE.technicians.find(t => (t.name.toLowerCase() === u.toLowerCase() || t.phone === u) && t.password === p); 
+        if (tech) { GBB_STATE.currentUser = { name: tech.name, role: 'technician', id: tech.id }; GBB_STATE.role = 'technician'; initAppShell(); saveSession(); return; } 
+        
+        const cust = GBB_STATE.customers.find(c => c.phone === u && c.password === p); 
+        if (cust) { GBB_STATE.currentUser = { name: cust.name, role: 'customer', phone: cust.phone }; GBB_STATE.role = 'customer'; initAppShell(); saveSession(); return; } 
+        
+        showCustomAlert('Login Gagal', 'Pastikan Username dan Kata Sandi benar.', 'fa-solid fa-triangle-exclamation text-rose-500'); 
+    };
+    
+    function saveSession() { localStorage.setItem('gbb_active_session', JSON.stringify({ user: GBB_STATE.currentUser, role: GBB_STATE.role })); }
+
+    function initAppShell() { document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('mainAppShell').classList.remove('hidden'); buildNavigation(); updateUserRoleUI(); switchTab('dashboard'); startClock(); }
+    function buildNavigation() { const navContainer = document.getElementById('sidebarNavItems'); const mobileNav = document.getElementById('mobileBottomNav'); navContainer.innerHTML = ''; mobileNav.innerHTML = ''; let items = []; if (GBB_STATE.role === 'admin') items = [{ id: 'dashboard', label: 'Dashboard', icon: 'fa-chart-pie' }, { id: 'newOrder', label: 'Buat Pesanan', icon: 'fa-calendar-plus' }, { id: 'customers', label: 'Pelanggan', icon: 'fa-users' }, { id: 'technicians', label: 'Teknisi', icon: 'fa-user-gear' }, { id: 'catalog', label: 'Gudang / Stok', icon: 'fa-boxes-stacked' }, { id: 'payroll', label: 'Gaji & Komisi', icon: 'fa-money-check-dollar' }, { id: 'settings', label: 'Pengaturan', icon: 'fa-cog' }]; else if (GBB_STATE.role === 'cs') items = [{ id: 'dashboard', label: 'Dashboard', icon: 'fa-chart-pie' }, { id: 'newOrder', label: 'Buat Pesanan', icon: 'fa-calendar-plus' }, { id: 'customers', label: 'Pelanggan', icon: 'fa-users' }, { id: 'catalog', label: 'Gudang / Stok', icon: 'fa-boxes-stacked' }]; else if (GBB_STATE.role === 'technician') items = [{ id: 'dashboard', label: 'Tugas Saya', icon: 'fa-clipboard-list' }, { id: 'catalog', label: 'Stok Sparepart', icon: 'fa-boxes-stacked' }]; else if (GBB_STATE.role === 'customer') items = [{ id: 'dashboard', label: 'Riwayat Servis', icon: 'fa-clock-rotate-left' }, { id: 'catalog', label: 'Katalog', icon: 'fa-boxes-stacked' }]; items.forEach(item => { const btn = document.createElement('button'); btn.id = `nav-btn-${item.id}`; btn.onclick = () => window.switchTab(item.id); btn.className = `w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-xs transition sidebar-nav-btn ${GBB_STATE.activeTab === item.id ? 'bg-cyan-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`; btn.innerHTML = `<i class="fa-solid ${item.icon} w-5 text-center"></i> <span>${item.label}</span>`; navContainer.appendChild(btn); const mBtn = document.createElement('button'); mBtn.onclick = () => window.switchTab(item.id); mBtn.className = `flex flex-col items-center justify-center py-2 px-3 rounded-xl text-[10px] font-bold min-w-[70px] snap-center shrink-0 transition-all ${GBB_STATE.activeTab === item.id ? 'text-cyan-700 bg-cyan-100 shadow-sm border border-cyan-200' : 'text-slate-500 hover:bg-slate-100'}`; mBtn.innerHTML = `<i class="fa-solid ${item.icon} text-base mb-1"></i><span class="whitespace-nowrap">${item.label}</span>`; mobileNav.appendChild(mBtn); }); }
+    function updateUserRoleUI() { if(!GBB_STATE.currentUser) return; document.getElementById('sidebarUserName').innerText = GBB_STATE.currentUser.name || 'User'; document.getElementById('sidebarRoleBadge').innerText = GBB_STATE.role.toUpperCase(); document.getElementById('mobileHeaderRole').innerText = GBB_STATE.role.toUpperCase(); const notifBar = document.getElementById('adminNotificationBar'); const reminderBanner = document.getElementById('customerReminderBanner'); if(GBB_STATE.role === 'admin' || GBB_STATE.role === 'cs') { const overdue = checkThreeMonthsReminders(); if(notifBar) { notifBar.classList.remove('hidden'); document.getElementById('notifBadgeCount').innerText = overdue.length; document.getElementById('notifBannerText').innerText = `Ada ${overdue.length} pelanggan yang AC-nya jatuh tempo.`; } } else { if(notifBar) notifBar.classList.add('hidden'); } if(GBB_STATE.role === 'customer') { const myOverdue = GBB_STATE.orders.filter(o => o.custPhone === GBB_STATE.currentUser.phone && o.status === 'completed' && (new Date() - new Date(o.date) >= 90 * 24 * 60 * 60 * 1000)); if(reminderBanner) reminderBanner.classList.toggle('hidden', myOverdue.length === 0); } else { if(reminderBanner) reminderBanner.classList.add('hidden'); } }
+    function startClock() { setInterval(() => { const now = new Date(); document.getElementById('liveClockText').innerText = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ' - ' + now.toLocaleTimeString('id-ID'); }, 1000); }
+    window.logout = function() { localStorage.removeItem('gbb_active_session'); GBB_STATE.currentUser = null; document.getElementById('mainAppShell').classList.add('hidden'); document.getElementById('loginScreen').classList.remove('hidden'); };
+
+    function renderDashboard() {
+      const lowStock = GBB_STATE.catalog.filter(i => i.stock < 5); document.getElementById('lowStockBanner').classList.toggle('hidden', lowStock.length === 0 || GBB_STATE.role === 'customer');
+      const totalOrders = GBB_STATE.orders.length; const completedOrders = GBB_STATE.orders.filter(o => o.status === 'completed').length; const totalRevenue = GBB_STATE.orders.filter(o => o.status === 'completed').reduce((acc, curr) => acc + curr.total, 0); const activeTechs = GBB_STATE.technicians.length;
+      document.getElementById('metricsCardsContainer').innerHTML = `
+        <div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex items-center justify-between"><span class="text-[10px] font-black uppercase text-slate-400">Total Tiket</span><div class="w-9 h-9 rounded-xl bg-cyan-100 text-cyan-600 flex items-center justify-center"><i class="fa-solid fa-ticket"></i></div></div><p class="text-2xl font-black text-slate-900 mt-2">${totalOrders}</p></div>
+        <div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex items-center justify-between"><span class="text-[10px] font-black uppercase text-slate-400">Selesai Normal</span><div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-circle-check"></i></div></div><p class="text-2xl font-black text-slate-900 mt-2">${completedOrders}</p></div>
+        <div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex items-center justify-between"><span class="text-[10px] font-black uppercase text-slate-400">Omset Lunas</span><div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-rupiah-sign"></i></div></div><p class="text-lg sm:text-xl font-black text-slate-900 mt-2">Rp ${totalRevenue.toLocaleString('id-ID')}</p></div>
+        <div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex items-center justify-between"><span class="text-[10px] font-black uppercase text-slate-400">Teknisi Aktif</span><div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center"><i class="fa-solid fa-user-gear"></i></div></div><p class="text-2xl font-black text-slate-900 mt-2">${activeTechs}</p></div>
+      `;
+      setTimeout(() => { window.updateChartData(); }, 100); renderOrdersTable();
+    }
+
+    window.setOrderFilter = function(filter) { GBB_STATE.orderFilter = filter; renderOrdersTable(); }; window.setDashDate = function(dateStr) { GBB_STATE.dashDateFilter = dateStr; document.getElementById('dashDatePicker').value = dateStr; renderOrdersTable(); };
+    window.deleteOrder = function(id) { if(confirm('Yakin ingin menghapus tiket pesanan ini secara permanen?')) { GBB_STATE.orders = GBB_STATE.orders.filter(o => o.id !== id); saveAppData(); renderDashboard(); } };
+    window.openEditOrderModal = function(id) { const o = GBB_STATE.orders.find(x => x.id === id); if (!o) return; const techSelect = document.getElementById('editOrderTech'); techSelect.innerHTML = ''; GBB_STATE.technicians.forEach(t => techSelect.innerHTML += `<option value="${t.id}">${t.name}</option>`); document.getElementById('editOrderId').value = o.id; document.getElementById('editOrderName').value = o.custName; document.getElementById('editOrderPhone').value = o.custPhone; document.getElementById('editOrderAddress').value = o.custAddress; document.getElementById('editOrderTech').value = o.techId; document.getElementById('editOrderDate').value = o.date; document.getElementById('editOrderTotal').value = o.total; document.getElementById('editOrderModal').classList.remove('hidden'); };
+    window.handleEditOrderSave = function(e) { e.preventDefault(); const id = document.getElementById('editOrderId').value; const o = GBB_STATE.orders.find(x => x.id === id); if(o) { o.custName = document.getElementById('editOrderName').value; o.custPhone = document.getElementById('editOrderPhone').value; o.custAddress = document.getElementById('editOrderAddress').value; o.techId = document.getElementById('editOrderTech').value; const tech = GBB_STATE.technicians.find(x => x.id === o.techId); if(tech) o.techName = tech.name; o.date = document.getElementById('editOrderDate').value; o.total = parseFloat(document.getElementById('editOrderTotal').value); saveAppData(); renderDashboard(); document.getElementById('editOrderModal').classList.add('hidden'); showCustomAlert('Berhasil', 'Data pesanan berhasil diperbarui!'); } };
+
+    function renderOrdersTable() {
+      let filtered = [...GBB_STATE.orders]; if (GBB_STATE.role === 'technician') filtered = filtered.filter(o => o.techId === GBB_STATE.currentUser.id); if (GBB_STATE.role === 'customer') filtered = filtered.filter(o => o.custPhone === GBB_STATE.currentUser.phone); if (GBB_STATE.orderFilter !== 'all') filtered = filtered.filter(o => o.status === GBB_STATE.orderFilter); if (GBB_STATE.dashDateFilter) filtered = filtered.filter(o => o.date === GBB_STATE.dashDateFilter);
+      const desktopBody = document.getElementById('desktopOrdersTableBody'); const mobileList = document.getElementById('mobileOrdersList'); const emptyState = document.getElementById('ordersEmptyState'); desktopBody.innerHTML = ''; mobileList.innerHTML = '';
+      if (filtered.length === 0) { emptyState.classList.remove('hidden'); return; } emptyState.classList.add('hidden');
+
+      filtered.forEach(o => {
+        let statusBadge = '<span class="px-2 py-1 rounded bg-amber-100 text-amber-700 font-bold text-[9px] uppercase shadow-sm"><i class="fa-solid fa-car"></i> Tunggu</span>'; if (o.status === 'in_progress') statusBadge = '<span class="px-2 py-1 rounded bg-blue-100 text-blue-700 font-bold text-[9px] uppercase shadow-sm"><i class="fa-solid fa-screwdriver-wrench"></i> Proses</span>'; if (o.status === 'completed') statusBadge = '<span class="px-2 py-1 rounded bg-emerald-100 text-emerald-700 font-bold text-[9px] uppercase shadow-sm"><i class="fa-solid fa-check"></i> Selesai</span>'; const mapLink = `https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lng}`;
+        const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 transition border-b border-slate-100'; tr.innerHTML = `<td class="py-3 px-4 font-mono font-bold text-cyan-600">${o.id}<br><span class="text-[9px] text-slate-400 font-sans tracking-wide">${o.date}</span></td><td class="py-3 px-4"><p class="font-bold text-slate-900">${o.custName}</p><p class="text-[10px] text-slate-500">${o.custPhone}</p></td><td class="py-3 px-4 text-[11px] font-medium">${o.units.map(u => `${u.brand} (${u.name})`).join(', ')}</td><td class="py-3 px-4 font-bold text-slate-700 text-[11px]">${o.techName}</td><td class="py-3 px-4 text-right font-black text-slate-900">Rp ${o.total.toLocaleString('id-ID')}</td><td class="py-3 px-4 text-center">${statusBadge}</td><td class="py-3 px-4 text-center space-x-1 whitespace-nowrap"><button onclick="window.openInvoiceModalForOrder('${o.id}')" title="Invoice PDF" class="w-7 h-7 bg-cyan-50 text-cyan-600 rounded-lg hover:bg-cyan-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-file-invoice"></i></button><button onclick="window.openBAModalForOrder('${o.id}')" title="Isi Laporan & Cetak BAST" class="w-7 h-7 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-clipboard-check"></i></button>${GBB_STATE.role !== 'customer' ? `<button onclick="window.openStatusModal('${o.id}')" title="Ubah Status" class="w-7 h-7 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-truck-fast"></i></button><button onclick="window.openEditOrderModal('${o.id}')" title="Edit Data" class="w-7 h-7 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-pen"></i></button><button onclick="window.deleteOrder('${o.id}')" title="Hapus Pesanan" class="w-7 h-7 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-trash"></i></button>` : ''}<button onclick="window.open('${mapLink}', '_blank')" title="Buka Rute Maps GPS" class="w-7 h-7 bg-indigo-50 text-indigo-500 rounded-lg hover:bg-indigo-500 hover:text-white transition shadow-sm animate-pulse"><i class="fa-solid fa-location-arrow"></i></button></td>`; desktopBody.appendChild(tr);
+        const card = document.createElement('div'); card.className = 'glass-card p-4 rounded-xl shadow-sm space-y-2 border border-slate-100'; card.innerHTML = `<div class="flex justify-between items-start"><div><span class="font-mono font-bold text-cyan-600 text-[10px] bg-cyan-50 px-2 rounded">${o.id}</span><p class="font-black text-slate-900 text-sm mt-1">${o.custName}</p></div><div>${statusBadge}</div></div><p class="text-[10px] text-slate-500 leading-tight"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> ${o.custAddress}</p><div class="flex justify-between items-center pt-3 border-t border-slate-100 mt-2"><span class="font-black text-slate-800 text-xs">Rp ${o.total.toLocaleString('id-ID')}</span><div class="space-x-1 flex flex-wrap justify-end"><button onclick="window.openInvoiceModalForOrder('${o.id}')" class="px-2.5 py-1.5 bg-cyan-500 text-white rounded-lg text-[9px] font-bold shadow-sm">INV</button><button onclick="window.openBAModalForOrder('${o.id}')" class="px-2.5 py-1.5 bg-emerald-500 text-white rounded-lg text-[9px] font-bold shadow-sm">BAST</button>${GBB_STATE.role !== 'customer' ? `<button onclick="window.openStatusModal('${o.id}')" class="px-2.5 py-1.5 bg-blue-500 text-white rounded-lg text-[9px] font-bold shadow-sm"><i class="fa-solid fa-truck-fast"></i></button><button onclick="window.openEditOrderModal('${o.id}')" class="px-2.5 py-1.5 bg-amber-500 text-white rounded-lg text-[9px] font-bold shadow-sm"><i class="fa-solid fa-pen"></i></button><button onclick="window.deleteOrder('${o.id}')" class="px-2.5 py-1.5 bg-rose-500 text-white rounded-lg text-[9px] font-bold shadow-sm"><i class="fa-solid fa-trash"></i></button>` : ''}<button onclick="window.open('${mapLink}', '_blank')" class="px-2.5 py-1.5 bg-indigo-500 text-white rounded-lg text-[9px] font-bold shadow-sm"><i class="fa-solid fa-map"></i></button></div></div>`; mobileList.appendChild(card);
+      });
+    }
+
+    window.openStatusModal = function(id) { currentStatusOrderId = id; document.getElementById('statusModal').classList.remove('hidden'); }
+    window.saveOrderStatus = function(status) { if(!currentStatusOrderId) return; const o = GBB_STATE.orders.find(x => x.id === currentStatusOrderId); if(o) { o.status = status; saveAppData(); renderDashboard(); document.getElementById('statusModal').classList.add('hidden'); } }
+
+    window.openLocationPicker = function(target) {
+        activePickerTarget = target; document.getElementById('mapPickerModal').classList.remove('hidden');
+        setTimeout(() => { if(!pickerMapInstance) { pickerMapInstance = L.map('pickerMapContainer').setView([-6.2000, 106.8166], 13); L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(pickerMapInstance); pickerMarker = L.marker([-6.2000, 106.8166], {draggable: true}).addTo(pickerMapInstance); window.locateMe(); } else { pickerMapInstance.invalidateSize(); } }, 300);
+    }
+    window.locateMe = function() { if(navigator.geolocation) { navigator.geolocation.getCurrentPosition(pos => { const lat = pos.coords.latitude; const lng = pos.coords.longitude; pickerMapInstance.setView([lat, lng], 18); pickerMarker.setLatLng([lat, lng]); }, err => showCustomAlert('GPS Info', 'Akses GPS ditolak browser.', 'fa-solid fa-triangle-exclamation text-amber-500'), {enableHighAccuracy: true}); } }
+    window.confirmMapLocation = function() { const pos = pickerMarker.getLatLng(); if(activePickerTarget === 'order') { document.getElementById('orderLat').value = pos.lat; document.getElementById('orderLng').value = pos.lng; } else if(activePickerTarget === 'customer') { document.getElementById('modalCustLat').value = pos.lat; document.getElementById('modalCustLng').value = pos.lng; } showCustomAlert('Berhasil', 'Koordinat GPS akurat berhasil dikunci!'); document.getElementById('mapPickerModal').classList.add('hidden'); }
+    window.closeMapPicker = function() { document.getElementById('mapPickerModal').classList.add('hidden'); }
+
+    function renderNewOrderForm() {
+      const custSelect = document.getElementById('savedCustomerSelect'); custSelect.innerHTML = '<option value="">-- Pilih Pelanggan (Otomatis Isi) --</option>'; GBB_STATE.customers.forEach(c => custSelect.innerHTML += `<option value="${c.phone}">${c.name} (${c.phone})</option>`);
+      const techSelect = document.getElementById('orderTechSelect'); techSelect.innerHTML = ''; GBB_STATE.technicians.forEach(t => techSelect.innerHTML += `<option value="${t.id}">${t.name}</option>`);
+      const serviceContainer = document.getElementById('serviceChecklist'); serviceContainer.innerHTML = '';
+      GBB_STATE.catalog.forEach(item => {
+        const isSelected = newOrderSelectedServices[item.id] !== undefined; const currentPrice = isSelected ? newOrderSelectedServices[item.id].price : item.price; const currentQty = isSelected ? newOrderSelectedServices[item.id].qty : 1;
+        const div = document.createElement('div'); div.className = `flex flex-col p-3 rounded-xl border transition shadow-sm ${isSelected ? 'bg-cyan-50 border-cyan-300' : 'bg-white border-slate-200'}`; const unitDisplay = item.unit ? ` / ${item.unit}` : '';
+        div.innerHTML = `<div class="flex items-center gap-2 mb-1.5"><input type="checkbox" ${isSelected ? 'checked' : ''} onchange="window.toggleServiceSelection('${item.id}', this.checked, ${item.price})" class="w-4 h-4 text-cyan-600 rounded cursor-pointer"><span class="text-[10px] font-bold text-slate-800 leading-tight">${item.name}</span></div>${isSelected ? `<div class="ml-6 flex flex-col gap-1.5 mt-1"><div class="flex items-center gap-2"><div class="flex items-center border border-cyan-200 bg-white rounded px-2 py-0.5 w-1/3" title="Kuantitas (Qty)"><span class="text-[9px] text-slate-400 font-bold mr-1">Qty</span><input type="number" min="0.1" step="0.1" value="${currentQty}" onchange="window.updateSelectedServiceQty('${item.id}', this.value)" class="w-full text-[10px] font-black text-slate-700 bg-transparent py-0.5 outline-none text-center"></div><div class="flex items-center border border-cyan-200 bg-white rounded px-2 py-0.5 w-2/3" title="Harga Satuan"><span class="text-[9px] text-slate-400 font-bold mr-1">Rp</span><input type="number" value="${currentPrice}" onchange="window.updateSelectedServicePrice('${item.id}', this.value)" class="w-full text-[10px] font-black text-cyan-700 bg-transparent py-0.5 outline-none"></div></div><div class="text-right text-[9px] font-black text-emerald-600">Subtotal: Rp ${(currentPrice * currentQty).toLocaleString('id-ID')}</div></div>` : `<span class="text-[9px] text-slate-400 font-bold ml-6">Rp ${item.price.toLocaleString('id-ID')} ${unitDisplay}</span>`}`;
+        serviceContainer.appendChild(div);
+      });
+      document.getElementById('orderDate').value = new Date().toISOString().split('T')[0]; renderOrderUnitsRows(); renderNewOrderManualItems(); calculateNewOrderTotal();
+    }
+
+    window.toggleServiceSelection = function(id, checked, defaultPrice) { if (checked) newOrderSelectedServices[id] = { price: defaultPrice, qty: 1 }; else delete newOrderSelectedServices[id]; renderNewOrderForm(); }; window.updateSelectedServicePrice = function(id, newPrice) { if(newOrderSelectedServices[id]) { newOrderSelectedServices[id].price = parseFloat(newPrice) || 0; calculateNewOrderTotal(); renderNewOrderForm(); } }; window.updateSelectedServiceQty = function(id, newQty) { if(newOrderSelectedServices[id]) { newOrderSelectedServices[id].qty = parseFloat(newQty) || 1; calculateNewOrderTotal(); renderNewOrderForm(); } };
+    window.applySavedCustomer = function(phone) { if (!phone) return; const c = GBB_STATE.customers.find(x => x.phone === phone); if (c) { document.getElementById('orderCustName').value = c.name; document.getElementById('orderCustPhone').value = c.phone; document.getElementById('orderCustAddress').value = c.address; document.getElementById('orderLat').value = c.lat || -6.20; document.getElementById('orderLng').value = c.lng || 106.81; if (c.units) { newOrderUnits = JSON.parse(JSON.stringify(c.units)); renderOrderUnitsRows(); } } };
+
+    function renderOrderUnitsRows() { const container = document.getElementById('orderUnitsList'); container.innerHTML = ''; newOrderUnits.forEach((u, idx) => { container.innerHTML += `<div class="flex gap-2 items-center"><input type="text" value="${u.brand}" onchange="newOrderUnits[${idx}].brand=this.value" class="w-1/2 bg-white border border-slate-200 rounded p-2 text-[10px] outline-none font-bold"><input type="text" value="${u.name}" onchange="newOrderUnits[${idx}].name=this.value" class="w-1/2 bg-white border border-slate-200 rounded p-2 text-[10px] outline-none font-bold"><button type="button" onclick="window.removeOrderUnitRow(${idx})" class="text-rose-500 w-6 h-6 flex items-center justify-center bg-rose-50 rounded"><i class="fa-solid fa-trash"></i></button></div>`; }); }
+    window.addOrderUnitRow = function() { newOrderUnits.push({ name: 'AC Split 1 PK', brand: 'Umum' }); renderOrderUnitsRows(); }; window.removeOrderUnitRow = function(idx) { if (newOrderUnits.length > 1) { newOrderUnits.splice(idx, 1); renderOrderUnitsRows(); } };
+
+    window.addManualItemToNewOrder = function() { const name = document.getElementById('manualItemName').value.trim(); const price = parseFloat(document.getElementById('manualItemPrice').value); const qty = parseFloat(document.getElementById('manualItemQty').value) || 1; const unit = document.getElementById('manualItemUnit').value.trim() || 'Unit'; if (name && !isNaN(price)) { newOrderManualItems.push({ name, price, qty, unit }); document.getElementById('manualItemName').value = ''; document.getElementById('manualItemPrice').value = ''; document.getElementById('manualItemQty').value = '1'; renderNewOrderManualItems(); calculateNewOrderTotal(); } };
+    function renderNewOrderManualItems() { const container = document.getElementById('newOrderManualItemsList'); container.innerHTML = ''; newOrderManualItems.forEach((m, idx) => container.innerHTML += `<div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-slate-200 text-[10px] shadow-sm"><span class="font-bold">${m.name} (${m.qty} ${m.unit})</span><div class="flex items-center gap-2"><span class="font-black">Rp ${(m.price * m.qty).toLocaleString('id-ID')}</span><button type="button" onclick="window.removeManualItem(${idx})" class="w-5 h-5 bg-rose-50 text-rose-500 rounded"><i class="fa-solid fa-xmark"></i></button></div></div>`); }
+    window.removeManualItem = function(idx) { newOrderManualItems.splice(idx, 1); renderNewOrderManualItems(); calculateNewOrderTotal(); };
+    function calculateNewOrderTotal() { let t = 0; Object.keys(newOrderSelectedServices).forEach(id => { t += newOrderSelectedServices[id].price * newOrderSelectedServices[id].qty; }); newOrderManualItems.forEach(m => { t += m.price * m.qty; }); document.getElementById('newOrderCalculatedTotal').innerText = `Rp ${t.toLocaleString('id-ID')}`; }
+
+    window.handleCreateOrder = function(e) {
+      e.preventDefault(); const name = document.getElementById('orderCustName').value.trim(); const phone = document.getElementById('orderCustPhone').value.trim(); const addr = document.getElementById('orderCustAddress').value.trim(); const tId = document.getElementById('orderTechSelect').value; const tech = GBB_STATE.technicians.find(x => x.id === tId);
+      const services = []; let total = 0; Object.keys(newOrderSelectedServices).forEach(id => { const item = GBB_STATE.catalog.find(c => c.id === id); if (item) { const sel = newOrderSelectedServices[id]; services.push({ name: item.name, price: sel.price, qty: sel.qty, unit: item.unit || 'Unit' }); total += (sel.price * sel.qty); } }); newOrderManualItems.forEach(m => { services.push({name: m.name, price: m.price, qty: m.qty, unit: m.unit}); total += (m.price * m.qty); });
+      if (!GBB_STATE.customers.some(c => c.phone === phone)) GBB_STATE.customers.push({ name, phone, password: '123', address: addr, units: [...newOrderUnits], lat: document.getElementById('orderLat').value, lng: document.getElementById('orderLng').value });
+      GBB_STATE.orders.unshift({ id: 'GBB-2026-' + String(GBB_STATE.orders.length + 1).padStart(3, '0'), custName: name, custPhone: phone, custAddress: addr, units: [...newOrderUnits], techId: tId, techName: tech ? tech.name : 'Teknisi', date: document.getElementById('orderDate').value, services, manualItems: [], total, status: 'pending', notes: document.getElementById('orderNotes').value, warranty: document.getElementById('orderWarrantyPeriod').value, lat: document.getElementById('orderLat').value, lng: document.getElementById('orderLng').value });
+      saveAppData(); showCustomAlert('Berhasil', 'Tiket Pesanan berhasil disimpan ke Cloud!'); newOrderSelectedServices = {}; newOrderManualItems = []; switchTab('dashboard');
+    };
+
+    function initCanvas(canvasId) {
+        const canvas = document.getElementById(canvasId); if(!canvas) return; const ctx = canvas.getContext('2d'); canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; let isDrawing = false;
+        function getPos(e) { const rect = canvas.getBoundingClientRect(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; return { x: clientX - rect.left, y: clientY - rect.top }; }
+        function startPos(e) { e.preventDefault(); isDrawing = true; draw(e); } function endPos() { isDrawing = false; ctx.beginPath(); }
+        function draw(e) { if(!isDrawing) return; e.preventDefault(); const pos = getPos(e); ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#0f172a'; ctx.lineTo(pos.x, pos.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
+        canvas.addEventListener('mousedown', startPos); canvas.addEventListener('mouseup', endPos); canvas.addEventListener('mousemove', draw); canvas.addEventListener('touchstart', startPos, {passive: false}); canvas.addEventListener('touchend', endPos); canvas.addEventListener('touchmove', draw, {passive: false});
+    }
+
+    window.clearCanvas = function(id) { const c = document.getElementById(id); const ctx = c.getContext('2d'); ctx.clearRect(0, 0, c.width, c.height); if(id === 'custSignCanvas') { document.getElementById('invCustSignImg').classList.add('hidden'); document.getElementById('invCustSignPlaceholder').classList.remove('hidden'); } else if(id === 'techSignCanvas') { document.getElementById('baTechSignImg').classList.add('hidden'); document.getElementById('baTechSignPlaceholder').classList.remove('hidden'); } };
+    window.saveSignature = function(type) { if(type === 'cust') { const data = document.getElementById('custSignCanvas').toDataURL(); const img = document.getElementById('invCustSignImg'); img.src = data; img.classList.remove('hidden'); document.getElementById('invCustSignPlaceholder').classList.add('hidden'); } else if(type === 'tech') { const data = document.getElementById('techSignCanvas').toDataURL(); const img = document.getElementById('baTechSignImg'); img.src = data; img.classList.remove('hidden'); document.getElementById('baTechSignPlaceholder').classList.add('hidden'); } };
+
+    window.openInvoiceModalForOrder = function(id) {
+      const o = GBB_STATE.orders.find(x => x.id === id); currentSelectedOrderForModal = o; if (!o) return;
+      document.getElementById('invCustName').innerText = o.custName; document.getElementById('invCustPhone').innerText = o.custPhone; document.getElementById('invCustAddress').innerText = o.custAddress; document.getElementById('invNumber').innerText = 'INV/' + o.id; document.getElementById('invDate').innerText = o.date; document.getElementById('invCustSignName').innerText = o.custName; document.getElementById('invTechName').innerText = o.techName; document.getElementById('invWarrantyBadgeText').innerText = o.warranty || '90 Hari (3 Bulan)';
+      document.getElementById('invStatusBadge').className = o.status === 'completed' ? 'px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-700' : 'px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-rose-100 text-rose-700'; document.getElementById('invStatusBadge').innerText = o.status === 'completed' ? 'LUNAS' : 'BELUM LUNAS';
+      const paymentSelector = document.getElementById('invPaymentSelector'); if (paymentSelector) paymentSelector.value = 'qris'; window.toggleInvoicePayment('qris');
+      const tb = document.getElementById('invItemsTableBody'); tb.innerHTML = ''; let sub = 0; o.units.forEach(u => tb.innerHTML += `<tr class="border-b border-slate-100"><td class="py-2.5 px-3 font-bold">AC: ${u.brand} (${u.name})</td><td class="py-2.5 px-3 text-center">1 Unit</td><td class="py-2.5 px-3 text-right">-</td><td class="py-2.5 px-3 text-right">Rp 0</td></tr>`);
+      o.services.forEach(s => { const qty = s.qty || 1; const unitName = s.unit || 'Unit'; const lineTotal = s.price * qty; sub += lineTotal; tb.innerHTML += `<tr class="border-b border-slate-100"><td class="py-2.5 px-3">${s.name}</td><td class="py-2.5 px-3 text-center whitespace-nowrap">${qty} ${unitName}</td><td class="py-2.5 px-3 text-right">Rp ${s.price.toLocaleString('id-ID')}</td><td class="py-2.5 px-3 text-right">Rp ${lineTotal.toLocaleString('id-ID')}</td></tr>`; }); if(o.manualItems && o.manualItems.length > 0) { o.manualItems.forEach(m => { const qty = m.qty || 1; const unitName = m.unit || 'Unit'; const lineTotal = m.price * qty; sub += lineTotal; tb.innerHTML += `<tr class="border-b border-slate-100"><td class="py-2.5 px-3">${m.name}</td><td class="py-2.5 px-3 text-center whitespace-nowrap">${qty} ${unitName}</td><td class="py-2.5 px-3 text-right">Rp ${m.price.toLocaleString('id-ID')}</td><td class="py-2.5 px-3 text-right">Rp ${lineTotal.toLocaleString('id-ID')}</td></tr>`; }); }
+      document.getElementById('invSubtotal').innerText = `Rp ${sub.toLocaleString('id-ID')}`; document.getElementById('invGrandTotal').innerText = `Rp ${o.total.toLocaleString('id-ID')}`;
+      document.getElementById('invoiceModal').classList.remove('hidden'); setTimeout(() => initCanvas('custSignCanvas'), 200);
+    };
+    
+    window.closeInvoiceModal = function() { document.getElementById('invoiceModal').classList.add('hidden'); }; window.toggleInvoicePayment = function(method) { const p = document.getElementById('invPaymentSection'); if(!p) return; if (method === 'cash') p.classList.add('invisible'); else p.classList.remove('invisible'); }; window.printInvoicePDF = function() { const el = document.getElementById('invoicePrintableArea'); html2pdf().from(el).set({ margin: 10, filename: 'Invoice_'+(currentSelectedOrderForModal.id)+'.pdf', image: { type: 'jpeg', quality: 1.0 }, html2canvas: {scale: 4, useCORS: true, letterRendering: true}, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).save(); };
+
+    window.openBAModalForOrder = function(id) {
+      const o = GBB_STATE.orders.find(x => x.id === id); currentSelectedOrderForModal = o; if (!o) return; document.getElementById('baDate').innerText = o.date; document.getElementById('baCustName').innerText = o.custName; document.getElementById('baCustAddress').innerText = o.custAddress; document.getElementById('baTechName').innerText = o.techName; document.getElementById('baSignTechName').innerText = o.techName; document.getElementById('baTicketId').innerText = o.id;
+      const container = document.getElementById('baUnitsListContainer'); container.innerHTML = ''; o.units.forEach((u, idx) => container.innerHTML += `<div class="p-2 bg-slate-50 rounded-lg border border-slate-200 text-xs flex justify-between items-center"><span class="font-bold">${idx + 1}. Unit: ${u.brand} - ${u.name}</span><span class="text-emerald-600 font-bold"><i class="fa-solid fa-check"></i> Selesai Diservis (Garansi: ${o.warranty || '90 Hari'})</span></div>`);
+      document.getElementById('beritaAcaraModal').classList.remove('hidden'); setTimeout(() => initCanvas('techSignCanvas'), 200);
+    };
+    window.closeBAModal = function() { document.getElementById('beritaAcaraModal').classList.add('hidden'); }; window.printBAPDF = function() { const el = document.getElementById('baPrintableArea'); html2pdf().from(el).set({ margin: 10, filename: 'BAST_'+(currentSelectedOrderForModal.id)+'.pdf', image: { type: 'jpeg', quality: 1.0 }, html2canvas: {scale: 4, useCORS: true, letterRendering: true}, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).save(); };
+
+    window.updateChartData = function() {
+        if(!document.getElementById('dashboardChart')) return; const ctx = document.getElementById('dashboardChart').getContext('2d'); const year = document.getElementById('chartYearSelect')?.value || new Date().getFullYear().toString(); const monthlyRevenue = new Array(12).fill(0); const monthlyOrders = new Array(12).fill(0); GBB_STATE.orders.forEach(o => { if(o.status === 'completed' && o.date.startsWith(year)) { const month = parseInt(o.date.split('-')[1]) - 1; monthlyRevenue[month] += o.total; monthlyOrders[month] += 1; } });
+        if(chartInstance) chartInstance.destroy(); chartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'], datasets: [{ label: 'Omset (Rp)', data: monthlyRevenue, backgroundColor: 'rgba(2, 132, 199, 0.7)', borderColor: 'rgb(2, 132, 199)', borderWidth: 1, yAxisID: 'y' }, { label: 'Jml Tiket Selesai', data: monthlyOrders, type: 'line', backgroundColor: 'rgba(16, 185, 129, 1)', borderColor: 'rgb(16, 185, 129)', borderWidth: 2, yAxisID: 'y1' }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { type: 'linear', display: true, position: 'left', ticks: { font: {size: 9} } }, y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { font: {size: 9} } }, x: { ticks: { font: {size: 9} } } }, plugins: { legend: { labels: { font: {size: 10} } } } } });
+    };
+
+    window.downloadRekapExcel = function() {
+        if (typeof XLSX === 'undefined') { showCustomAlert('Info', 'Library Excel belum siap.'); return; } const monthVal = document.getElementById('reportMonth').value; let filteredOrders = GBB_STATE.orders.filter(o => o.status === 'completed'); let fileName = 'Laporan_Rekap_Pesanan_Semua.xlsx'; if(monthVal) { filteredOrders = filteredOrders.filter(o => o.date.startsWith(monthVal)); fileName = `Laporan_Rekap_Pesanan_${monthVal}.xlsx`; }
+        const dataToExport = filteredOrders.map((o, index) => ({ 'No': index + 1, 'ID Tiket': o.id, 'Tanggal': o.date, 'Nama Pelanggan': o.custName, 'No WhatsApp': o.custPhone, 'Alamat Servis': o.custAddress, 'Nama Teknisi': o.techName, 'Garansi': o.warranty, 'Total Tagihan (Rp)': o.total, 'Status': 'Selesai / Lunas' })); if(dataToExport.length === 0) { showCustomAlert('Info', 'Data kosong pada periode tersebut.'); return; }
+        const ws = XLSX.utils.json_to_sheet(dataToExport); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Rekap Pesanan"); XLSX.writeFile(wb, fileName);
+    };
+
+    window.downloadRekapPDF = function() {
+        const monthVal = document.getElementById('reportMonth').value; let filteredOrders = GBB_STATE.orders.filter(o => o.status === 'completed'); let periodText = 'Keseluruhan Waktu'; if(monthVal) { filteredOrders = filteredOrders.filter(o => o.date.startsWith(monthVal)); periodText = `Periode: ${monthVal}`; } if(filteredOrders.length === 0) { showCustomAlert('Info', 'Data kosong pada periode tersebut.'); return; }
+        let totalOmset = filteredOrders.reduce((acc, curr) => acc + curr.total, 0); let htmlContent = `<div style="padding: 20px; font-family: sans-serif; color: #333;"><h2 style="text-align:center; color: #0284c7; margin-bottom: 5px; font-weight: 900;">LAPORAN REKAPITULASI OMSET & PESANAN</h2><p style="text-align:center; font-size: 12px; margin-top:0;">PT. Grup Bangun Bersama | ${periodText}</p><hr style="border-top: 2px solid #cbd5e1; margin-bottom: 20px;"><table style="width: 100%; border-collapse: collapse; font-size: 10px;"><thead><tr style="background-color: #f1f5f9; text-align: left;"><th style="border: 1px solid #cbd5e1; padding: 6px;">ID Tiket</th><th style="border: 1px solid #cbd5e1; padding: 6px;">Tanggal</th><th style="border: 1px solid #cbd5e1; padding: 6px;">Pelanggan</th><th style="border: 1px solid #cbd5e1; padding: 6px;">Teknisi</th><th style="border: 1px solid #cbd5e1; padding: 6px; text-align:right;">Total (Rp)</th></tr></thead><tbody>${filteredOrders.map(o => `<tr><td style="border: 1px solid #cbd5e1; padding: 6px;">${o.id}</td><td style="border: 1px solid #cbd5e1; padding: 6px;">${o.date}</td><td style="border: 1px solid #cbd5e1; padding: 6px;">${o.custName}</td><td style="border: 1px solid #cbd5e1; padding: 6px;">${o.techName}</td><td style="border: 1px solid #cbd5e1; padding: 6px; text-align:right;">${o.total.toLocaleString('id-ID')}</td></tr>`).join('')}</tbody><tfoot><tr style="font-weight: bold; background-color: #e2e8f0;"><td colspan="4" style="border: 1px solid #cbd5e1; padding: 8px; text-align: right;">TOTAL PENDAPATAN :</td><td style="border: 1px solid #cbd5e1; padding: 8px; text-align: right; color:#059669;">Rp ${totalOmset.toLocaleString('id-ID')}</td></tr></tfoot></table><p style="font-size: 10px; margin-top: 30px; text-align: right;">Dicetak secara otomatis pada: ${new Date().toLocaleString('id-ID')}</p></div>`;
+        const element = document.createElement('div'); element.innerHTML = htmlContent; html2pdf().from(element).set({ margin: 10, filename: `Laporan_GBB_${monthVal || 'Semua'}.pdf`, image: { type: 'jpeg', quality: 1.0 }, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).save();
+    };
+
+    function renderCustomers() { const grid = document.getElementById('customersGrid'); grid.innerHTML = ''; GBB_STATE.customers.forEach((c, idx) => grid.innerHTML += `<div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex justify-between items-start"><div><h4 class="font-black text-slate-900 text-sm">${c.name}</h4><p class="text-[10px] text-cyan-600 font-bold"><i class="fa-brands fa-whatsapp mr-1"></i> ${c.phone}</p></div></div><p class="text-[10px] text-slate-500 mt-2 h-8 overflow-hidden"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> ${c.address}</p><div class="pt-3 border-t border-slate-100 flex justify-between items-center mt-3"><span class="text-[9px] text-slate-400 font-bold bg-slate-50 px-2 py-1 rounded border border-slate-200">Pass: ${c.password}</span><div class="flex gap-1.5"><button onclick="window.openEditCustomerModal(${idx})" class="w-6 h-6 bg-blue-50 text-blue-600 rounded flex justify-center items-center"><i class="fa-solid fa-pen"></i></button><button onclick="window.deleteCustomer(${idx})" class="w-6 h-6 bg-rose-50 text-rose-500 rounded flex justify-center items-center"><i class="fa-solid fa-trash"></i></button></div></div></div>`); }
+    window.filterCustomerList = function(q) { const lowerQ = q.toLowerCase(); const cards = document.getElementById('customersGrid').children; GBB_STATE.customers.forEach((c, i) => cards[i].style.display = (c.name.toLowerCase().includes(lowerQ) || c.phone.includes(lowerQ)) ? 'block' : 'none'); };
+    window.deleteCustomer = function(idx) { GBB_STATE.customers.splice(idx, 1); saveAppData(); renderCustomers(); };
+    window.openCustomerModal = function() { document.getElementById('customerModalTitle').innerHTML = '<i class="fa-solid fa-user-plus text-cyan-600 mr-2"></i> Tambah Pelanggan'; document.getElementById('editCustomerOriginalPhone').value = ''; document.getElementById('modalCustName').value = ''; document.getElementById('modalCustPhone').value = ''; document.getElementById('modalCustPassword').value = '123'; document.getElementById('modalCustAddress').value = ''; document.getElementById('customerModal').classList.remove('hidden'); };
+    window.openEditCustomerModal = function(idx) { document.getElementById('customerModalTitle').innerHTML = '<i class="fa-solid fa-user-pen text-cyan-600 mr-2"></i> Edit Pelanggan'; const c = GBB_STATE.customers[idx]; document.getElementById('editCustomerOriginalPhone').value = c.phone; document.getElementById('modalCustName').value = c.name; document.getElementById('modalCustPhone').value = c.phone; document.getElementById('modalCustPassword').value = c.password; document.getElementById('modalCustAddress').value = c.address; document.getElementById('modalCustLat').value = c.lat; document.getElementById('modalCustLng').value = c.lng; document.getElementById('customerModal').classList.remove('hidden'); };
+    window.closeCustomerModal = function() { document.getElementById('customerModal').classList.add('hidden'); };
+    window.handleCustomerSave = function(e) { e.preventDefault(); const orig = document.getElementById('editCustomerOriginalPhone').value; const c = { name: document.getElementById('modalCustName').value, phone: document.getElementById('modalCustPhone').value, password: document.getElementById('modalCustPassword').value, address: document.getElementById('modalCustAddress').value, lat: document.getElementById('modalCustLat').value, lng: document.getElementById('modalCustLng').value, units: [{name:'AC Standar',brand:'Umum'}] }; if (orig) { const i = GBB_STATE.customers.findIndex(x => x.phone === orig); if (i>-1) GBB_STATE.customers[i] = {...GBB_STATE.customers[i], ...c}; } else { if (GBB_STATE.customers.some(x => x.phone === c.phone)) { showCustomAlert('Perhatian', 'No WA sudah terdaftar!', 'fa-solid fa-triangle-exclamation text-amber-500'); return; } GBB_STATE.customers.push(c); } saveAppData(); closeCustomerModal(); renderCustomers(); };
+
+    function renderTechnicians() { const g = document.getElementById('techniciansGrid'); g.innerHTML = ''; GBB_STATE.technicians.forEach((t, i) => g.innerHTML += `<div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex justify-between items-start"><div><h4 class="font-black text-slate-900 text-sm">${t.name}</h4><p class="text-[10px] text-blue-600 font-bold"><i class="fa-brands fa-whatsapp mr-1"></i> ${t.phone}</p></div></div><div class="pt-3 border-t border-slate-100 flex justify-between items-center mt-3"><span class="text-[9px] text-slate-400 font-bold bg-slate-50 px-2 py-1 rounded">PIN: ${t.password}</span><div class="flex gap-1.5"><button onclick="window.openEditTechnicianModal(${i})" class="w-6 h-6 bg-blue-50 text-blue-600 rounded flex justify-center items-center"><i class="fa-solid fa-pen"></i></button><button onclick="window.deleteTechnician(${i})" class="w-6 h-6 bg-rose-50 text-rose-500 rounded flex justify-center items-center"><i class="fa-solid fa-trash"></i></button></div></div></div>`); }
+    window.deleteTechnician = function(i) { GBB_STATE.technicians.splice(i, 1); saveAppData(); renderTechnicians(); };
+    window.openTechnicianModal = function() { document.getElementById('technicianModalTitle').innerHTML = '<i class="fa-solid fa-user-gear text-blue-600 mr-2"></i> Tambah Teknisi'; document.getElementById('editTechnicianOriginalId').value = ''; document.getElementById('modalTechName').value = ''; document.getElementById('modalTechPhone').value = ''; document.getElementById('modalTechPassword').value = '123'; document.getElementById('technicianModal').classList.remove('hidden'); };
+    window.openEditTechnicianModal = function(i) { document.getElementById('technicianModalTitle').innerHTML = '<i class="fa-solid fa-user-pen text-blue-600 mr-2"></i> Edit Teknisi'; const t = GBB_STATE.technicians[i]; document.getElementById('editTechnicianOriginalId').value = t.id; document.getElementById('modalTechName').value = t.name; document.getElementById('modalTechPhone').value = t.phone; document.getElementById('modalTechPassword').value = t.password; document.getElementById('technicianModal').classList.remove('hidden'); };
+    window.closeTechnicianModal = function() { document.getElementById('technicianModal').classList.add('hidden'); };
+    window.handleTechnicianSave = function(e) { e.preventDefault(); const orig = document.getElementById('editTechnicianOriginalId').value; const t = { name: document.getElementById('modalTechName').value, phone: document.getElementById('modalTechPhone').value, password: document.getElementById('modalTechPassword').value }; if (orig) { const i = GBB_STATE.technicians.findIndex(x => x.id === orig); if (i>-1) GBB_STATE.technicians[i] = {...GBB_STATE.technicians[i], ...t}; } else { t.id = 'tech_'+Date.now(); t.status = 'Tersedia'; GBB_STATE.technicians.push(t); } saveAppData(); closeTechnicianModal(); renderTechnicians(); };
+
+    function renderCatalog() { const g = document.getElementById('catalogGrid'); g.innerHTML = ''; GBB_STATE.catalog.forEach(c => g.innerHTML += `<div class="glass-card rounded-3xl p-5 shadow-sm border border-slate-100"><div class="flex justify-between items-start"><div><h4 class="font-black text-slate-900 text-xs">${c.name}</h4><span class="px-2 py-0.5 rounded text-[8px] font-black uppercase ${c.type==='service'?'bg-cyan-50 text-cyan-700':'bg-indigo-50 text-indigo-700'}">${c.type==='service'?'Jasa':'Barang'}</span></div><div class="flex gap-1.5 ml-2 shrink-0"><button onclick="window.openEditCatalogModal('${c.id}')" class="w-6 h-6 bg-blue-50 text-blue-600 rounded flex justify-center items-center"><i class="fa-solid fa-pen text-[10px]"></i></button><button onclick="window.deleteCatalogItem('${c.id}')" class="w-6 h-6 bg-rose-50 text-rose-500 rounded flex justify-center items-center"><i class="fa-solid fa-trash text-[10px]"></i></button></div></div><div class="flex justify-between items-center pt-3 border-t border-slate-100 mt-3 text-[10px]"><span class="font-black text-emerald-600">Rp ${c.price.toLocaleString('id-ID')} / ${c.unit || 'Unit'}</span><span class="font-bold text-slate-500 bg-slate-50 px-2 py-1 rounded">Stok: ${c.stock}</span></div></div>`); }
+    window.openCatalogModal = function() { document.getElementById('catalogModalTitle').innerHTML = '<i class="fa-solid fa-box text-indigo-600 mr-2"></i> Tambah Item'; document.getElementById('editCatalogOriginalId').value = ''; document.getElementById('modalCatName').value = ''; document.getElementById('modalCatPrice').value = ''; document.getElementById('modalCatStock').value = '10'; document.getElementById('modalCatUnit').value = 'Unit'; document.getElementById('catalogModal').classList.remove('hidden'); }; 
+    window.openEditCatalogModal = function(id) { document.getElementById('catalogModalTitle').innerHTML = '<i class="fa-solid fa-box text-indigo-600 mr-2"></i> Edit Item'; const c = GBB_STATE.catalog.find(x => x.id === id); if(!c) return; document.getElementById('editCatalogOriginalId').value = c.id; document.getElementById('modalCatName').value = c.name; document.getElementById('modalCatType').value = c.type; document.getElementById('modalCatPrice').value = c.price; document.getElementById('modalCatStock').value = c.stock; document.getElementById('modalCatUnit').value = c.unit || 'Unit'; document.getElementById('catalogModal').classList.remove('hidden'); }; 
+    window.deleteCatalogItem = function(id) { if(confirm('Yakin ingin menghapus item ini dari katalog gudang?')) { GBB_STATE.catalog = GBB_STATE.catalog.filter(c => c.id !== id); saveAppData(); renderCatalog(); } };
+    window.closeCatalogModal = function() { document.getElementById('catalogModal').classList.add('hidden'); }; 
+    window.handleCatalogSave = function(e) { e.preventDefault(); const origId = document.getElementById('editCatalogOriginalId').value; const catData = { name: document.getElementById('modalCatName').value, type: document.getElementById('modalCatType').value, price: parseFloat(document.getElementById('modalCatPrice').value), stock: parseInt(document.getElementById('modalCatStock').value), unit: document.getElementById('modalCatUnit').value }; if (origId) { const idx = GBB_STATE.catalog.findIndex(x => x.id === origId); if (idx > -1) { GBB_STATE.catalog[idx] = { ...GBB_STATE.catalog[idx], ...catData }; } } else { catData.id = 'c_' + Date.now(); GBB_STATE.catalog.push(catData); } saveAppData(); closeCatalogModal(); renderCatalog(); };
+
+    function renderPayroll() { const c = GBB_STATE.orders.filter(o => o.status === 'completed'); document.getElementById('payrollTotalTickets').innerText = c.length; const rev = c.reduce((a, b) => a + b.total, 0); document.getElementById('payrollTotalRevenue').innerText = `Rp ${rev.toLocaleString('id-ID')}`; document.getElementById('payrollTotalCommission').innerText = `Rp ${(rev * 0.20).toLocaleString('id-ID')}`; const tbody = document.getElementById('payrollTableBody'); tbody.innerHTML = ''; GBB_STATE.technicians.forEach(t => { const o = c.filter(x => x.techId === t.id); const r = o.reduce((a, b) => a + b.total, 0); const comm = r * 0.20; tbody.innerHTML += `<tr class="border-b border-slate-50"><td class="py-3 px-4 font-bold text-slate-900">${t.name}</td><td class="py-3 px-4 text-center">${o.length}</td><td class="py-3 px-4 text-right">Rp ${r.toLocaleString('id-ID')}</td><td class="py-3 px-4 text-right text-emerald-600 font-bold">Rp ${comm.toLocaleString('id-ID')}</td><td class="py-3 px-4 text-right font-black text-emerald-700 bg-emerald-50">Rp ${comm.toLocaleString('id-ID')}</td></tr>`; }); }
+
+    window.openWarrantyClaimModal = function() { const container = document.getElementById('warrantyClaimListContainer'); container.innerHTML = ''; const completedOrders = GBB_STATE.orders.filter(o => o.status === 'completed'); if (completedOrders.length === 0) { container.innerHTML = '<p class="text-xs text-slate-500 text-center py-4 font-bold">Belum ada riwayat pesanan selesai untuk garansi.</p>'; } else { completedOrders.forEach(o => { const div = document.createElement('div'); div.className = 'p-3.5 bg-sky-50 rounded-2xl border border-sky-200 text-xs space-y-1 shadow-sm'; div.innerHTML = `<div class="flex justify-between items-center"><span class="font-bold text-slate-900">${o.custName} (${o.custPhone})</span><span class="text-[9px] bg-emerald-100 text-emerald-800 font-black px-2 py-0.5 rounded">Garansi: ${o.warranty || '90 Hari'}</span></div><p class="text-[10px] text-slate-600"><i class="fa-solid fa-ticket text-cyan-600 mr-1"></i> No. Tiket: ${o.id} • Tgl Servis: ${o.date}</p><p class="text-[10px] text-slate-600"><i class="fa-solid fa-snowflake text-blue-500 mr-1"></i> Unit: ${o.units.map(u => u.name).join(', ')}</p><div class="pt-2 flex justify-end gap-2"><button onclick="window.processClaimWarranty('${o.id}')" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-700 text-white font-black text-[10px] rounded-xl shadow transition"><i class="fa-solid fa-file-shield mr-1"></i> Buat Tiket Klaim Garansi</button></div>`; container.appendChild(div); }); } document.getElementById('warrantyClaimModal').classList.remove('hidden'); };
+    window.processClaimWarranty = function(orderId) { const o = GBB_STATE.orders.find(x => x.id === orderId); if(!o) return; const claimOrder = { id: 'GBB-GARANSI-' + String(GBB_STATE.orders.length + 1).padStart(3, '0'), custName: o.custName, custPhone: o.custPhone, custAddress: o.custAddress, units: [...o.units], techId: o.techId, techName: o.techName, date: new Date().toISOString().split('T')[0], services: [{name: '[KLAIM GARANSI] Perbaikan Ulang AC (Bebas Biaya Jasa)', price: 0, qty: 1, unit: 'Unit'}], manualItems: [], total: 0, status: 'pending', notes: 'Klaim Garansi dari Tiket ' + o.id, warranty: o.warranty || '90 Hari', lat: o.lat, lng: o.lng }; GBB_STATE.orders.unshift(claimOrder); saveAppData(); document.getElementById('warrantyClaimModal').classList.add('hidden'); showCustomAlert('Berhasil', 'Tiket Klaim Garansi berhasil dibuat! Status tiket masuk ke daftar tunggu penugasan.'); switchTab('dashboard'); };
+  </script>
+</body>
+</html>
+```eof
