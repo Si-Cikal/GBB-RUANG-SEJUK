@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>GBB Ruang Sejuk - Enterprise Cloud v6.2</title>
+  <title>GBB Ruang Sejuk - Enterprise Cloud v6.2 (Firestore)</title>
   
   <meta name="theme-color" content="#0284c7">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="GBB Sejuk">
   
-  <!-- PWA Manifest Link -->
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22GBB%20Ruang%20Sejuk%22%2C%22short_name%22%3A%22GBB%20Sejuk%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f0f9ff%22%2C%22theme_color%22%3A%22%230284c7%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fplacehold.co%2F192x192%2F0284c7%2Fffffff%3Ftext%3DGBB%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22GBB%20Ruang%20Sejuk%22%2C%22short_name%22%3A%22GBB%20Sejuk%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f0f9ff%22%2C%22theme_color%22%3A%22%230284c7%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Bcharset%3Dutf-8%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%2520100%2520100%2527%253E%253Crect%2520width%253D%2527100%2527%2520height%253D%2527100%2527%2520rx%253D%252720%2527%2520fill%253D%2527%25230284c7%2527%252F%253E%253Ctext%2520x%253D%252750%2527%2520y%253D%252765%2527%2520font-family%253D%2527Arial%2527%2520font-size%253D%252735%2527%2520font-weight%253D%2527bold%2527%2520fill%253D%2527white%2527%2520text-anchor%253D%2527middle%2527%253EGBB%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22192x192%20512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+  <link rel="apple-touch-icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230284c7'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='35' font-weight='bold' fill='white' text-anchor='middle'%3EGBB%3C/text%3E%3C/svg%3E">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,9 +23,9 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-  <!-- FIREBASE SDK V8 COMPAT -->
+  <!-- FIREBASE SDK V8 COMPAT (Menggunakan Firestore) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <style>
     body { font-family: 'Inter', sans-serif; color: #1e293b; -webkit-tap-highlight-color: transparent; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f5f3ff 100%); background-size: 200% 200%; animation: gradientShift 15s ease infinite; -webkit-overflow-scrolling: touch; }
@@ -95,7 +96,7 @@
 
           <!-- INDIKATOR CLOUD -->
           <div id="cloudSyncIndicator" class="mb-4 text-center py-2 bg-slate-100 text-slate-500 rounded-xl text-[10px] font-black border border-slate-200 shadow-sm animate-pulse transition-all duration-300">
-             <i class="fa-solid fa-spinner fa-spin mr-1"></i> Memeriksa Koneksi Database...
+             <i class="fa-solid fa-spinner fa-spin mr-1"></i> Memeriksa Koneksi Firestore...
           </div>
           
           <div id="installAppContainer" class="hidden mb-4 p-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white text-xs flex items-center justify-between shadow-lg">
@@ -460,7 +461,7 @@
                   </div>
                 </div>
 
-                <!-- TTD BARCODE (Dede Janudin) -->
+                <!-- TTD BARCODE -->
                 <div class="space-y-3 p-4 bg-slate-50 rounded-2xl border border-slate-200 md:col-span-2 shadow-sm">
                   <h4 class="text-xs font-black text-slate-700 uppercase flex items-center"><i class="fa-solid fa-signature text-blue-500 mr-2"></i> Tanda Tangan & Otorisasi Dokumen</h4>
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -944,26 +945,68 @@
       orders: []
     };
 
-    // PWA & VIRTUAL SERVICE WORKER
     let deferredPrompt = null;
-    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('installAppContainer').classList.remove('hidden'); });
-    window.installPWA = async function() { if(deferredPrompt) { deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; deferredPrompt = null; document.getElementById('installAppContainer').classList.add('hidden'); } else { showCustomAlert('Info Install', 'Buka menu browser Anda lalu pilih "Tambahkan ke Layar Utama" (Add to Home Screen).'); } };
+    window.addEventListener('beforeinstallprompt', (e) => { 
+        e.preventDefault(); 
+        deferredPrompt = e; 
+        document.getElementById('installAppContainer').classList.remove('hidden'); 
+    });
+    
+    window.installPWA = async function() { 
+        if(deferredPrompt) { 
+            deferredPrompt.prompt(); 
+            const { outcome } = await deferredPrompt.userChoice; 
+            deferredPrompt = null; 
+            document.getElementById('installAppContainer').classList.add('hidden'); 
+        } else { 
+            showCustomAlert('Info Install', 'Buka menu browser Anda lalu pilih "Tambahkan ke Layar Utama" (Add to Home Screen).'); 
+        } 
+    };
 
-    setTimeout(() => { if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent) && !window.matchMedia('(display-mode: standalone)').matches) { document.getElementById('installAppContainer').classList.remove('hidden'); } }, 1500);
+    setTimeout(() => { 
+        if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent) && !window.matchMedia('(display-mode: standalone)').matches) { 
+            document.getElementById('installAppContainer').classList.remove('hidden'); 
+        } 
+    }, 1500);
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        const swCode = `
+          self.addEventListener('install', (e) => {
+            self.skipWaiting();
+          });
+          self.addEventListener('activate', (e) => {
+            return self.clients.claim();
+          });
+          self.addEventListener('fetch', (e) => {
+            e.respondWith(fetch(e.request).catch(() => new Response('Sedang Offline')));
+          });
+        `;
+        const blob = new Blob([swCode], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(blob);
+
+        navigator.serviceWorker.register(swUrl)
+          .then((registration) => console.log('PWA ServiceWorker Aktif.'))
+          .catch((err) => console.log('ServiceWorker Gagal: ', err));
+      });
+    }
 
     // =========================================================================
-    // KONFIGURASI FIREBASE CLOUD (SISTEM ANTI-STUCK & ERROR TRACKER)
+    // KONFIGURASI FIREBASE CLOUD FIRESTORE
     // =========================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyAiAq8VYBpkYoDexh8Odji4mPuUqMg90tA",
-  authDomain: "gbbruangsejuk.firebaseapp.com",
-  projectId: "gbbruangsejuk",
-  storageBucket: "gbbruangsejuk.firebasestorage.app",
-  messagingSenderId: "978367455784",
-  appId: "1:978367455784:web:956ecec7b04b19b5668b1d"
+      authDomain: "gbbruangsejuk.firebaseapp.com",
+      projectId: "gbbruangsejuk",
+      storageBucket: "gbbruangsejuk.firebasestorage.app",
+      messagingSenderId: "978367455784",
+      appId: "1:978367455784:web:956ecec7b04b19b5668b1d"
     };
 
-    let isCloudReady = false; let cloudDbRef = null; let isInitialLoad = true;
+    let isCloudReady = false; 
+    let db = null;
+    let cloudDocRef = null; 
+    let isInitialLoad = true;
     
     // Fallback awal (Mode Lokal) agar sistem tidak terhenti
     loadSettingsFromStorage();
@@ -971,57 +1014,64 @@
 
     try {
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        cloudDbRef = database.ref('gbb_cloud_v6_3');
+        db = firebase.firestore();
+        
+        // MENGAKTIFKAN OFFLINE PERSISTENCE UNTUK PWA (SUPER PENTING)
+        db.enablePersistence().catch(function(err) {
+            console.warn("Mode Offline Firestore belum aktif atau tidak didukung di mode incognito.", err);
+        });
 
-        // MENDETEKSI PERMISSION DENIED (RULES BELUM DIBUKA)
-        cloudDbRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
+        // Karena struktur sebelumnya adalah Realtime DB (JSON Tree 1 objek besar),
+        // Kita menggunakan Document Database. 
+        // Note: Satu Document maksimal 1MB. Jika aplikasi Anda bertambah besar ke depannya, 
+        // pisahkan menjadi Collection (orders, customers, dll).
+        cloudDocRef = db.collection('gbb_cloud_database').doc('v6_3_master');
+
+        cloudDocRef.onSnapshot((doc) => {
+            const ind = document.getElementById('cloudSyncIndicator');
+            isCloudReady = true;
+            if(ind) {
+                ind.className = 'mb-4 text-center py-2 bg-blue-50 text-blue-700 rounded-xl text-[10px] font-black border border-blue-200 shadow-sm transition-all';
+                ind.innerHTML = '<i class="fa-solid fa-cloud-check mr-1"></i> Terhubung ke Firestore Cloud';
+            }
+
+            if (doc.exists) {
+                const data = doc.data();
                 if (data.settings) GBB_STATE.settings = data.settings; 
-                if (data.users) GBB_STATE.users = data.users; // Ini bisa menimpa default admin123 jika di DB beda
+                if (data.users) GBB_STATE.users = data.users; 
                 if (data.customers) GBB_STATE.customers = data.customers || []; 
                 if (data.orders) GBB_STATE.orders = data.orders || [];
                 if (data.catalog) GBB_STATE.catalog = data.catalog || []; 
                 if (data.technicians) GBB_STATE.technicians = data.technicians || [];
                 saveToLocalStorageOnly();
-                if (!isInitialLoad && GBB_STATE.currentUser) { window.applySettingsToApp(); window.switchTab(GBB_STATE.activeTab); }
+                
+                if (!isInitialLoad && GBB_STATE.currentUser) { 
+                   window.applySettingsToApp(); 
+                   window.switchTab(GBB_STATE.activeTab); 
+                }
                 isInitialLoad = false;
             } else {
-                if(isInitialLoad) window.saveToCloud(); isInitialLoad = false;
+                // Document belum ada sama sekali, inisiasi awal
+                if(isInitialLoad) window.saveToCloud(); 
+                isInitialLoad = false;
             }
         }, (error) => {
             isCloudReady = false;
             const ind = document.getElementById('cloudSyncIndicator');
             if(ind) {
                 ind.className = 'mb-4 text-center py-2 bg-rose-50 text-rose-700 rounded-xl text-[10px] font-black border border-rose-200 shadow-sm transition-all';
-                ind.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Mode Lokal (Akses Database Ditolak)';
+                ind.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Mode Lokal (Akses Firestore Ditolak)';
             }
-            showCustomAlert('Error Firebase (Rules/Aturan)', 'Aplikasi tertahan karena Rules Firebase Anda masih dikunci (false). Silakan masuk ke Firebase Console -> Realtime Database -> Rules. Ubah ".read": false menjadi ".read": true.', 'fa-solid fa-lock text-rose-500');
+            showCustomAlert('Error Firebase (Rules/Aturan)', 'Aplikasi tertahan karena Rules FIRESTORE Anda masih dikunci (false). Silakan masuk ke Firebase Console -> Firestore Database -> Rules. Ubah allow read, write: if false; menjadi if true;', 'fa-solid fa-lock text-rose-500');
         });
 
-        // MENDETEKSI KONEKSI INTERNET/URL
-        const connectedRef = database.ref(".info/connected");
-        connectedRef.on("value", (snap) => {
-            const ind = document.getElementById('cloudSyncIndicator');
-            if (snap.val() === true) {
-                isCloudReady = true;
-                if(ind) {
-                    ind.className = 'mb-4 text-center py-2 bg-blue-50 text-blue-700 rounded-xl text-[10px] font-black border border-blue-200 shadow-sm transition-all';
-                    ind.innerHTML = '<i class="fa-solid fa-cloud-check mr-1"></i> Terhubung ke Cloud Database';
-                }
-            } else {
-                isCloudReady = false;
-            }
-        });
-
-        // TIMEOUT JIKA URL SALAH / DATABASE TIDAK ADA
+        // TIMEOUT JIKA INTERNET MATI / DATABASE TIDAK DITEMUKAN
         setTimeout(() => {
             const ind = document.getElementById('cloudSyncIndicator');
             if (ind && ind.innerHTML.includes('Memeriksa')) {
-                isCloudReady = false;
+                // Dianggap pakai data lokal / offline cache dari Firestore
                 ind.className = 'mb-4 text-center py-2 bg-amber-50 text-amber-700 rounded-xl text-[10px] font-black border border-amber-200 shadow-sm transition-all';
-                ind.innerHTML = '<i class="fa-solid fa-hard-drive mr-1"></i> Mode Lokal (Database Tidak Ditemukan)';
+                ind.innerHTML = '<i class="fa-solid fa-wifi mr-1"></i> Mode Offline Tersinkronisasi';
             }
         }, 5000);
 
@@ -1030,8 +1080,16 @@
     }
 
     window.saveToCloud = function() {
-        if(!cloudDbRef || !isCloudReady) return; 
-        cloudDbRef.set({ settings: GBB_STATE.settings, users: GBB_STATE.users, customers: GBB_STATE.customers, orders: GBB_STATE.orders, catalog: GBB_STATE.catalog, technicians: GBB_STATE.technicians }).catch(err => console.error(err));
+        if(!cloudDocRef) return; 
+        cloudDocRef.set({ 
+            settings: GBB_STATE.settings, 
+            users: GBB_STATE.users, 
+            customers: GBB_STATE.customers, 
+            orders: GBB_STATE.orders, 
+            catalog: GBB_STATE.catalog, 
+            technicians: GBB_STATE.technicians 
+        }, { merge: true }) // Gunakan merge:true agar lebih aman 
+        .catch(err => console.error("Gagal simpan ke Firestore:", err));
     };
     // =========================================================================
 
@@ -1056,7 +1114,7 @@
     }
 
     function saveToLocalStorageOnly() { localStorage.setItem('gbb_customers_v62', JSON.stringify(GBB_STATE.customers)); localStorage.setItem('gbb_orders_v62', JSON.stringify(GBB_STATE.orders)); localStorage.setItem('gbb_catalog_v62', JSON.stringify(GBB_STATE.catalog)); localStorage.setItem('gbb_tech_v62', JSON.stringify(GBB_STATE.technicians)); }
-    function saveAppData() { saveToLocalStorageOnly(); if(window.saveToCloud && isCloudReady) window.saveToCloud(); }
+    function saveAppData() { saveToLocalStorageOnly(); if(window.saveToCloud) window.saveToCloud(); }
 
     window.applySettingsToApp = applySettingsToApp;
     function applySettingsToApp() {
@@ -1103,7 +1161,6 @@
         GBB_STATE.settings.qrisNmid = document.getElementById('settingNmid').value; 
         GBB_STATE.settings.ttdName = document.getElementById('settingTtdName').value;
         
-        // Memastikan object users aman sebelum disimpan
         if(!GBB_STATE.users) GBB_STATE.users = { admin: {}, cs: {} };
         if(!GBB_STATE.users.admin) GBB_STATE.users.admin = {};
         if(!GBB_STATE.users.cs) GBB_STATE.users.cs = {};
@@ -1124,7 +1181,7 @@
         if(ttdAttr && ttdAttr.startsWith('data:')) GBB_STATE.settings.ttdUrl = document.getElementById('ttdPreview').src;
         
         localStorage.setItem('gbb_settings_v62', JSON.stringify(GBB_STATE.settings));
-        if(window.saveToCloud && isCloudReady) window.saveToCloud(); 
+        if(window.saveToCloud) window.saveToCloud(); 
         applySettingsToApp(); 
         showCustomAlert('Berhasil', 'Pengaturan Global berhasil disimpan!');
     };
@@ -1160,9 +1217,6 @@
         const u = document.getElementById('loginUsername').value.trim(); 
         const p = document.getElementById('loginPassword').value.trim(); 
 
-        // =========================================================================
-        // [FITUR DARURAT] JALUR BACKDOOR / BYPASS RESET (Jika Data Firebase Rusak)
-        // =========================================================================
         if (u === 'superadmin' && p === 'gbb123') {
              GBB_STATE.currentUser = { name: 'Super Administrator', role: 'admin' }; 
              GBB_STATE.role = 'admin'; 
@@ -1172,7 +1226,6 @@
              return;
         }
 
-        // Penanganan aman jika struktur DB rusak (Optional Chaining ?.)
         const adminUser = GBB_STATE.users?.admin?.user || 'admin';
         const adminPass = GBB_STATE.users?.admin?.pass || 'admin123';
         const csUser = GBB_STATE.users?.cs?.user || 'cs';
@@ -1285,7 +1338,7 @@
 
     function initCanvas(canvasId) {
         const canvas = document.getElementById(canvasId); if(!canvas) return; const ctx = canvas.getContext('2d'); canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; let isDrawing = false;
-        function getPos(e) { const rect = canvas.getBoundingClientRect(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; return { x: clientX - rect.left, y: clientY - rect.top }; }
+        function getPos(e) { const rect = canvas.getBoundingClientRect(); const clientX = e.touches ? e.touches[0].clientX : e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; return { x: clientX - rect.left, y: clientY - rect.top }; }
         function startPos(e) { e.preventDefault(); isDrawing = true; draw(e); } function endPos() { isDrawing = false; ctx.beginPath(); }
         function draw(e) { if(!isDrawing) return; e.preventDefault(); const pos = getPos(e); ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#0f172a'; ctx.lineTo(pos.x, pos.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
         canvas.addEventListener('mousedown', startPos); canvas.addEventListener('mouseup', endPos); canvas.addEventListener('mousemove', draw); canvas.addEventListener('touchstart', startPos, {passive: false}); canvas.addEventListener('touchend', endPos); canvas.addEventListener('touchmove', draw, {passive: false});
@@ -1360,4 +1413,3 @@
   </script>
 </body>
 </html>
-```eof
